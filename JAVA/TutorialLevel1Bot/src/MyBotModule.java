@@ -1,59 +1,170 @@
-import bwapi.Color;
+/*
++----------------------------------------------------------------------+
+| BuildServerCode                                                             |
++----------------------------------------------------------------------+
+| Samsung SDS - 2017 Algorithm Contest                                 |
++----------------------------------------------------------------------+
+|                                                                      |
++----------------------------------------------------------------------+
+| Author: Tekseon Shin  <tekseon.shin@gmail.com>                       |
+| Author: Duckhwan Kim  <duckhwan1982.kim@gmail.com>                   |
++----------------------------------------------------------------------+
+*/
+
+/*
++----------------------------------------------------------------------+
+| UAlbertaBot                                                          |
++----------------------------------------------------------------------+
+| University of Alberta - AIIDE StarCraft Competition                  |
++----------------------------------------------------------------------+
+|                                                                      |
++----------------------------------------------------------------------+
+| Author: David Churchill <dave.churchill@gmail.com>                   |
++----------------------------------------------------------------------+
+*/
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
+
 import bwapi.DefaultBWListener;
 import bwapi.Game;
 import bwapi.Mirror;
 import bwapi.Player;
 import bwapi.Position;
 import bwapi.Unit;
+import bwapi.UnitType;
 import bwapi.Flag.Enum;
 import bwta.BWTA;
 
+
+/// MyBotModule Àº º¿ÇÁ·Î±×·¥ÀÇ ±âº»ÀûÀÎ »À´ë ±¸Á¶¸¦ Á¤ÀÇÇÑ class ·Î¼­, ½ºÅ¸Å©·¡ÇÁÆ® °æ±â µµÁß ¹ß»ýÇÏ´Â ÀÌº¥Æ®µéÀ» GameCommander class ÀÎ½ºÅÏ½º¿¡°Ô Àü´ÞÇÕ´Ï´Ù.<br>
+///
+/// MyBotModule class´Â ¼öÁ¤À» ÇÏÁö ¸»°í,<br>
+/// ½ÇÁ¦ º¿ÇÁ·Î±×·¥ °³¹ßÀº GameCommander class ¸¦ ¼öÁ¤ÇÏ´Â ÇüÅÂ·Î ÁøÇàÇÏµµ·Ï ÇÕ´Ï´Ù.<br>
+/// @see GameCommander
+///
+/// <br><br>
+/// ¾Ë°í¸®Áò °æÁø´ëÈ¸ ÀÇ °øÁ¤ÇÏ°í È¿À²ÀûÀÎ ¿î¿µÀ» À§ÇØ Main, MyBotModule, UXManager ÆÄÀÏÀº Âü°¡ÀÚµéÀÌ Á¦ÃâÇÏ´Â ¼Ò½ºÄÚµå¸¦ ¹«½ÃÇÏ°í µ¤¾î¾´ ÈÄ ºôµåÇÕ´Ï´Ù <br>
+///
+/// ¾Ë°í¸®Áò °æÁø´ëÈ¸ ºôµå¼­¹ö°¡ »ç¿ëÇÏ´Â Main, MyBotModule, UXManager ÆÄÀÏÀ» ¿¹½ÃÀûÀ¸·Î MyBotModule ¿¡ ¹Ý¿µÇÏ¿´½À´Ï´Ù <br>
+/// ½ÇÁ¦ ¾Ë°í¸®Áò °æÁø´ëÈ¸ ºôµå¼­¹ö¿¡¼­´Â ÄÚµå¸¦ ÀÏºÎ ¼öÁ¤ÇØ¼­ ºôµåÇÏ°Ô ÇÒ ¼ö ÀÖ½À´Ï´Ù <br>
+///
+/// ¾Ë°í¸®Áò °æÁø´ëÈ¸ ºôµå¼­¹ö°¡ »ç¿ëÇÏ´Â Main Àº MyBotModule À» ½ÇÇà½ÃÅ°´Â ±â´ÉÀ» ¼öÇàÇÕ´Ï´Ù. <br>
+/// ¾Ë°í¸®Áò °æÁø´ëÈ¸ ºôµå¼­¹ö°¡ »ç¿ëÇÏ´Â MyBotModule Àº GameCommander ¿¡°Ô ÀÌº¥Æ®¸¦ Àü´ÞÇÏ´Â ±â´ÉÀ» ¼öÇàÇÏ¸ç, °ÔÀÓ ¼Óµµ Áö¿¬ ¿©ºÎ ÆÄ¾Ç, °ÔÀÓ ¹«½ÂºÎ »óÈ² ÆÄ¾Ç µîÀ» ÅëÇØ °ÔÀÓÀ» °­Á¦ ÆÐ¹è½ÃÅ°°Å³ª °­Á¦ Á¾·á½ÃÅ°´Â Çàµ¿À» ¼öÇàÇÕ´Ï´Ù. <br>
+/// ¾Ë°í¸®Áò °æÁø´ëÈ¸ ºôµå¼­¹ö°¡ »ç¿ëÇÏ´Â UX Manager ´Â ¾Ë°í¸®Áò °æÁø´ëÈ¸ ¿î¿µ, »çÈÄ ÆÇÁ¤ µî¿¡ ÇÊ¿äÇÑ ÃÖ¼ÒÇÑÀÇ ³»¿ë¸¸ È­¸é¿¡ Ç¥½ÃÇÕ´Ï´Ù. <br>
+/// ÀÌ ÆÄÀÏµéÀº InformationManager µî ´Ù¸¥ ÆÄÀÏµé°ú Dependency°¡ ¾øµµ·Ï °³¹ßµÇ¾ú±â ¶§¹®¿¡, <br>
+/// Âü°¡ÀÚµéÀº InformationManager µî ´Ù¸¥ ÆÄÀÏµéÀ» ÀÚÀ¯·Ó°Ô ¼öÁ¤ÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù. 
+/// 
 public class MyBotModule extends DefaultBWListener {
-	
+
+	/// BWAPI ¿¡ ÇØ´çÇÏ´Â ³»ºÎ °´Ã¼
 	private Mirror mirror = new Mirror();
+	
+	/// ½ºÅ¸Å©·¡ÇÁÆ® ´ë°á »óÈ² ÀüÃ¼¿¡ ´ëÇÑ »óÈ² ÆÄ¾Ç ¹× ¾×¼Ç ½ÇÇàÀ» Á¦°øÇÏ´Â °´Ã¼  <br>
+	/// C¾ð¾î¿¡¼­ MyBotModule.Broodwar ¿¡ ÇØ´çÇÕ´Ï´Ù
 	public static Game Broodwar;
 
+	/// ½ÇÁ¦ º¿ÇÁ·Î±×·¥
+	/// @see GameCommander			
+	private GameCommander gameCommander;
+
+	/// ·ÎÄÃ ½ºÇÇµå 
+	/// Åä³Ê¸ÕÆ® Å¬¶óÀÌ¾ðÆ® ½ÇÇà¿£Áø¿¡¼­ Ã³¸®ÇÏÁö¸¸ È¤½Ã³ª ¸ô¶ó¼­ ÀÌÁßÃ³¸®
+	private int numLocalSpeed = 20;
+
+	/// frameskip
+	/// Åä³Ê¸ÕÆ® Å¬¶óÀÌ¾ðÆ® ½ÇÇà¿£Áø¿¡¼­ Ã³¸®ÇÏÁö¸¸ È¤½Ã³ª ¸ô¶ó¼­ ÀÌÁßÃ³¸®
+	private int numFrameSkip = 0;
+
+	// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+	/// ÆÐ¹è Á¶°ÇÀÌ ¸¸Á·µÈÃ¤ °ÔÀÓÀ» À¯Áö½ÃÅ°´Â ÃÖ´ë ÇÁ·¹ÀÓ ¼ö
+	private int maxDurationForLostCondition = 200;
+	// BasicBot 1.2 Patch End //////////////////////////////////////////////////
+	
+	private boolean isExceptionLostConditionSatisfied = false;	/// Exception À¸·Î ÀÎÇÑ ÆÐ¹è Ã¼Å© °á°ú
+	private int exceptionLostConditionSatisfiedFrame = 0;		/// Exception ÆÐ¹è Á¶°ÇÀÌ ½ÃÀÛµÈ ÇÁ·¹ÀÓ ½ÃÁ¡
+	private int maxDurationForExceptionLostCondition = 20;		/// Exception ÆÐ¹è Á¶°ÇÀÌ ¸¸Á·µÈÃ¤ °ÔÀÓÀ» À¯Áö½ÃÅ°´Â ÃÖ´ë ÇÁ·¹ÀÓ ¼ö
+	
+	private boolean isToCheckGameLostCondition = true;			/// ÀÚµ¿ ÆÐ¹è Ã¼Å© ½ÇÇà ¿©ºÎ
+	private boolean isGameLostConditionSatisfied = false;		/// ÀÚµ¿ ÆÐ¹è Ã¼Å© °á°ú
+	private int gameLostConditionSatisfiedFrame = 0;			/// ÀÚµ¿ ÆÐ¹è Á¶°ÇÀÌ ½ÃÀÛµÈ ÇÁ·¹ÀÓ ½ÃÁ¡
+		
+	private boolean isToCheckTimeOut = true;					/// Å¸ÀÓ ¾Æ¿ô Ã¼Å© ½ÇÇà ¿©ºÎ
+	private int timeOutConditionSatisfiedFrame = 0;				/// Å¸ÀÓ ¾Æ¿ô Á¶°ÇÀÌ ½ÃÀÛµÈ ÇÁ·¹ÀÓ ½ÃÁ¡
+	private boolean isTimeOutConditionSatisfied = false;		/// Å¸ÀÓ ¾Æ¿ô Ã¼Å© °á°ú
+	private ArrayList<Integer> timerLimits = new ArrayList<Integer>();			///< Å¸ÀÓ ¾Æ¿ô ÇÑ°è½Ã°£ (ms/frame)
+	private ArrayList<Integer> timerLimitsBound = new ArrayList<Integer>();		///< Å¸ÀÓ ¾Æ¿ô ÃÊ°úÇÑ°èÈ½¼ö
+	private ArrayList<Integer> timerLimitsExceeded = new ArrayList<Integer>();	///< Å¸ÀÓ ¾Æ¿ô ÃÊ°úÈ½¼ö
+	private long[] timeStartedAtFrame = new long[100000];		///< ÇØ´ç ÇÁ·¹ÀÓÀ» ½ÃÀÛÇÑ ½Ã°¢
+	private long[] timeElapsedAtFrame = new long[100000];		///< ÇØ´ç ÇÁ·¹ÀÓ¿¡¼­ »ç¿ëÇÑ ½Ã°£ (ms)		
+
+	private boolean isToTestTimeOut = false;					///< Å¸ÀÓ ¾Æ¿ô Ã¼Å© Å×½ºÆ® ½ÇÇà ¿©ºÎ
+	private int timeOverTestDuration = 0;
+	private int timeOverTestFrameCountLimit = 0;
+	private int timeOverTestFrameCount = 0;						///< Å¸ÀÓ ¾Æ¿ô Ã¼Å© Å×½ºÆ® ½ÇÇà 
+	
 	public void run() {
 		mirror.getModule().setEventListener(this);
 		mirror.startGame();
 	}
 
+	/// °æ±â°¡ ½ÃÀÛµÉ ¶§ ÀÏÈ¸ÀûÀ¸·Î ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
 	public void onStart() {
+
 		Broodwar = mirror.getGame();
 		
+		gameCommander = new GameCommander();
+
 		if (Broodwar.isReplay()) {
 			return;
 		}
 
-		// ì „ì²´ ì§€ë„ ë° ìƒëŒ€íŽ¸ ì´ë²¤íŠ¸ë“¤ ë‹¤ íŒŒì•…í•˜ëŠ” ëª¨ë“œ
-		//game.enableFlag(Enum.CompleteMapInformation.getValue());
+		initializeLostConditionVariables();
 
-		// í‚¤ë³´ë“œ/ë§ˆìš°ìŠ¤ë¡œ ê²Œìž„ í”Œë ˆì´ë¥¼ ì§„í–‰í•  ìˆ˜ ìžˆëŠ” ëª¨ë“œ
-		Broodwar.enableFlag(Enum.UserInput.getValue());
+		/// ÀüÃ¼ ¸Ê Á¤º¸ Çã¿ë ¿©ºÎ : ºÒÇã
+		/// Åä³Ê¸ÕÆ® Å¬¶óÀÌ¾ðÆ® ½ÇÇà¿£Áø¿¡¼­µµ ºÒÇã Ã³¸®ÇÏÁö¸¸ È¤½Ã³ª ¸ô¶ó¼­ ÀÌÁßÃ³¸®
+		boolean isToEnableCompleteMapInformation = false;
 
-		// ë™ì¼í•œ ê²Œìž„ ëª…ë ¹ì€ í•˜ë‚˜ë¡œ ì²˜ë¦¬í•´ì„œ CPU ë¶€ë‹´ì„ ì¤„ì—¬ì¤Œ
+		/// UserInput Çã¿ë ¿©ºÎ : ºÒÇã
+		/// Åä³Ê¸ÕÆ® Å¬¶óÀÌ¾ðÆ® ½ÇÇà¿£Áø¿¡¼­µµ ºÒÇã Ã³¸®ÇÏÁö¸¸ È¤½Ã³ª ¸ô¶ó¼­ ÀÌÁßÃ³¸®
+		// TODO : Å×½ºÆ®¶§¸¸ true, ½ÇÁ¦ »ç¿ë½Ã¿¡¼­´Â false ·Î º¯°æ
+		boolean isToEnableUserInput = true;
+
+		if(isToEnableCompleteMapInformation){
+			Broodwar.enableFlag(Enum.CompleteMapInformation.getValue());
+		}
+
+		if(isToEnableUserInput){
+			Broodwar.enableFlag(Enum.UserInput.getValue());
+		}
+
 		Broodwar.setCommandOptimizationLevel(1);
 
 		// Speedups for automated play, sets the number of milliseconds bwapi spends in each frame
-		// Fastest: 42 ms/frame.  1ì´ˆì— 24 frame. ì¼ë°˜ì ìœ¼ë¡œ 1ì´ˆì— 24frameì„ ê¸°ì¤€ ê²Œìž„ì†ë„ë¡œ í•œë‹¤
-		// Normal: 67 ms/frame. 1ì´ˆì— 15 frame
-		// As fast as possible : 0 ms/frame. CPUê°€ í• ìˆ˜ìžˆëŠ” ê°€ìž¥ ë¹ ë¥¸ ì†ë„. 
-		Broodwar.setLocalSpeed(15);
-		// frameskipì„ ëŠ˜ë¦¬ë©´ í™”ë©´ í‘œì‹œë„ ì—…ë°ì´íŠ¸ ì•ˆí•˜ë¯€ë¡œ í›¨ì”¬ ë¹ ë¥´ë‹¤
-		Broodwar.setFrameSkip(0);
+		// Fastest: 42 ms/frame.  1ÃÊ¿¡ 24 frame. ÀÏ¹ÝÀûÀ¸·Î 1ÃÊ¿¡ 24frameÀ» ±âÁØ °ÔÀÓ¼Óµµ·Î ÇÑ´Ù
+		// Normal: 67 ms/frame. 1ÃÊ¿¡ 15 frame
+		// As fast as possible : 0 ms/frame. CPU°¡ ÇÒ¼öÀÖ´Â °¡Àå ºü¸¥ ¼Óµµ. 
+		Broodwar.setLocalSpeed(numLocalSpeed);
+		// frameskipÀ» ´Ã¸®¸é È­¸é Ç¥½Ãµµ ¾÷µ¥ÀÌÆ® ¾ÈÇÏ¹Ç·Î ÈÎ¾À ºü¸£´Ù
+		Broodwar.setFrameSkip(numFrameSkip);
 
 		System.out.println("Map analyzing started");
 		BWTA.readMap();
 		BWTA.analyze();
 		BWTA.buildChokeNodes();
-		System.out.println("Map analyzing finished");		
-	
-		System.out.println("Hello Starcraft : Broodwar command prompt");
+		System.out.println("Map analyzing finished");
 
-		Broodwar.printf("Hello Starcraft : Broodwar game screen");
+		gameCommander.onStart();
 	}
 
+	///  °æ±â°¡ Á¾·áµÉ ¶§ ÀÏÈ¸ÀûÀ¸·Î ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
 	public void onEnd(boolean isWinner) {
 		if (isWinner){
@@ -61,124 +172,767 @@ public class MyBotModule extends DefaultBWListener {
 		} else {
 			System.out.println("I lost the game");
 		}
+
+		gameCommander.onEnd(isWinner);
 		
         System.out.println("Match ended");
+        
+		// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+		// Á¾·áÃ³¸®
+    	TournamentModuleState state = new TournamentModuleState(
+			(int)(System.currentTimeMillis() - timeStartedAtFrame[10])
+		);
+    	state.ended(isWinner);
+    	state.update(timerLimitsExceeded);
+    	state.write();
+
+        Broodwar.sendText("Game End");
         System.exit(0);
+		// BasicBot 1.2 Patch End //////////////////////////////////////////////////				
 	}
 
+	/// °æ±â ÁøÇà Áß ¸Å ÇÁ·¹ÀÓ¸¶´Ù ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
 	public void onFrame() {
-		// ë¦¬í”Œë ˆì´ ìž¬ìƒì¼ ê²½ìš° ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŒ
+
 		if (Broodwar.isReplay()) {
 			return;
 		}
 
-		// í”Œë ˆì´ì–´ ì •ë³´ í‘œì‹œ
-		Broodwar.drawTextScreen(5, 5, "My Player: "+Broodwar.self().getTextColor()+Broodwar.self().getName()+" ("+Broodwar.self().getRace()+")");
-		Broodwar.drawTextScreen(5, 15, "Enemy Player: "+Broodwar.enemy().getTextColor()+Broodwar.enemy().getName()+" ("+Broodwar.enemy().getRace()+")");
+		// timeStartedAtFrame ¸¦ °»½ÅÇÑ´Ù
+		if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+			timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+		}
+			
+		// Å¸ÀÓ¾Æ¿ô Ã¼Å© ¸Þ¸ð¸® ºÎÁ·½Ã Áõ¼³
+		if ((int)timeStartedAtFrame.length < Broodwar.getFrameCount() + 10)
+		{
+			timeStartedAtFrame = Arrays.copyOf(timeStartedAtFrame, timeStartedAtFrame.length+10000);
+			timeElapsedAtFrame = Arrays.copyOf(timeElapsedAtFrame, timeElapsedAtFrame.length+10000);
+		}
+
+		// Pause »óÅÂ¿¡¼­´Â timeStartedAtFrame ¸¦ °è¼Ó °»½ÅÇØ¼­, timeElapsedAtFrame ÀÌ Á¦´ë·Î °è»êµÇµµ·Ï ÇÑ´Ù
+		if (Broodwar.isPaused()) {
+			timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+		}
+		else {
+			
+			try {
+				gameCommander.onFrame();
+			} 
+			catch (Exception e) {
+
+				// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+				// Exception ÀÌ ¹Ýº¹ÀûÀ¸·Î ¹ß»ýÇØµµ µü ÇÑ¹ø¸¸ Ç¥½ÃÇÏµµ·Ï ¼öÁ¤				
+				if (isExceptionLostConditionSatisfied == false) {
+				
+					Broodwar.sendText("[Error Stack Trace]");
+					System.out.println("[Error Stack Trace]");
+					for (int i = 0; i < e.getStackTrace().length && i < 11; i++) {
+						StackTraceElement ste = e.getStackTrace()[i];
+						Broodwar.sendText(ste.toString());
+						System.out.println(ste.toString());
+					}
+					Broodwar.sendText("GG");
+	
+					isExceptionLostConditionSatisfied = true;
+					
+					exceptionLostConditionSatisfiedFrame = Broodwar.getFrameCount();
+				}				
+				// BasicBot 1.2 Patch End //////////////////////////////////////////////////				
+			}
+			
+			if (isExceptionLostConditionSatisfied) {
+				MyBotModule.Broodwar.drawTextScreen(250, 100, "I lost because of EXCEPTION");
+
+				if (MyBotModule.Broodwar.getFrameCount() - exceptionLostConditionSatisfiedFrame >= maxDurationForLostCondition) {
+					MyBotModule.Broodwar.leaveGame();
+				}
+			}
+	    }
 		
-		// í˜„ìž¬ FrameCount í‘œì‹œ
-		Broodwar.drawTextScreen(300, 100, "FrameCount: "+Broodwar.getFrameCount());
+		// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+		// º¿ »óÅÂ ±â·Ï : 360 ÇÁ·¹ÀÓ (ÃÊ´ç 24ÇÁ·¹ÀÓ * 15 ÃÊ)¸¶´Ù ÇÑ¹ø¾¿
+		if (Broodwar.getFrameCount() % 360 == 0)
+		{
+			TournamentModuleState state = new TournamentModuleState(
+				(int)(System.currentTimeMillis() - timeStartedAtFrame[10]));
+			state.update(timerLimitsExceeded);
+			state.write();
+		}
+		// BasicBot 1.2 Patch End //////////////////////////////////////////////////
 
-		// ìœ ë‹› id í‘œì‹œ
-		for (Unit unit : Broodwar.getAllUnits()) {
-			Broodwar.drawTextMap(unit.getPosition().getX(), unit.getPosition().getY(), ""+unit.getID());
-		}		
+		// È­¸é Ãâ·Â ¹× »ç¿ëÀÚ ÀÔ·Â Ã³¸®
+		UXManager.Instance().update();
+
+		checkLostConditions();
 	}
 
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Create µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
-	public void onSendText(String text){
-		// Display the text to the game
-		Broodwar.sendText(text);
-		
-		Broodwar.printf(text);
+	public void onUnitCreate(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitCreate(unit);
+		} 
 	}
 
+	///  À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Destroy µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
-	public void onReceiveText(Player player, String text){
-		Broodwar.printf(player.getName() + " said \"" + text + "\"");
-	}
-
-	@Override
-	public void onPlayerLeft(Player player){
-		Broodwar.printf(player.getName() + " left the game.");
-	}
-
-	@Override
-	public void onNukeDetect(Position target){
-		if (target != Position.Unknown)	{
-			Broodwar.drawCircleMap(target, 40, Color.Red, true);
-			Broodwar.printf("Nuclear Launch Detected at " + target);
-		} else {
-			Broodwar.printf("Nuclear Launch Detected");
+	public void onUnitDestroy(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitDestroy(unit);
 		}
 	}
 
-	@Override
-	public void onUnitCreate(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " created at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Morph µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// Zerg Á¾Á·ÀÇ À¯´ÖÀº °Ç¹° °Ç¼³ÀÌ³ª Áö»óÀ¯´Ö/°øÁßÀ¯´Ö »ý»ê¿¡¼­ °ÅÀÇ ´ëºÎºÐ Morph ÇüÅÂ·Î ÁøÇàµË´Ï´Ù
 	@Override
 	public void onUnitMorph(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " morphed at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitMorph(unit);
+		} 
 	}
-
-	@Override
-	public void onUnitDestroy(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " destroyed at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
-	@Override
-	public void onUnitShow(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " showed at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
-	@Override
-	public void onUnitHide(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " hid at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
-	@Override
-	public void onUnitRenegade(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " renegaded at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
-	@Override
-	public void onUnitDiscover(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " discovered at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
-	@Override
-	public void onUnitEvade(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " evaded at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
-		}	
-	}
-
+	
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÇ ÇÏ´ø ÀÏ (°Ç¹° °Ç¼³, ¾÷±×·¹ÀÌµå, Áö»óÀ¯´Ö ÈÆ·Ã µî)ÀÌ ³¡³µÀ» ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
 	@Override
 	public void onUnitComplete(Unit unit){
-		if (unit.getPlayer().isNeutral() == false) {
-			Broodwar.printf(unit.getType() + " " + unit.getID() + " completed at " + unit.getTilePosition().getX() + ", " + unit.getTilePosition().getY());
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitComplete(unit);
+		}
+	}
+
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÇ ¼Ò¼Ó ÇÃ·¹ÀÌ¾î°¡ ¹Ù²ð ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// Gas Geyser¿¡ ¾î¶² ÇÃ·¹ÀÌ¾î°¡ Refinery °Ç¹°À» °Ç¼³ÇßÀ» ¶§, Refinery °Ç¹°ÀÌ ÆÄ±«µÇ¾úÀ» ¶§, Protoss Á¾Á· Dark Archon ÀÇ Mind Control ¿¡ ÀÇÇØ ¼Ò¼Ó ÇÃ·¹ÀÌ¾î°¡ ¹Ù²ð ¶§ ¹ß»ýÇÕ´Ï´Ù
+	@Override
+	public void onUnitRenegade(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitRenegade(unit);
+		}
+	}
+
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Discover µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// ¾Æ±º À¯´ÖÀÌ Create µÇ¾úÀ» ¶§ ¶óµç°¡, Àû±º À¯´ÖÀÌ Discover µÇ¾úÀ» ¶§ ¹ß»ýÇÕ´Ï´Ù
+	@Override
+	public void onUnitDiscover(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitDiscover(unit);
+		}
+	}
+
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Evade µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// À¯´ÖÀÌ Destroy µÉ ¶§ ¹ß»ýÇÕ´Ï´Ù
+	@Override
+	public void onUnitEvade(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitEvade(unit);
+		}
+	}
+
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Show µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// ¾Æ±º À¯´ÖÀÌ Create µÇ¾úÀ» ¶§ ¶óµç°¡, Àû±º À¯´ÖÀÌ Discover µÇ¾úÀ» ¶§ ¹ß»ýÇÕ´Ï´Ù
+	@Override
+	public void onUnitShow(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitShow(unit);
+		}
+	}
+
+	/// À¯´Ö(°Ç¹°/Áö»óÀ¯´Ö/°øÁßÀ¯´Ö)ÀÌ Hide µÉ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù<br>
+	/// º¸ÀÌ´ø À¯´ÖÀÌ Hide µÉ ¶§ ¹ß»ýÇÕ´Ï´Ù
+	@Override
+	public void onUnitHide(Unit unit){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			gameCommander.onUnitHide(unit);
+		}
+	}
+
+	/// ÇÙ¹Ì»çÀÏ ¹ß»ç°¡ °¨ÁöµÇ¾úÀ» ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
+	@Override
+	public void onNukeDetect(Position target){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+
+			// ºôµå¼­¹ö¿¡¼­´Â ÇâÈÄ Àû¿ë
+			//gameCommander.onNukeDetect(target);
+		}
+	}
+
+	/// ´Ù¸¥ ÇÃ·¹ÀÌ¾î°¡ ´ë°áÀ» ³ª°¬À» ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
+	@Override
+	public void onPlayerLeft(Player player){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+			
+			// ºôµå¼­¹ö¿¡¼­´Â ÇâÈÄ Àû¿ë
+			//gameCommander.onPlayerLeft(player);
+		}
+	}
+
+	/// °ÔÀÓÀ» ÀúÀåÇÒ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
+	@Override
+	public void onSaveGame(String gameName){
+		if (!Broodwar.isReplay()) {
+			if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+				timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+			}
+
+			// ºôµå¼­¹ö¿¡¼­´Â ÇâÈÄ Àû¿ë
+			//gameCommander.onSaveGame(gameName);
+		}
+	}
+	
+	/// ÅØ½ºÆ®¸¦ ÀÔ·Â ÈÄ ¿£ÅÍ¸¦ ÇÏ¿© ´Ù¸¥ ÇÃ·¹ÀÌ¾îµé¿¡°Ô ÅØ½ºÆ®¸¦ Àü´ÞÇÏ·Á ÇÒ ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
+	@Override
+	public void onSendText(String text){		
+		
+		if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+			timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+		}
+		
+		ParseTextCommand(text);
+		
+		gameCommander.onSendText(text);
+
+		// Display the text to the game
+		Broodwar.sendText(text);
+	}
+
+	/// ´Ù¸¥ ÇÃ·¹ÀÌ¾î·ÎºÎÅÍ ÅØ½ºÆ®¸¦ Àü´Þ¹Þ¾ÒÀ» ¶§ ¹ß»ýÇÏ´Â ÀÌº¥Æ®¸¦ Ã³¸®ÇÕ´Ï´Ù
+	@Override
+	public void onReceiveText(Player player, String text){
+		if (timeStartedAtFrame[Broodwar.getFrameCount()] == 0) {
+			timeStartedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis();
+		}
+		
+		Broodwar.printf(player.getName() + " said \"" + text + "\"");
+
+		gameCommander.onReceiveText(player, text);
+	}
+	
+	private void initializeLostConditionVariables(){
+		
+		timerLimits.add(55);
+		timerLimitsBound.add(320);
+		timerLimitsExceeded.add(0);
+
+		timerLimits.add(1000);
+		timerLimitsBound.add(10);
+		timerLimitsExceeded.add(0);
+
+		timerLimits.add(10000);
+		timerLimitsBound.add(2);
+		timerLimitsExceeded.add(0);
+		
+	    parseConfigFile("bwapi-data\\tm_settings.ini");
+	}
+	
+
+	private void parseConfigFile(String filename) {
+	    File file = new File(filename);
+	    
+	    if (file.exists()) {
+	  		timerLimits.clear();
+	  		timerLimitsBound.clear();
+	  		timerLimitsExceeded.clear();
+	  		
+	  		try (BufferedReader br = new BufferedReader(new FileReader(file));) {
+		        String line = null;
+		  	    while ((line = br.readLine()) != null) {
+			  	      String[] split = line.split(" ");
+			  	      
+			  	      if ("LocalSpeed".equals(split[0])) {
+			  	    	  numLocalSpeed = Integer.parseInt(split[1]);
+			  	      } 
+			  	      else if ("FrameSkip".equals(split[0])) {
+			  	    	  numFrameSkip = Integer.parseInt(split[1]);
+			  	      } 
+			  	      else if ("Timeout".equals(split[0])) {
+			  	    	  timerLimits.add(Integer.parseInt(split[1]));
+			  	    	  timerLimitsBound.add(Integer.parseInt(split[2]));
+			  	    	  timerLimitsExceeded.add(0);
+			  	      } 
+			  	      else if ("MaxDurationForLostCondition".equals(split[0])) {
+			  	    	  maxDurationForLostCondition = Integer.parseInt(split[1]);
+			  	      } 
+			  	      else {
+			  	    	  MyBotModule.Broodwar.drawTextScreen(250, 100, "Invalid Option in Tournament Module Settings: " + split[0]);
+			  	      }
+		  	    }
+	  		} 
+	  		catch (Exception e) {
+	  			e.printStackTrace();
+	  		}
+	    } 
+	    else {
+	      MyBotModule.Broodwar.drawTextScreen(250, 100, "Tournament Module Settings File Not Found, Using Defaults " + file.getPath());
+	    }
+	}
+	
+	/// »ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ text ¸¦ parse ÇØ¼­ Ã³¸®ÇÕ´Ï´Ù
+	public void ParseTextCommand(String commandString)
+	{
+		// Make sure to use %s and pass the text as a parameter,
+		// otherwise you may run into problems when you use the %(percent) character!
+		Player self = Broodwar.self();
+
+		if ("afap".equals(commandString)) {
+			Broodwar.setLocalSpeed(0);
+			Broodwar.setFrameSkip(0);
+		} else if ("fast".equals(commandString)) {
+			Broodwar.setLocalSpeed(24);
+			Broodwar.setFrameSkip(0);
+		} else if ("slow".equals(commandString)) {
+			Broodwar.setLocalSpeed(42);
+			Broodwar.setFrameSkip(0);
+		} else if ("endthegame".equals(commandString)) {
+			// Not needed if using setGUI(false).
+			Broodwar.setGUI(false);
+		}
+
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 10ÃÊ ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 1¹ø ÇØº»´Ù
+		else if ("delay12000_1".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 12000;
+			timeOverTestFrameCountLimit = 1;
+		}
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 10ÃÊ ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 2¹ø ÇØº»´Ù
+		else if ("delay12000_2".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 12000;
+			timeOverTestFrameCountLimit = 2;
+		}
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 1ÃÊ ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 9¹ø ÇØº»´Ù
+		else if ("delay1200_9".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 1200;
+			timeOverTestFrameCountLimit = 9;
+		}
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 1ÃÊ ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 12¹ø ÇØº»´Ù
+		else if ("delay1200_12".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 1200;
+			timeOverTestFrameCountLimit = 12;
+		}
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 55 millisecond ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 310¹ø ÇØº»´Ù
+		else if ("delay70_310".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 70;
+			timeOverTestFrameCountLimit = 310;
+		}
+		// 1°³ ÇÁ·¹ÀÓ Ã³¸®¿¡ 55 millisecond ³Ñ°Ô °É¸®µµ·Ï ÇÏ´Â °ÍÀ» 330¹ø ÀÌ»ó ÇØº»´Ù
+		else if ("delay70_330".equals(commandString)) {
+			isToTestTimeOut = true;
+			timeOverTestFrameCount = 0;
+			timeOverTestDuration = 70;
+			timeOverTestFrameCountLimit = 330;
+		}
+	}
+
+	private void checkLostConditions() {
+		
+		// ÆÐ¹èÁ¶°Ç Ã¼Å©
+		if (isToCheckGameLostCondition) {
+			checkLostConditionAndLeaveGame();
+		}
+
+		// Å¸ÀÓ¾Æ¿ô Å×½ºÆ®
+		if (isToTestTimeOut) {
+			doTimeOutDelay();
+		}
+
+		if (isToCheckTimeOut) {
+			// Å¸ÀÓ¾Æ¿ô Ã¼Å©
+			checkTimeOutConditionAndLeaveGame();
+		}
+	}
+
+	// ÇöÀç ÀÚµ¿ ÆÐ¹èÁ¶°Ç : »ý»ê´É·ÂÀ» °¡Áø °Ç¹°ÀÌ ÇÏ³ªµµ ¾øÀ½ && °ø°Ý´É·ÂÀ» °¡Áø/°¡Áú¼öÀÖ´Â °Ç¹°ÀÌ ÇÏ³ªµµ ¾øÀ½ && »ý»ê/°ø°Ý/Æ¯¼ö´É·ÂÀ» °¡Áø ºñ°Ç¹° À¯´ÖÀÌ ÇÏ³ªµµ ¾øÀ½
+	// Åä³Ê¸ÕÆ® ¼­¹ö¿¡¼­ °ÔÀÓÀ» ¹«ÀÇ¹ÌÇÏ°Ô Á¦ÇÑ½Ã°£±îÁö ÇÃ·¹ÀÌ½ÃÅ°´Â °æ¿ì°¡ ¾øµµ·Ï ÇÏ±â À§ÇÔÀÓ
+	//
+	// TODO (ÇâÈÄ Ãß°¡¿©ºÎ °ËÅä) : 'ÀÏ²ÛÀº ÀÖÁö¸¸ Ä¿¸Çµå¼¾ÅÍµµ ¾ø°í º¸À¯ ¹Ì³×¶öµµ ¾ø°í Áöµµ¿¡ ¹Ì³×¶öÀÌ ÇÏ³ªµµ ¾ø´Â °æ¿ì' Ã³·³ °ÔÀÓ ½Â¸®¸¦ ÀÌ²ø °¡´É¼ºÀÌ Çö½ÇÀûÀ¸·Î ÀüÇô ¾ø´Â °æ¿ì±îÁö Ãß°¡ Ã¼Å©
+	public void checkLostConditionAndLeaveGame()
+	{
+		int canProduceBuildingCount = 0;
+		int canAttackBuildingCount = 0;
+		int canDoSomeThingNonBuildingUnitCount = 0;
+		
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+			if (unit.getType().isBuilding()) {
+					
+				// »ý»ê °¡´É °Ç¹°ÀÌ ÇÏ³ª¶óµµ ÀÖÀ¸¸é °ÔÀÓ Áö¼Ó °¡´É.
+				if (unit.getType().canProduce()) {
+					canProduceBuildingCount++;
+					break;
+				}
+
+				// °ø°Ý °¡´É °Ç¹°ÀÌ ÇÏ³ª¶óµµ ÀÖÀ¸¸é °ÔÀÓ Áö¼Ó °¡´É. Å©¸³ÄÝ·Î´Ï´Â ÇöÀç´Â °ø°Ý´É·ÂÀ» °®°íÀÖÁö ¾ÊÁö¸¸, ÇâÈÄ °ø°Ý´É·ÂÀ» °¡Áú ¼ö ÀÖ´Â °Ç¹°ÀÌ¹Ç·Î Ä«¿îÆ®¿¡ Æ÷ÇÔ
+				if (unit.getType().canAttack() || unit.getType() == UnitType.Zerg_Creep_Colony) {
+					canAttackBuildingCount++;
+					break;
+				}
+			}
+			else {
+				// »ý»ê ´É·ÂÀ» °¡Áø À¯´ÖÀÌ³ª °ø°Ý ´É·ÂÀ» °¡Áø À¯´Ö, Æ¯¼ö ´É·ÂÀ» °¡Áø À¯´ÖÀÌ ÇÏ³ª¶óµµ ÀÖÀ¸¸é °ÔÀÓ Áö¼Ó °¡´É
+				// Áï, ¶ó¹Ù, Äý, µðÆÄÀÏ·¯, ½ÎÀÌ¾ð½ºº£¾µ, ´ÙÅ©¾ÆÄ­ µîÀº °ÔÀÓ ½Â¸®¸¦ ÀÌ²ø °¡´É¼ºÀÌ Á¶±ÝÀÌ¶óµµ ÀÖÀ½
+				// Ä¡·á, ¼ö¼Û, ¿ÉÀú¹ö ´É·Â¸¸ ÀÖ´Â À¯´Ö¸¸ ÀÖÀ¸¸é °ÔÀÓ ÁßÁö.
+				// Áï, ¸Þµñ, µå¶ø½±, ¿À¹ö·Îµå, ¿ÉÀú¹ö, ¼ÅÆ²¸¸ Á¸ÀçÇÏ¸é, °ÔÀÓ ½Â¸®¸¦ ÀÌ²ø ´É·ÂÀÌ ¾øÀ½
+				if (unit.getType().canAttack() || unit.getType().canProduce() 
+					|| (unit.getType().isSpellcaster() && unit.getType() != UnitType.Terran_Medic) 
+					|| unit.getType() == UnitType.Zerg_Larva
+					|| unit.getType() == UnitType.Zerg_Egg || unit.getType() == UnitType.Zerg_Lurker_Egg || unit.getType() == UnitType.Zerg_Cocoon ) 
+				{
+					canDoSomeThingNonBuildingUnitCount++;
+					break;
+				}
+			}
+		}
+
+		//MyBotModule.Broodwar.drawTextScreen(250, 120, "canProduce Building Count        : " + canProduceBuildingCount);
+		//MyBotModule.Broodwar.drawTextScreen(250, 130, "canAttack Building Count         : " + canAttackBuildingCount);
+		//MyBotModule.Broodwar.drawTextScreen(250, 140, "canDoSomeThing NonBuilding Count : " + canDoSomeThingNonBuildingUnitCount);
+
+		// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+		// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¸¸Á·ÇÑ »óÅÂ°¡ ÀÏÁ¤½Ã°£ °è¼ÓµÇ¾úÀ» ¶§ ¸Þ½ÃÁö SendText
+		
+		// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¸¸Á·ÇÏ°Ô µÈ ÇÁ·¹ÀÓ ±â·Ï
+		if (canDoSomeThingNonBuildingUnitCount == 0 && canProduceBuildingCount == 0 && canAttackBuildingCount == 0 ) {
+
+			if (isGameLostConditionSatisfied == false) {
+				MyBotModule.Broodwar.sendText("I HAVE NO UNIT TO DEFEAT ENEMY PLAYER");
+
+				isGameLostConditionSatisfied = true;
+				gameLostConditionSatisfiedFrame = MyBotModule.Broodwar.getFrameCount();
+			}
+			
+		}
+		// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¹þ¾î³ª°Ô µÇ¸é ¸®¼Â
+		else if (canDoSomeThingNonBuildingUnitCount != 0 || canProduceBuildingCount != 0 || canAttackBuildingCount != 0) {
+
+			if (isGameLostConditionSatisfied == true) {
+				isGameLostConditionSatisfied = false;
+				gameLostConditionSatisfiedFrame = 0;
+			}
+		}
+
+		// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¸¸Á· »óÈ²ÀÌ ÀÏÁ¤½Ã°£ µ¿¾È Áö¼ÓµÇ¾úÀ¸¸é °ÔÀÓ ÆÐ¹è·Î Ã³¸®
+		if (isGameLostConditionSatisfied) {
+
+			MyBotModule.Broodwar.drawTextScreen(250, 100, "I lost because I HAVE NO UNIT TO DEFEAT ENEMY PLAYER");
+			MyBotModule.Broodwar.drawTextScreen(250, 115, "I will leave game in " 
+					+ (maxDurationForLostCondition - (MyBotModule.Broodwar.getFrameCount() - gameLostConditionSatisfiedFrame)) 
+					+ " frames");
+
+			// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¸¸Á·ÇÑÁö 100 ÇÁ·¹ÀÓ µÇ¾úÀ»¶§ ¸Þ½ÃÁö Ç¥½Ã
+			if (MyBotModule.Broodwar.getFrameCount() - gameLostConditionSatisfiedFrame == 100) {
+				int count = 0;
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+					if (unit != null && unit.exists() ) {
+						MyBotModule.Broodwar.sendText("Alive Unit : " + unit.getType().toString() + " " + unit.getID() + " at " + unit.getTilePosition());
+					}
+					count ++;
+					if (count == 10) break;
+				}
+				MyBotModule.Broodwar.sendText("Alive Unit Number : " + MyBotModule.Broodwar.self().getUnits().size());
+
+				MyBotModule.Broodwar.sendText("I lost because I HAVE NO UNIT TO DEFEAT ENEMY PLAYER");
+				MyBotModule.Broodwar.sendText("GG");
+				System.out.println("I lost because I HAVE NO UNIT TO DEFEAT ENEMY PLAYER");
+
+			}
+			
+			if (MyBotModule.Broodwar.getFrameCount() - gameLostConditionSatisfiedFrame >= maxDurationForLostCondition) {
+				MyBotModule.Broodwar.leaveGame();
+			}
+		}
+		// BasicBot 1.2 Patch End //////////////////////////////////////////////////
+	}
+
+
+
+	void doTimeOutDelay() {
+		if (timeOverTestFrameCount < timeOverTestFrameCountLimit) {
+
+			// 10 ÇÁ·¹ÀÓ¸¶´Ù 1¹ø¾¿ Å¸ÀÓ µô·¹ÀÌ¸¦ ½ÇÇàÇÑ´Ù
+			if (Broodwar.getFrameCount() % 10 == 0) {
+				long startTime = System.currentTimeMillis();
+				while (System.currentTimeMillis() - startTime < timeOverTestDuration) {
+				}
+				timeOverTestFrameCount++;
+			}
+		}
+		else {
+			isToTestTimeOut = false;
 		}	
 	}
 
-	@Override
-	public void onSaveGame(String gameName){
-		Broodwar.printf("The game was saved to \"" + gameName + "\".");
+	/// Å¸ÀÓ ¾Æ¿ô Á¶°ÇÀ» Ã¼Å©ÇÏ¿©, Á¶°Ç ¸¸Á· ½Ã GG ¼±¾ðÇÏ°í °ÔÀÓÀ» ³ª°©´Ï´Ù
+	void checkTimeOutConditionAndLeaveGame(){
+		
+		// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+		// ÇÁ·¹ÀÓº° ¼Ò¿ä½Ã°£ °è»ê·ÎÁ÷ ÁÖ¼® Ãß°¡
+
+		if (Broodwar.getFrameCount() >= 10) {
+
+			// ÇöÀç ÇÁ·¹ÀÓ¿¡¼­ÀÇ ¼Ò¿ä½Ã°£ ±â·Ï
+			timeElapsedAtFrame[Broodwar.getFrameCount()] = System.currentTimeMillis()
+					- timeStartedAtFrame[Broodwar.getFrameCount()];
+
+			long timeElapsedAtLastFrame = timeElapsedAtFrame[Broodwar.getFrameCount() - 1];
+
+			// (ÇÁ·¹ÀÓ F-1 ¿¡¼­ ¼Ò¿äÇß´ø ½Ã°£)  = (ÇÁ·¹ÀÓ F - 1 ÀÇ ¸¶Áö¸· ½Ã°¢) - (ÇÁ·¹ÀÓ F -1 ÀÇ ½ÃÀÛ ½Ã°¢) À¸·Î ÇÏ¸é 
+			// onFrame ¿¡¼­ ¸¶Áö¸· ½Ã°¢À» ±â·ÏÇÑ ÈÄ ´ÙÀ½ ÇÁ·¹ÀÓÀÌ ½ÃÀÛµÇ±â Àü±îÁö StarCraft °¡ Ã³¸®ÇÏ´Âµ¥ ½Ã°£ÀÌ ¶Ç °É¸®±â ¶§¹®¿¡ ¸¹ÀÌ ºÎÁ¤È®ÇÔ
+			// ±×·¯³ª, ÀÏ´Ü ÀÌ ¹æ½ÄÀÌ ÃÖ¼±.
+
+//			timeElapsedAtFrame[Broodwar.getFrameCount() - 1] =
+//					timeEndAtFrame[Broodwar.getFrameCount() - 1]
+//					- timeStartedAtFrame[Broodwar.getFrameCount() - 1];
+//
+//			long timeElapsedAtLastFrame = timeElapsedAtFrame[Broodwar.getFrameCount()-1];
+
+			// (ÇÁ·¹ÀÓ F-2 ¿¡¼­ ¼Ò¿äÇß´ø ½Ã°£)  = (ÇÁ·¹ÀÓ F - 1 ÀÇ ½ÃÀÛ ½Ã°¢) - (ÇÁ·¹ÀÓ F -2 ÀÇ ½ÃÀÛ ½Ã°¢) À¸·Î ÇÏ¸é ¾ÈµÊ.
+			// »ó´ë¹æ º¿ÀÇ ±ÍÃ¥»çÀ¯·Î ÀÎÇØ °ÔÀÓÀÌ ´À·ÁÁ³´Âµ¥,  ÇÁ·¹ÀÓ µ¿±âÈ­ ¶§¹®¿¡ °°Àº ½Ã°¢¿¡ ÇÁ·¹ÀÓÀ» ½ÃÀÛÇØ¼­ ÇÔ²² Å¸ÀÓ¾Æ¿ôÀÌ Ä«¿îÆ®µÇ±â ¶§¹®.
+//			timeElapsedAtFrame[Broodwar.getFrameCount() - 2] = 
+//					timeStartedAtFrame[Broodwar.getFrameCount() - 1]
+//					- timeStartedAtFrame[Broodwar.getFrameCount() - 2];
+//			long timeElapsedAtLastFrame = timeElapsedAtFrame[Broodwar.getFrameCount() - 2];
+
+			// ÇöÀç ½Ã°¢ Ç¥½Ã
+			Broodwar.drawTextScreen(260, 5, "FrameCount :");
+			Broodwar.drawTextScreen(340, 5, ""+ Broodwar.getFrameCount());
+			Broodwar.drawTextScreen(370, 5, "("
+					+(int)(Broodwar.getFrameCount() / (23.8 * 60))
+					+":"
+					+(int)((int)(Broodwar.getFrameCount() / 23.8) % 60)
+					+")"
+			);
+							
+			// Å¸ÀÓ¾Æ¿ô Ã¼Å© ÇöÈ²À» È­¸é¿¡ Ç¥½Ã
+			int y = 15;
+			for (int t = 0; t < timerLimits.size(); ++t)
+			{
+				Broodwar.drawTextScreen(260, y, "> "+timerLimits.get(t)+" ms : "+timerLimitsExceeded.get(t)+" / "+timerLimitsBound.get(t));
+				y += 10;
+			}
+
+			/*
+			// °¢ ÇÁ·¹ÀÓº° ¼Ò¿ä½Ã°£ ±â·ÏÀ» È­¸é¿¡ Ç¥½Ã
+			y = 100;
+			for (int i = Broodwar.getFrameCount() - 9; i < Broodwar.getFrameCount(); ++i)
+			{
+				Broodwar.drawTextScreen(260, y, "["+i+"] : "+timeStartedAtFrame[i]+" "+timeElapsedAtFrame[i]+" ms");
+				y += 10;
+			}
+
+			// ÃÖ´ë ¸¹Àº ½Ã°£À» ¼Ò¿äÇÑ ÇÁ·¹ÀÓÀ» È­¸é¿¡ Ç¥½Ã
+			y = 220;
+			int maxI = 0;
+			for (int i = 0; i < Broodwar.getFrameCount(); ++i)
+			{
+				if (timeElapsedAtFrame[maxI] < timeElapsedAtFrame[i]) {
+					maxI = i;
+				}
+			}
+			Broodwar.drawTextScreen(260, y, "["+maxI+"] : "+timeStartedAtFrame[maxI]+" "+timeElapsedAtFrame[maxI]+" ms");
+			*/
+
+			// Å¸ÀÓ¾Æ¿ô Ã¼Å© ¹× °ÔÀÓ Á¾·á
+			for (int t = 0; t < timerLimits.size(); ++t)
+			{
+				if (timeElapsedAtLastFrame > timerLimits.get(t))
+				{
+					timerLimitsExceeded.set(t, timerLimitsExceeded.get(t)+1);
+
+					if (timerLimitsExceeded.get(t).equals(timerLimitsBound.get(t)))
+					{
+						isTimeOutConditionSatisfied = true;
+						timeOutConditionSatisfiedFrame = Broodwar.getFrameCount();
+						
+						Broodwar.sendText("I lost because of TIMEOUT ("+timerLimitsBound.get(t)+" frames exceed "+timerLimits.get(t)+" ms/frame)");
+						System.out.println("I lost because of TIMEOUT ("+timerLimitsBound.get(t)+" frames exceed "+timerLimits.get(t)+" ms/frame)");
+						Broodwar.sendText("GG");
+					}
+				}
+			}
+			
+			// ÀÚµ¿ ÆÐ¹èÁ¶°Ç ¸¸Á· »óÈ²ÀÌ ÀÏÁ¤½Ã°£ µ¿¾È Áö¼ÓµÇ¾úÀ¸¸é °ÔÀÓ ÆÐ¹è·Î Ã³¸®
+			if (isTimeOutConditionSatisfied) {
+
+				MyBotModule.Broodwar.drawTextScreen(250, 100, "I lost because of TIMEOUT");
+
+				if (MyBotModule.Broodwar.getFrameCount() - timeOutConditionSatisfiedFrame >= maxDurationForLostCondition) {
+					MyBotModule.Broodwar.leaveGame();
+				}
+			}
+		}
+
 	}
+
+	// BasicBot 1.2 Patch Start ////////////////////////////////////////////////
+	/// º¿ ÇÁ·Î±×·¥ÀÇ »óÅÂ : º¿ÀÌ »ì¾ÆÀÖ´ÂÁö Ã¼Å©ÇÏ±â À§ÇÑ File Write ¿ëµµ
+	class TournamentModuleState {
+
+		public String tournamentModuleStateFileName; ///< º¿ ÇÁ·Î±×·¥ÀÇ »óÅÂ¸¦ ÀûÀ» ÆÄÀÏ ÀÌ¸§		
+
+		public String selfName;
+		public String enemyName;
+		public String mapName;
+
+		int frameCount;
+		int selfScore;
+		int enemyScore;
+		int gameElapsedTime;
+		int gameOver;
+		int gameTimeUp;
+
+		int isDefeated;
+		int isVictorious;
+
+		ArrayList<Integer> timerLimitsExceededInTournamentModuleState;
+
+		TournamentModuleState(int _gameElapsedTime)
+		{
+			tournamentModuleStateFileName = "gameStateOfBot.txt";
+
+			selfName = Broodwar.self().getName();
+			enemyName = Broodwar.enemy().getName();
+			mapName = Broodwar.mapFileName();
+
+			frameCount = Broodwar.getFrameCount();
+			selfScore = Broodwar.self().getKillScore()
+				+ Broodwar.self().getBuildingScore()
+				+ Broodwar.self().getRazingScore()
+				+ Broodwar.self().gatheredMinerals()
+				+ Broodwar.self().gatheredGas();
+
+			enemyScore = 0;
+
+			gameOver = 0;
+			gameTimeUp = 0;
+
+			gameElapsedTime = _gameElapsedTime;
+
+			isDefeated = -1;
+			isVictorious = -1;
+		}
+
+		void update(ArrayList<Integer> _timerLimitsExceeded)
+		{
+			frameCount = Broodwar.getFrameCount();
+			selfScore = Broodwar.self().getKillScore()
+				//+ Broodwar.self().getBuildingScore()
+				+ Broodwar.self().getRazingScore();
+			//+ Broodwar.self().gatheredMinerals()
+			//+ Broodwar.self().gatheredGas();
+
+			timerLimitsExceededInTournamentModuleState = new ArrayList<Integer>();
+			for (int t = 0; t < _timerLimitsExceeded.size(); ++t)
+			{
+				timerLimitsExceededInTournamentModuleState.add(_timerLimitsExceeded.get(t));
+			}
+		}
+
+		void ended(boolean isWinner)
+		{
+			gameOver = 1;
+			if (isWinner) {
+				isDefeated = 0;
+				isVictorious = 1;
+			}
+			else {
+				isDefeated = 1;
+				isVictorious = 0;
+			}
+		}
+
+		boolean write()
+		{
+			gameTimeUp = Broodwar.getFrameCount() > 64800 ? 1 : 0;
+
+			boolean result = false;
+			BufferedWriter bw = null;
+			try{
+				bw = new BufferedWriter(new FileWriter(tournamentModuleStateFileName, false));
+				
+				bw.write(""+selfName); bw.newLine();
+				bw.write(""+enemyName); bw.newLine();
+				bw.write(""+mapName); bw.newLine();
+				bw.write(""+frameCount); bw.newLine();
+				bw.write(""+selfScore); bw.newLine();
+				bw.write(""+enemyScore); bw.newLine();
+				bw.write(""+gameElapsedTime); bw.newLine();
+				bw.write(""+isDefeated); bw.newLine();
+				bw.write(""+isVictorious); bw.newLine();
+				bw.write(""+gameOver); bw.newLine();
+				bw.write(""+gameTimeUp); bw.newLine();
+
+				for (int i = 0; i<timerLimitsExceededInTournamentModuleState.size(); ++i)
+				{
+					bw.write(""+timerLimitsExceededInTournamentModuleState.get(i)); bw.newLine();
+				}
+
+				bw.flush();
+				result = true;				
+			}
+			catch(Exception e) {
+			}
+			finally {
+				try{
+					if (bw != null) {
+						bw.close();
+					}
+				}
+				catch(Exception ex) {				
+				}
+			}
+
+			return result;
+		}
+	}
+	
+	
 }
