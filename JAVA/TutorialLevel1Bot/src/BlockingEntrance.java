@@ -142,6 +142,60 @@ public class BlockingEntrance {
 				int[] bunkerYY_array = { 9, 11, 11, 83, 114, 115, 113, 50 };
 				bunkerY_array = bunkerYY_array;
 			}
+		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch) {
+			int[] fix_supplyXX = { 17, 111, 114, 24 };
+			fix_supplyX = fix_supplyXX;
+			int[] fix_supplyYY = { 21, 13, 108, 110 };
+			fix_supplyY = fix_supplyYY;
+			if (InformationManager.Instance().enemyRace == Race.Protoss
+					|| InformationManager.Instance().enemyRace == Race.Terran) {
+				int[] first_suppleXX_array = { 17, 111, 114, 24 };// private
+																	// static
+																	// intnew
+																	// int []
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 21, 13, 108, 110 };
+				first_suppleY_array = first_suppleYY_array;
+				int[] second_suppleXX_array = { 19, 119, 56, 10 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 23, 53, 105, 60 };
+				second_suppleY_array = second_suppleYY_array;
+				int[] barrackXX_array = { 76, 113, 52, 14 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 8, 50, 108, 63 };
+				barrackY_array = barrackYY_array;
+				int[] factoryXX_array = { 67, 107, 41, 20 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 12, 38, 109, 82 };
+				factoryY_array = factoryYY_array;
+				int[] bunkerXX_array = { 77, 110, 53, 16 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 4, 51, 104, 61 };
+			    bunkerY_array = bunkerYY_array;
+			} else {
+				int[] first_suppleXX_array = { 17, 111, 114, 24 };// private
+																// static intnew
+																// int []
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 21, 13, 108, 110 };
+				first_suppleY_array = first_suppleYY_array;
+				int[] second_suppleXX_array = { 50, 114, 20, 11 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 8, 27, 116, 86 };
+				second_suppleY_array = second_suppleYY_array;
+				int[] barrackXX_array = { 60, 113, 30, 10 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 9, 29, 115, 90 };
+				barrackY_array = barrackYY_array;
+				int[] factoryXX_array = { 60, 113, 30, 10 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 12, 33, 112, 93 };
+				factoryY_array = factoryYY_array;
+				int[] bunkerXX_array = { 57, 117, 27, 7 };
+				bunkerX_array = bunkerXX_array;
+				int[] bunkerYY_array = { 9, 30, 116, 90 };
+				bunkerY_array = bunkerYY_array;
+			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
 			int[] fix_supplyXX = { 66, 118, 40, 0 };
 			fix_supplyX = fix_supplyXX;
@@ -288,6 +342,17 @@ public class BlockingEntrance {
 			}else if(startingX == 8 && startingY == 47){
 				starting_int = 7;
 			}
+		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch){
+			if(startingX == 9 && startingY == 8){
+				//11시부터 시계방향
+				starting_int = 0;
+			}else if(startingX == 119 && startingY == 8){
+				starting_int = 1;
+			}else if(startingX == 119 && startingY == 118){
+				starting_int = 2;
+			}else if(startingX == 9 && startingY == 118){
+				starting_int = 3;
+			}
 		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
 			if(startingX == 57 && startingY == 6){
 				//11시부터 시계방향
@@ -374,6 +439,17 @@ public class BlockingEntrance {
 				starting_int = 6;
 			}else if(startingX == 8 && startingY == 47){
 				starting_int = 7;
+			}
+		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch){
+			if(startingX == 9 && startingY == 8){
+				//11시부터 시계방향
+				starting_int = 0;
+			}else if(startingX == 119 && startingY == 8){
+				starting_int = 1;
+			}else if(startingX == 119 && startingY == 118){
+				starting_int = 2;
+			}else if(startingX == 9 && startingY == 118){
+				starting_int = 3;
 			}
 		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
 			if(startingX == 57 && startingY == 6){

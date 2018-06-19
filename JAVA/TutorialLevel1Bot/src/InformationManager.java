@@ -1665,6 +1665,8 @@ public class InformationManager {
 		String mapName = MyBotModule.Broodwar.mapFileName().toUpperCase();
 		if (mapName.matches(".*HUNT.*")) {
 			candiMapByName = MAP.TheHunters;
+		} else if (mapName.matches(".*OverWatch.*") || mapName.matches(".*OverWatch.*")) {
+			candiMapByName = MAP.OverWatch;
 		} else if (mapName.matches(".*LOST.*") || mapName.matches(".*TEMPLE.*")) {
 			candiMapByName = MAP.LostTemple;
 		} else if (mapName.matches(".*FIGHT.*") || mapName.matches(".*SPIRIT.*")) {
@@ -1674,7 +1676,7 @@ public class InformationManager {
 		}
 
 		// 최종 결정
-		MAP mapDecision = MAP.LostTemple;
+		MAP mapDecision = MAP.OverWatch;
 		if (candiMapByPosition == candiMapByName) {
 			mapDecision = candiMapByPosition;
 //			System.out.println("map : " + candiMapByPosition + "(100%)");

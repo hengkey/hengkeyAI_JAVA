@@ -30,5 +30,5 @@ public class MapSpecificInformation {
 }
 
 enum MAP {
-	LostTemple, FightingSpririts, TheHunters, Unknown
+	LostTemple, FightingSpririts, TheHunters, CircuitBreaker, OverWatch, Unknown
 };
