@@ -1,4 +1,5 @@
 hengkey
+<<<<<<< HEAD
 Sargas Tribe
 (4)CircuitBreaker.scx
 4320
@@ -7,8 +8,21 @@ Sargas Tribe
 98036
 -1
 -1
+=======
+Velari Tribe
+(4)OverWatch.scx
+5581
 0
+>>>>>>> 9ce604b07beae4a31b2cb54992e98f7c064106ef
+0
+114534
+1
 0
 1
+<<<<<<< HEAD
+=======
+0
+1
+>>>>>>> 9ce604b07beae4a31b2cb54992e98f7c064106ef
 0
 0
