@@ -1638,20 +1638,39 @@ public class InformationManager {
 		// position으로 map 판단
 		final int posFighting[][] = new int[][]{{288, 3760}, {288, 240}, {3808, 272}, {3808, 3792}};
 		final int posLost[][] = new int[][]{{288, 2832}, {928, 3824}, {3808, 912}, {1888, 240}};
+		final int posOver[][] = new int[][]{{288, 272}, {3808, 272}, {3808, 3792}, {288, 3792}};
+		final int posCircuit[][] = new int[][]{{288, 336}, {3808, 336}, {3808, 3824}, {288, 3824}};
 		if (startingBase.size() == 8) {
 			candiMapByPosition = MAP.TheHunters;
 		} else if (startingBase.size() == 4) {
 			Position basePos = mainBaseLocations.get(selfPlayer).getPosition();
-			for (int[] pos : posFighting) {
-				if (basePos.equals(new Position(pos[0], pos[1]))) {
-					candiMapByPosition = MAP.FightingSpririts;
-					break;
-				}
-			}
-			if (candiMapByPosition == null) {
+System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
+//			for (int[] pos : posFighting) {
+//				if (basePos.equals(new Position(pos[0], pos[1]))) {
+//					candiMapByPosition = MAP.FightingSpririts;
+//					break;
+//				}
+//			}
+//			if (candiMapByPosition == null) {
 				for (int[] pos : posLost) {
 					if (basePos.equals(new Position(pos[0], pos[1]))) {
 						candiMapByPosition = MAP.LostTemple;
+						break;
+					}
+				}
+//			}
+			if (candiMapByPosition == null) {
+				for (int[] pos : posOver) {
+					if (basePos.equals(new Position(pos[0], pos[1]))) {
+						candiMapByPosition = MAP.OverWatch;
+						break;
+					}
+				}
+			}
+			if (candiMapByPosition == null) {
+				for (int[] pos : posCircuit) {
+					if (basePos.equals(new Position(pos[0], pos[1]))) {
+						candiMapByPosition = MAP.CircuitBreaker;
 						break;
 					}
 				}
@@ -1659,14 +1678,17 @@ public class InformationManager {
 		} else {
 			candiMapByPosition = MAP.Unknown;
 		}
-		
+System.out.println("map="+candiMapByPosition);
+
 		// name으로 map 판단
 		MAP candiMapByName = null;
 		String mapName = MyBotModule.Broodwar.mapFileName().toUpperCase();
 		if (mapName.matches(".*HUNT.*")) {
 			candiMapByName = MAP.TheHunters;
-		} else if (mapName.matches(".*OverWatch.*") || mapName.matches(".*OverWatch.*")) {
+		} else if (mapName.matches(".*Over.*") || mapName.matches(".*Watch.*")) {
 			candiMapByName = MAP.OverWatch;
+		} else if (mapName.matches(".*Circuit.*") || mapName.matches(".*Breaker.*")) {
+			candiMapByName = MAP.CircuitBreaker;			
 		} else if (mapName.matches(".*LOST.*") || mapName.matches(".*TEMPLE.*")) {
 			candiMapByName = MAP.LostTemple;
 		} else if (mapName.matches(".*FIGHT.*") || mapName.matches(".*SPIRIT.*")) {
@@ -1689,6 +1711,8 @@ public class InformationManager {
 //				System.out.println("map : " + mapDecision + "(mapByPosition is -> " + candiMapByPosition + ")");
 			}
 		}
+
+System.out.println("map="+mapDecision);
 
 		MapSpecificInformation tempMapInfo = new MapSpecificInformation();
 		tempMapInfo.setMap(mapDecision);
