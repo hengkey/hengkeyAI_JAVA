@@ -143,58 +143,64 @@ public class BlockingEntrance {
 				bunkerY_array = bunkerYY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch) {
-			int[] fix_supplyXX = { 17, 111, 114, 24 };
+			int[] fix_supplyXX = { 19, 96, 114, 36 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 21, 13, 108, 110 };
+			int[] fix_supplyYY = { 22, 17, 107, 111 };
 			fix_supplyY = fix_supplyYY;
+			
+System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().enemyRace);			
+			
 			if (InformationManager.Instance().enemyRace == Race.Protoss
 					|| InformationManager.Instance().enemyRace == Race.Terran) {
-				int[] first_suppleXX_array = { 17, 111, 114, 24 };// private
-																	// static
-																	// intnew
-																	// int []
+				int[] first_suppleXX_array = { 17, 94, 112, 34 };
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 21, 13, 108, 110 };
+				int[] first_suppleYY_array = { 20, 15, 105, 109 };
 				first_suppleY_array = first_suppleYY_array;
-				int[] second_suppleXX_array = { 19, 119, 56, 10 };
+
+				int[] second_suppleXX_array = { 15, 93, 106, 33 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 23, 53, 105, 60 };
+				int[] second_suppleYY_array = { 18, 13, 103, 111 };
 				second_suppleY_array = second_suppleYY_array;
-				int[] barrackXX_array = { 76, 113, 52, 14 };
+
+				int[] barrackXX_array = { 11, 89, 108, 30 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 8, 50, 108, 63 };
+				int[] barrackYY_array = { 17, 15, 106, 111 };
 				barrackY_array = barrackYY_array;
-				int[] factoryXX_array = { 67, 107, 41, 20 };
+
+				int[] factoryXX_array = { 65, 105, 39, 18 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 38, 109, 82 };
+				int[] factoryYY_array = { 10, 36, 107, 80 };
 				factoryY_array = factoryYY_array;
-				int[] bunkerXX_array = { 77, 110, 53, 16 };
+
+				int[] bunkerXX_array = { 75, 108, 51, 14 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 4, 51, 104, 61 };
+			    int[] bunkerYY_array = { 2, 49, 102, 59 };
 			    bunkerY_array = bunkerYY_array;
 			} else {
-				int[] first_suppleXX_array = { 17, 111, 114, 24 };// private
-																// static intnew
-																// int []
+				int[] first_suppleXX_array = { 17, 94, 112, 34 };
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 21, 13, 108, 110 };
+				int[] first_suppleYY_array = { 20, 15, 105, 109 };
 				first_suppleY_array = first_suppleYY_array;
-				int[] second_suppleXX_array = { 50, 114, 20, 11 };
+
+				int[] second_suppleXX_array = { 15, 93, 106, 33 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 8, 27, 116, 86 };
+				int[] second_suppleYY_array = { 18, 13, 103, 111 };
 				second_suppleY_array = second_suppleYY_array;
-				int[] barrackXX_array = { 60, 113, 30, 10 };
+
+				int[] barrackXX_array = { 11, 89, 108, 30 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 9, 29, 115, 90 };
+				int[] barrackYY_array = { 17, 15, 106, 111 };
 				barrackY_array = barrackYY_array;
-				int[] factoryXX_array = { 60, 113, 30, 10 };
+
+				int[] factoryXX_array = { 65, 105, 39, 18 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 33, 112, 93 };
+				int[] factoryYY_array = { 10, 36, 107, 80 };
 				factoryY_array = factoryYY_array;
-				int[] bunkerXX_array = { 57, 117, 27, 7 };
-				bunkerX_array = bunkerXX_array;
-				int[] bunkerYY_array = { 9, 30, 116, 90 };
-				bunkerY_array = bunkerYY_array;
+
+				int[] bunkerXX_array = { 75, 108, 51, 14 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 2, 49, 102, 59 };
+			    bunkerY_array = bunkerYY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
 			int[] fix_supplyXX = { 66, 118, 40, 0 };
@@ -343,14 +349,15 @@ public class BlockingEntrance {
 				starting_int = 7;
 			}
 		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch){
-			if(startingX == 9 && startingY == 8){
+System.out.println("startingX="+startingX+" startingY="+startingY);
+			if(startingX == 7 && startingY == 7){
 				//11시부터 시계방향
 				starting_int = 0;
-			}else if(startingX == 119 && startingY == 8){
+			}else if(startingX == 117 && startingY == 7){
 				starting_int = 1;
-			}else if(startingX == 119 && startingY == 118){
+			}else if(startingX == 117 && startingY == 117){
 				starting_int = 2;
-			}else if(startingX == 9 && startingY == 118){
+			}else if(startingX == 7 && startingY == 117){
 				starting_int = 3;
 			}
 		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
