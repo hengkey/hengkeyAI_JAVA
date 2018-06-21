@@ -167,6 +167,7 @@ public class BuildManager {
 							if (desiredPosition != TilePosition.None) {
 								// Send the construction task to the
 								// construction manager
+System.out.println("t.getUnitType()="+t.getUnitType());
 								ConstructionManager.Instance().addConstructionTask(t.getUnitType(), desiredPosition);
 							} else {
 								// 건물 가능 위치가 없는 경우는, Protoss_Pylon 가 없거나, Creep
