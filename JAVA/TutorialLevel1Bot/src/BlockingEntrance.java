@@ -167,7 +167,7 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] barrackYY_array = { 17, 15, 106, 111 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 65, 115, 114, 12 };
+				int[] factoryXX_array = { 65, 115, 104, 12 };
 				factoryX_array = factoryXX_array;
 				int[] factoryYY_array = { 10, 11, 112, 106 };
 				factoryY_array = factoryYY_array;
@@ -192,7 +192,7 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] barrackYY_array = { 17, 15, 106, 111 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 65, 115, 114, 12 };
+				int[] factoryXX_array = { 65, 115, 104, 12 };
 				factoryX_array = factoryXX_array;
 				int[] factoryYY_array = { 10, 11, 112, 106 };
 				factoryY_array = factoryYY_array;
