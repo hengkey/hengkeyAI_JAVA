@@ -93,7 +93,7 @@ public class WorkerData {
 			Unit worker = it.next();
 
 			if (worker == null ) {			
-				workers.remove(worker);
+//				workers.remove(worker);
 			}
 			else {
 				if (worker.getType().isWorker() == false || worker.getPlayer() != MyBotModule.Broodwar.self() 
@@ -152,7 +152,7 @@ public class WorkerData {
 						refineryWorkerCount.put(refineryID, count);
 					}
 
-					workers.remove(worker);
+//					workers.remove(worker);
 				}
 			}
 		}
