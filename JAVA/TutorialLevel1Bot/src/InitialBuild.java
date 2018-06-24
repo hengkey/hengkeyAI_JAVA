@@ -26,7 +26,7 @@ public class InitialBuild {
 		TilePosition barrackPos = new TilePosition(BlockingEntrance.Instance().barrackX,BlockingEntrance.Instance().barrackY);
 		TilePosition factoryPos = new TilePosition(BlockingEntrance.Instance().factoryX,BlockingEntrance.Instance().factoryY);
 		TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
-		
+		TilePosition turret1Pos = new TilePosition(BlockingEntrance.Instance().turret1X,BlockingEntrance.Instance().turret1Y);		
 		
 		
 		if (InformationManager.Instance().enemyRace == Race.Terran) {
@@ -56,6 +56,10 @@ public class InitialBuild {
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
+				
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret, turret1Pos,true);
+				
 				queueBuildSeed(true, UnitType.Terran_Command_Center, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				

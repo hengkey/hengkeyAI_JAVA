@@ -41,6 +41,9 @@ public class BlockingEntrance {
 	public int bunkerX = 0;
 	public int bunkerY = 0;
 	
+	public int turret1X = 0;
+	public int turret1Y = 0;
+	
 	public int build_first_suppleX = 0;
 	public int build_first_suppleY = 0;
 	
@@ -69,6 +72,9 @@ public class BlockingEntrance {
 	
 	private static int fix_supplyX[] = null; //new int []{26, 54, 98, 104, 90, 52, 14, 20};
 	private static int fix_supplyY[] = null; //new int []{21, 25, 23,   63, 97, 96, 99, 56};
+	
+	private static int turretX_array[] = null;
+	private static int turretY_array[] = null;
 	
 	private int starting_int = 0;
 
@@ -176,6 +182,11 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 16, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
+			    
+				int[] turretXX_array = { 0, 126, 126, 0 };
+			    turretX_array = turretXX_array;
+			    int[] turretYY_array = { 11, 11, 121, 122 };
+			    turretY_array = turretYY_array;
 			} else {
 				int[] first_suppleXX_array = { 17, 95, 113, 34 };
 				first_suppleX_array = first_suppleXX_array;
