@@ -416,6 +416,11 @@ public class BuildOrderQueue {
 		queueItem(new BuildOrderItem(metaType, seedPosition, 0, blocking, -1));
 	}
 
+	public void queueAsLowestPriority(UnitType unitType, TilePosition seedPosition, boolean blocking, boolean forcedType)
+	{
+		queueItem(new BuildOrderItem(new MetaType(unitType), seedPosition, 0, blocking, -1, forcedType));
+	}
+	
 	public void queueAsLowestPriority(UnitType unitType, TilePosition seedPosition, boolean blocking)
 	{
 		queueItem(new BuildOrderItem(new MetaType(unitType), seedPosition, 0, blocking, -1));

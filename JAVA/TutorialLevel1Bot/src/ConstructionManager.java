@@ -36,7 +36,7 @@ public class ConstructionManager {
 	}
 	
 	/// constructionQueue 에 ConstructionTask 를 추가합니다
-	public void addConstructionTask(UnitType type, TilePosition desiredPosition)
+	public void addConstructionTask(UnitType type, TilePosition desiredPosition, boolean forcedType)
 	{
 		if (type == UnitType.None || type == UnitType.Unknown) {
 			return;
@@ -45,7 +45,7 @@ public class ConstructionManager {
 			return;
 		}
 
-		ConstructionTask b = new ConstructionTask(type, desiredPosition);
+		ConstructionTask b = new ConstructionTask(type, desiredPosition, forcedType);
 		b.setStatus(ConstructionTask.ConstructionStatus.Unassigned.ordinal());
 
 		// reserve resources
@@ -61,7 +61,7 @@ public class ConstructionManager {
 		reservedMinerals -= type.mineralPrice();
 		reservedGas -= type.gasPrice();
 
-		ConstructionTask b = new ConstructionTask(type, desiredPosition);
+		ConstructionTask b = new ConstructionTask(type, desiredPosition, false);
 	    if (constructionQueue.contains(b))
 	    {
 	    	//System.out.println("Cancel Construction " + b.getType() + " at " + b.getDesiredPosition().getX() + "," + b.getDesiredPosition().getY());
@@ -210,8 +210,13 @@ public class ConstructionManager {
 
 			// 건설 일꾼이 Unassigned 인 상태에서 getBuildLocationNear 로 건설할 위치를 다시 정합니다. . Assigned 
 			TilePosition testLocation = ConstructionPlaceFinder.Instance().getBuildLocationNear(b.getType(), b.getDesiredPosition());
-
-			//System.out.println( "ConstructionPlaceFinder Selected Location : " + testLocation.x + "," + testLocation.y );
+			if(b.isForcedType() == true)
+			{
+				System.out.println("desiredPosition is forced mode "+b.getType());
+				testLocation = b.getDesiredPosition();
+			}
+			
+			System.out.println( "ConstructionPlaceFinder Selected Location : " + testLocation.getX() + "," + testLocation.getY() );
 
 			if (testLocation == TilePosition.None || testLocation == TilePosition.Invalid || testLocation.isValid() == false) {
 				// 지금 건물 지을 장소를 전혀 찾을 수 없게 된 경우는, 

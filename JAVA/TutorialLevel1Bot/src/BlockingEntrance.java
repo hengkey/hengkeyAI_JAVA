@@ -158,19 +158,19 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 			
 			if (InformationManager.Instance().enemyRace == Race.Protoss
 					|| InformationManager.Instance().enemyRace == Race.Terran) {
-				int[] first_suppleXX_array = { 18, 95, 113, 34 };
+				int[] first_suppleXX_array = { 18, 95, 109, 34 };
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 21, 16, 105, 109 };
+				int[] first_suppleYY_array = { 21, 16, 106, 110 };
 				first_suppleY_array = first_suppleYY_array;
 
 				int[] second_suppleXX_array = { 16, 94, 107, 35 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 19, 14, 103, 111 };
+				int[] second_suppleYY_array = { 19, 14, 104, 112 };
 				second_suppleY_array = second_suppleYY_array;
 
-				int[] barrackXX_array = { 12, 89, 109, 30 };
+				int[] barrackXX_array = { 12, 90, 112, 30 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 18, 15, 106, 111 };
+				int[] barrackYY_array = { 18, 16, 107, 111 };
 				barrackY_array = barrackYY_array;
 
 				int[] factoryXX_array = { 18, 115, 104, 12 };
@@ -183,24 +183,24 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 			    int[] bunkerYY_array = { 16, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
 			    
-				int[] turretXX_array = { 0, 126, 126, 0 };
-			    turret1X_array = turretXX_array;
-			    int[] turretYY_array = { 11, 11, 121, 122 };
-			    turret1Y_array = turretYY_array;
+				int[] turret1XX_array = { 6, 120, 120, 6 };
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = { 10, 10, 120, 120 };
+			    turret1Y_array = turret1YY_array;
 			} else {
-				int[] first_suppleXX_array = { 17, 95, 113, 34 };
+				int[] first_suppleXX_array = { 18, 95, 109, 34 };
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 20, 16, 105, 109 };
+				int[] first_suppleYY_array = { 21, 16, 106, 110 };
 				first_suppleY_array = first_suppleYY_array;
 
-				int[] second_suppleXX_array = { 15, 94, 107, 35 };
+				int[] second_suppleXX_array = { 16, 94, 107, 35 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 18, 14, 103, 111 };
+				int[] second_suppleYY_array = { 19, 14, 104, 112 };
 				second_suppleY_array = second_suppleYY_array;
 
-				int[] barrackXX_array = { 11, 89, 109, 30 };
+				int[] barrackXX_array = { 12, 90, 112, 30 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 17, 15, 106, 111 };
+				int[] barrackYY_array = { 18, 16, 107, 111 };
 				barrackY_array = barrackYY_array;
 
 				int[] factoryXX_array = { 18, 115, 104, 12 };
@@ -213,10 +213,10 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 			    int[] bunkerYY_array = { 16, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
 			    
-				int[] turretXX_array = { 0, 126, 126, 0 };
-			    turret1X_array = turretXX_array;
-			    int[] turretYY_array = { 11, 11, 121, 122 };
-			    turret1Y_array = turretYY_array;
+				int[] turret1XX_array = { 6, 120, 120, 6 };
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = { 10, 10, 120, 120 };
+			    turret1Y_array = turret1YY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
 			int[] fix_supplyXX = { 66, 118, 40, 0 };

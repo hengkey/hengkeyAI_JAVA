@@ -13,6 +13,7 @@ public class BuildOrderItem {
 	public boolean blocking;			///< whether or not we block further items
 	public TilePosition seedLocation; 	///< 건설 위치
 	public int producerID;				///< producer unitID (건물ID, 유닛ID)
+	public boolean forcedType;			///< true이면 seedLocation에 지정한대로 강제건설
 	
 	/// 건설위치 초안 결정 정책
 	/// 향후 적진 길목, 언덕 위 등 추가
@@ -44,6 +45,7 @@ public class BuildOrderItem {
 		this.producerID = producerID;
 		this.seedLocation = TilePosition.None;
 		this.seedLocationStrategy = SeedPositionStrategy.MainBaseLocation;
+		this.forcedType = false;
 	}
 	
 	public BuildOrderItem(MetaType metaType, int priority, boolean blocking)
@@ -68,8 +70,20 @@ public class BuildOrderItem {
 		this.producerID = producerID;
 		this.seedLocation = seedLocation;
 		this.seedLocationStrategy = SeedPositionStrategy.SeedPositionSpecified;
+		this.forcedType = false;
 	}
 
+	public BuildOrderItem(MetaType metaType, TilePosition seedLocation, int priority, boolean blocking, int producerID, boolean forcedType)
+	{
+		this.metaType = metaType;
+		this.priority = priority;
+		this.blocking = blocking;
+		this.producerID = producerID;
+		this.seedLocation = seedLocation;
+		this.seedLocationStrategy = SeedPositionStrategy.SeedPositionSpecified;
+		this.forcedType = forcedType;
+	}
+	
 	public BuildOrderItem(MetaType metaType, TilePosition seedLocation){
 		this(metaType, seedLocation, 0, true, -1);
 	}
@@ -87,8 +101,9 @@ public class BuildOrderItem {
 		this.producerID = producerID;
 		this.seedLocation = TilePosition.None;
 		this.seedLocationStrategy = seedPositionStrategy;
+		this.forcedType = false;
 	}
-
+	
 	public BuildOrderItem(MetaType metaType, SeedPositionStrategy seedPositionStrategy) {
 		this(metaType, seedPositionStrategy, 0, true, -1);
 	}

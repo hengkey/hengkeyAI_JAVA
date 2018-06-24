@@ -53,6 +53,9 @@ public class ConstructionTask {
 	/// Construction Task 가 건설 작업 시작했는가 여부
 	private boolean underConstruction;
 
+	/// true일경우 아무것도 따지지 않고 건설 위치를 desiredPosition 그대로 사용 함.
+	private boolean forcedType;
+	
 	public ConstructionTask()
 	{
 		desiredPosition = TilePosition.None;
@@ -64,10 +67,11 @@ public class ConstructionTask {
 		lastConstructionWorkerID = 0;
 		status = ConstructionStatus.Unassigned.ordinal();
 		buildCommandGiven = false;
-		underConstruction = false; 
+		underConstruction = false;
+		forcedType = false;
 	} 
 
-	public ConstructionTask(UnitType t, TilePosition desiredPosition)
+	public ConstructionTask(UnitType t, TilePosition desiredPosition, boolean forcedType)
 	{
 		this.desiredPosition = desiredPosition;
 		finalPosition = TilePosition.None;
@@ -78,7 +82,8 @@ public class ConstructionTask {
 		lastConstructionWorkerID = 0;
 		status = ConstructionStatus.Unassigned.ordinal();
 		buildCommandGiven = false;
-		underConstruction = false; 
+		underConstruction = false;
+		this.forcedType = forcedType;
 	}
 
 	public UnitType getType() {
@@ -143,6 +148,14 @@ public class ConstructionTask {
 
 	public void setUnderConstruction(boolean underConstruction) {
 		this.underConstruction = underConstruction;
+	}
+	
+	public boolean isForcedType() {
+		return forcedType;
+	}
+
+	public void setForcedType(boolean forcedType) {
+		this.forcedType = forcedType;
 	}
 
 	public boolean isBuildCommandGiven() {

@@ -62,7 +62,7 @@ public class ConstructionPlaceFinder {
 		if (seedPosition != TilePosition.None  && seedPosition.isValid() )
 		{
 			
-			//System.out.println("checking here");
+//			System.out.println("checking here");
 			desiredPosition = getBuildLocationNear(buildingType, seedPosition, true, true);
 			
 		}
@@ -212,7 +212,7 @@ public class ConstructionPlaceFinder {
 	}
 	public final TilePosition getBuildLocationNear(UnitType buildingType, TilePosition desiredPosition, Boolean MethodFix, Boolean spaceZero)
 	{
-		//System.out.println("getBuildLocationNear 입력111 ==>> (" + desiredPosition.getX() + " , " +  desiredPosition.getY() + ")" );
+//		System.out.println("getBuildLocationNear 입력111 ==>> (" + desiredPosition.getX() + " , " +  desiredPosition.getY() + ")" );
 		if (buildingType.isRefinery())
 		{
 			//std::cout << "getRefineryPositionNear "<< std::endl;
@@ -278,7 +278,7 @@ public class ConstructionPlaceFinder {
 
 				testPosition = getBuildLocationNear(buildingType, desiredPosition, buildingGapSpace, constructionPlaceSearchMethod);
 
-				// std::cout << "ConstructionPlaceFinder testPosition " << testPosition.x << "," << testPosition.y << std::endl;
+				System.out.println("ConstructionPlaceFinder testPosition "+testPosition.getX()+","+testPosition.getY());
 
 				if (testPosition != TilePosition.None && testPosition != TilePosition.Invalid)
 					return testPosition;
@@ -325,7 +325,7 @@ public class ConstructionPlaceFinder {
 
 		//returns a valid build location near the desired tile position (x,y).
 		TilePosition resultPosition = TilePosition.None;
-		ConstructionTask b = new ConstructionTask(buildingType, desiredPosition);
+		ConstructionTask b = new ConstructionTask(buildingType, desiredPosition, false);
 
 		// maxRange 를 설정하지 않거나, maxRange 를 128으로 설정하면 지도 전체를 다 탐색하는데, 매우 느려질뿐만 아니라, 대부분의 경우 불필요한 탐색이 된다
 		// maxRange 는 16 ~ 64가 적당하다
