@@ -188,9 +188,12 @@ public class BuildOrderQueue {
 				{
 					if (queryType.getUnitType().isBuilding())
 					{
-						//System.out.println("distance : " + itemPosition.getDistance(new TilePosition((int)seedPositionPoint.getX(), (int)seedPositionPoint.getY())));
-						if (itemPosition.getDistance(new TilePosition((int)seedPositionPoint.getX(), (int)seedPositionPoint.getY())) <= maxRange){
-							itemCount++;
+						if(seedPositionPoint != null && itemPosition != null)
+						{
+							//System.out.println("distance : " + itemPosition.getDistance(new TilePosition((int)seedPositionPoint.getX(), (int)seedPositionPoint.getY())));
+							if (itemPosition.getDistance(new TilePosition((int)seedPositionPoint.getX(), (int)seedPositionPoint.getY())) <= maxRange){
+								itemCount++;
+							}
 						}
 					}
 				}

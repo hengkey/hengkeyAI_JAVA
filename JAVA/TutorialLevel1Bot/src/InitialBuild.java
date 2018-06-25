@@ -57,14 +57,17 @@ System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
-				queueBuild(false, UnitType.Terran_Vulture);
+				queueBuild(false, UnitType.Terran_Siege_Tank_Tank_Mode);
 
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret, turret1Pos, true, true);
 				
-				queueBuildSeed(true, UnitType.Terran_Command_Center, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
+//				queueBuildSeed(true, UnitType.Terran_Command_Center, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
-				
+//				queueBuildSeed(true, UnitType.Terran_Missile_Turret, BuildOrderItem.SeedPositionStrategy.FirstChokePoint);
+//				queueBuildSeed(true, UnitType.Terran_Missile_Turret, BuildOrderItem.SeedPositionStrategy.FirstExpansionLocation);
+//				queueBuildSeed(true, UnitType.Terran_Missile_Turret, BuildOrderItem.SeedPositionStrategy.SecondChokePoint);
+//				queueBuildSeed(true, UnitType.Terran_Missile_Turret, BuildOrderItem.SeedPositionStrategy.MainBaseBackYard);
 //			}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters){
 //				//ÇåÅÍ Å×¶õÀü
 //				
@@ -125,15 +128,15 @@ System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
 		}else if (InformationManager.Instance().enemyRace == Race.Protoss) {
 			//if(InformationManager.Instance().getMapSpecificInformation().getMap() != MAP.TheHunters){
 				queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
 				queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
 				queueBuild(true, UnitType.Terran_SCV);
 				queueBuild(true, UnitType.Terran_Refinery);
 				queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_Marine);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true);
 				queueBuildSeed(false, UnitType.Terran_Factory, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);

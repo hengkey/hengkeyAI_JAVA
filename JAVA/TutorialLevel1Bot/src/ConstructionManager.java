@@ -216,7 +216,7 @@ public class ConstructionManager {
 				testLocation = b.getDesiredPosition();
 			}
 			
-			System.out.println( "ConstructionPlaceFinder Selected Location : " + testLocation.getX() + "," + testLocation.getY() );
+//			System.out.println( "ConstructionPlaceFinder Selected Location : " + testLocation.getX() + "," + testLocation.getY() );
 
 			if (testLocation == TilePosition.None || testLocation == TilePosition.Invalid || testLocation.isValid() == false) {
 				// 지금 건물 지을 장소를 전혀 찾을 수 없게 된 경우는, 

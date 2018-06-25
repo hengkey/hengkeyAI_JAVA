@@ -123,15 +123,15 @@ public class BuildManager {
 				 */
 			}
 
-			// SCV °¹¼ö Á¦ÇÑ (¹Ì³×¶ö 1°³´ç 2°³ SCV)
-			if (currentItem.metaType.getUnitType() == UnitType.Terran_SCV) {
-				int numScv = InformationManager.Instance().getUnitData(InformationManager.Instance().selfPlayer).getNumUnits("Terran_SCV");
-				int numCmdCenter = InformationManager.Instance().getUnitData(InformationManager.Instance().selfPlayer).getNumUnits("Terran_Command_Center");
-				if (numCmdCenter * 20 < numScv) {
-//					System.out.println(currentItem.metaType.getUnitType()+"numver is too many"+" numCmdCenter="+numCmdCenter+" numScv="+numScv);
-					canMake = false;
-				}
-			}
+//			// SCV °¹¼ö Á¦ÇÑ (¹Ì³×¶ö 1°³´ç 2°³ SCV)
+//			if (currentItem.metaType.getUnitType() == UnitType.Terran_SCV) {
+//				int numScv = InformationManager.Instance().getUnitData(InformationManager.Instance().selfPlayer).getNumUnits("Terran_SCV");
+//				int numCmdCenter = InformationManager.Instance().getUnitData(InformationManager.Instance().selfPlayer).getNumUnits("Terran_Command_Center");
+//				if (numCmdCenter * 20 < numScv) {
+////					System.out.println(currentItem.metaType.getUnitType()+"numver is too many"+" numCmdCenter="+numCmdCenter+" numScv="+numScv);
+//					canMake = false;
+//				}
+//			}
 			
 			// if we can make the current item, create it
 			if (producer != null && canMake == true) {

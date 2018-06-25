@@ -395,7 +395,7 @@ public class InformationManager {
 	/// Unit 에 대한 정보를 업데이트합니다 <br>
 	/// 유닛이 파괴/사망한 경우, 해당 유닛 정보를 삭제합니다
 	public void onUnitDestroy(Unit unit) {
-if (unit.getType() == UnitType.Terran_SCV)System.out.println("unit.getType()=" + unit.getType() + "destoried"+new Exception().getStackTrace()[0].getLineNumber());
+//if (unit.getType() == UnitType.Terran_SCV)System.out.println("unit.getType()=" + unit.getType() + "destoried"+new Exception().getStackTrace()[0].getLineNumber());
 
 		if (unit.getType().isNeutral()) {
 			return;
