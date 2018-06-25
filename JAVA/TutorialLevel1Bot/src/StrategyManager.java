@@ -1303,10 +1303,11 @@ public class StrategyManager {
 		Boolean goliathInTheQueue = false;
 		Boolean tankInTheQueue = false;
 		Boolean isfacexists = false;
-		
+System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());		
 		if(MyBotModule.Broodwar.self().supplyTotal() - MyBotModule.Broodwar.self().supplyUsed() < 4){
 			return;
 		}
+System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());		
 		if (!tempbuildQueue.isEmpty()) {
 			currentItem= tempbuildQueue.getHighestPriorityItem();
 			while(true){
@@ -1319,18 +1320,22 @@ public class StrategyManager {
 					tankInTheQueue = true;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Supply_Depot){
+					System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 //				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType().isAddon()){
 //					return;
 //				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
+					System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Vulture){
+					System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_SCV){
+					System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.blocking == true){
@@ -1344,6 +1349,7 @@ public class StrategyManager {
 				currentItem = tempbuildQueue.getItem();
 			}
 		}else{
+			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		
@@ -1359,6 +1365,7 @@ public class StrategyManager {
 			}
 		}
 		if(isfacexists == false){
+			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		
@@ -1398,7 +1405,7 @@ public class StrategyManager {
 				
 				
 				int minNeed = selected.mineralPrice();
-				
+System.out.println("MyBotModule.Broodwar.self().supplyUsed()="+MyBotModule.Broodwar.self().supplyUsed());				
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType()!=selected){
 					if(selected == UnitType.Terran_Siege_Tank_Tank_Mode && tankInTheQueue == false){
 						if(unit.getAddon() != null && unit.getAddon().isCompleted() == true){
