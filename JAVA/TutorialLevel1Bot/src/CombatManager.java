@@ -1382,6 +1382,16 @@ public class CombatManager {
 		        }
 			}
 			
+			//시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
+			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+						unit.getTilePosition(), 180)
+						+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
+								UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
+					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
+							unit.getTilePosition(), true);
+				}
+			}
 	    }
 
 //		int bonusRadius = (int) (Math.log(mainAttackSquad.getUnitSet().size()) * 15);

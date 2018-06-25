@@ -168,15 +168,15 @@ public class BuildManager {
 							// ConstructionManager 가 건설 도중에 해당 위치에 건설이 어려워지면 다시
 							// ConstructionPlaceFinder 를 통해 건설 가능 위치를
 							// desiredPosition 주위에서 찾을 것이다
-if(currentItem.seedLocation==null)
-{
-	System.out.println(currentItem.seedLocationStrategy);
-}
-else
-{
-	System.out.print("currentItem.seedLocation("+currentItem.seedLocation.getX()+","+currentItem.seedLocation.getY()+")");
-	System.out.println(currentItem.seedLocationStrategy);	
-}
+//if(currentItem.seedLocation==null)
+//{
+//	System.out.println(currentItem.seedLocationStrategy);
+//}
+//else
+//{
+//	System.out.print("currentItem.seedLocation("+currentItem.seedLocation.getX()+","+currentItem.seedLocation.getY()+")");
+//	System.out.println(currentItem.seedLocationStrategy);	
+//}
 
 							TilePosition desiredPosition = getDesiredPosition(t.getUnitType(), currentItem.seedLocation,currentItem.seedLocationStrategy);
 							if(currentItem.forcedType == true)
