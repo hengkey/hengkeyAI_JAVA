@@ -285,7 +285,7 @@ System.out.println("seedPositionStrategy="+seedPositionStrategy+" "+new Exceptio
 
 				testPosition = getBuildLocationNear(buildingType, desiredPosition, buildingGapSpace, constructionPlaceSearchMethod);
 
-				System.out.println("ConstructionPlaceFinder testPosition "+testPosition.getX()+","+testPosition.getY());
+//				System.out.println("ConstructionPlaceFinder testPosition "+testPosition.getX()+","+testPosition.getY());
 
 				if (testPosition != TilePosition.None && testPosition != TilePosition.Invalid)
 					return testPosition;
