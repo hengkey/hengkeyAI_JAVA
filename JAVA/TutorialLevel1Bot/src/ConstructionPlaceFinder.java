@@ -58,6 +58,8 @@ public class ConstructionPlaceFinder {
 	{
 		TilePosition desiredPosition = TilePosition.None;
 
+System.out.println("seedPositionStrategy="+seedPositionStrategy+" "+new Exception().getStackTrace()[0].getLineNumber());
+		
 		// seedPosition 을 입력한 경우 그 근처에서 찾는다
 		if (seedPosition != TilePosition.None  && seedPosition.isValid() )
 		{
@@ -185,6 +187,11 @@ public class ConstructionPlaceFinder {
 			case getLastBuilingFinalLocation: //이놈이 마지막이니까.... NULL 일수가 없다.
 			
 				tempTilePosition = InformationManager.Instance().getLastBuilingFinalLocation();
+
+				if(tempTilePosition!=null)
+					System.out.println("tempTilePosition="+tempTilePosition.getX()+" "+tempTilePosition.getY()+"  "+new Exception().getStackTrace()[0].getLineNumber());
+				else
+					System.out.println("tempTilePosition=null"+"  "+new Exception().getStackTrace()[0].getLineNumber());
 				desiredPosition = getBuildLocationNear(buildingType, tempTilePosition);
 			break;
 					

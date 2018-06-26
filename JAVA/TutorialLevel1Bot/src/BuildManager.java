@@ -201,11 +201,11 @@ System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()
 								// 없는 경우인데,
 								// 대부분의 경우 Pylon 이나 Hatchery가 지어지고 있는 중이므로, 다음
 								// frame 에 건물 지을 공간을 다시 탐색하도록 한다.
-								System.out.print("There is no place to construct " + currentItem.metaType.getUnitType()+ " strategy " + currentItem.seedLocationStrategy);
+								System.out.println("There is no place to construct " + currentItem.metaType.getUnitType()+ " strategy " + currentItem.seedLocationStrategy);
 								if (currentItem.seedLocation != null)
-									System.out.print(" seedPosition " + currentItem.seedLocation.getX() + ","+ currentItem.seedLocation.getY());
+									System.out.println(" seedPosition " + currentItem.seedLocation.getX() + ","+ currentItem.seedLocation.getY());
 								if (desiredPosition != null)
-									System.out.print(" desiredPosition " + desiredPosition.getX() + ","+ desiredPosition.getY());
+									System.out.println(" desiredPosition " + desiredPosition.getX() + ","+ desiredPosition.getY());
 								
 								isOkToRemoveQueue = false;
 							}
@@ -213,6 +213,7 @@ System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()
 					}
 					// 지상유닛 / 공중유닛의 경우
 					else {
+System.out.println("t.getUnitType()="+t.getUnitType()+" "+new Exception().getStackTrace()[0].getLineNumber());	
 						producer.train(t.getUnitType());
 //						if(producer.isTraining() == false){
 //							isOkToRemoveQueue = false;
@@ -236,10 +237,12 @@ System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()
 			}
 			// otherwise, if we can skip the current item
 			else if (buildQueue.canSkipCurrentItem()) {
+//System.out.println("canMake="+canMake+" "+"currentItem.metaType.getUnitType()"+currentItem.metaType.getUnitType()+new Exception().getStackTrace()[0].getLineNumber());
 				// skip it and get the next one
 				buildQueue.skipCurrentItem();
 				currentItem = buildQueue.getItem();
 			} else {
+//System.out.println("canMake="+canMake+" "+"currentItem.metaType.getUnitType()"+currentItem.metaType.getUnitType()+new Exception().getStackTrace()[0].getLineNumber());
 				// so break out
 				break;
 			}

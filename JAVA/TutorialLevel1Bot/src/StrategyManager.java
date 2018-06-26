@@ -1303,11 +1303,12 @@ public class StrategyManager {
 		Boolean goliathInTheQueue = false;
 		Boolean tankInTheQueue = false;
 		Boolean isfacexists = false;
-System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());		
+		
 		if(MyBotModule.Broodwar.self().supplyTotal() - MyBotModule.Broodwar.self().supplyUsed() < 4){
+			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
-System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());		
+		
 		if (!tempbuildQueue.isEmpty()) {
 			currentItem= tempbuildQueue.getHighestPriorityItem();
 			while(true){
@@ -1405,7 +1406,7 @@ System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStack
 				
 				
 				int minNeed = selected.mineralPrice();
-System.out.println("MyBotModule.Broodwar.self().supplyUsed()="+MyBotModule.Broodwar.self().supplyUsed());				
+//System.out.println("MyBotModule.Broodwar.self().supplyUsed()="+MyBotModule.Broodwar.self().supplyUsed());				
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType()!=selected){
 					if(selected == UnitType.Terran_Siege_Tank_Tank_Mode && tankInTheQueue == false){
 						if(unit.getAddon() != null && unit.getAddon().isCompleted() == true){
