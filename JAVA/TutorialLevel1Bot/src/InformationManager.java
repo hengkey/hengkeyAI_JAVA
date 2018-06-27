@@ -852,7 +852,8 @@ public class InformationManager {
 			
 			if(MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Command_Center)%2 == 0){
 			
-				for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
+//				for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
+				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations())
 				{
 					if (targetBaseLocation.getTilePosition().equals(mainBaseLocations.get(selfPlayer).getTilePosition())) continue;
 					if (targetBaseLocation.getTilePosition().equals(mainBaseLocations.get(enemyPlayer).getTilePosition())) continue;
@@ -988,6 +989,9 @@ public class InformationManager {
 		
 		for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
 		{
+			if (targetBaseLocation != null)
+				System.out.println("targetBaseLocation=" + targetBaseLocation.getTilePosition().getX() + " " + targetBaseLocation.getTilePosition().getY());
+			
 			if (targetBaseLocation.getTilePosition().equals(mainBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemyBaseLocation.getTilePosition())) continue;
 			
@@ -1001,7 +1005,7 @@ public class InformationManager {
 			
 			res = targetBaseLocation.getRegion().getCenter().toTilePosition();
 		}
-		
+	
 		return res;
 	}
 

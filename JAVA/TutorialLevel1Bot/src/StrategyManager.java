@@ -912,7 +912,7 @@ public class StrategyManager {
 		
 		
 		//barrack start
-		if(isInitialBuildOrderFinished == true && (barrackcnt == 0 || (barrackcnt == 1 && barrackUnit.getHitPoints() < UnitType.Terran_Barracks.maxHitPoints()/3)) ){
+		if(isInitialBuildOrderFinished == true && (barrackcnt == 0 || (barrackcnt == 1 && barrackUnit.getHitPoints() < UnitType.Terran_Barracks.maxHitPoints()/2)) ){
 			if(BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Barracks) == 0
 					&& ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Barracks, null) == 0) {
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, false);
@@ -921,7 +921,7 @@ public class StrategyManager {
 		//barrack end
 		
 		//engineering start
-		if(isInitialBuildOrderFinished == true && (engineeringcnt == 0 || (engineeringcnt == 1 && engineeringUnit.getHitPoints() < UnitType.Terran_Engineering_Bay.maxHitPoints()/3))
+		if(isInitialBuildOrderFinished == true && (engineeringcnt == 0 || (engineeringcnt == 1 && engineeringUnit.getHitPoints() < UnitType.Terran_Engineering_Bay.maxHitPoints()/2))
 				&& MyBotModule.Broodwar.getFrameCount() > 11000){
 			if(BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Engineering_Bay) == 0
 					&& ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Engineering_Bay, null) == 0) {
@@ -1328,11 +1328,11 @@ public class StrategyManager {
 //				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType().isAddon()){
 //					return;
 //				}
-				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
-					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
-					return;
-				}
+//				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
+//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
+//					return;
+//				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Vulture){
 					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
 							+ new Exception().getStackTrace()[0].getLineNumber());

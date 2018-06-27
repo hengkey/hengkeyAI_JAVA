@@ -453,98 +453,98 @@ System.out.println("seedPositionStrategy="+seedPositionStrategy+" "+new Exceptio
 				currentX = currentX + depostSizeX;
 			}
 
-//			// À§ ¿À¸¥ÂÊ ¹æÇâ Å½»ö
-//			if (isPossiblePlace==false) {
-//				currentX = desiredPosition.getX();
-//				currentY = desiredPosition.getY();
-//				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
-//					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
-//						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
-//								&& currentY < MyBotModule.Broodwar.mapHeight()) {
-//
-//							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
-//
-//							if (isPossiblePlace) {
-//								resultPosition = new TilePosition(currentX, currentY);
-//								break;
-//							}
-//							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
-//							// + ")");
-//						}
-//
-//						currentY = currentY - depostSizeY;
-//						// currentY = currentY + spiralDirectionY;
-//					}
-//					if (isPossiblePlace) {
-//						break;
-//					}
-//
-//					currentY = desiredPosition.getY();
-//					currentX = currentX + depostSizeX;
-//				}
-//			}
-//
-//			// À§ ¿ÞÂÊ ¹æÇâ Å½»ö
-//			if (isPossiblePlace==false) {
-//				currentX = desiredPosition.getX();
-//				currentY = desiredPosition.getY();
-//				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
-//					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
-//						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
-//								&& currentY < MyBotModule.Broodwar.mapHeight()) {
-//
-//							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
-//
-//							if (isPossiblePlace) {
-//								resultPosition = new TilePosition(currentX, currentY);
-//								break;
-//							}
-//							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
-//							// + ")");
-//						}
-//
-//						currentY = currentY - depostSizeY;
-//						// currentY = currentY + spiralDirectionY;
-//					}
-//					if (isPossiblePlace) {
-//						break;
-//					}
-//
-//					currentY = desiredPosition.getY();
-//					currentX = currentX - depostSizeX;
-//				}
-//			}
-//			
-//			// ¾Æ·¡ ¿ÞÂÊ ¹æÇâ Å½»ö
-//			if (isPossiblePlace==false) {
-//				currentX = desiredPosition.getX();
-//				currentY = desiredPosition.getY();
-//				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
-//					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
-//						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
-//								&& currentY < MyBotModule.Broodwar.mapHeight()) {
-//
-//							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
-//
-//							if (isPossiblePlace) {
-//								resultPosition = new TilePosition(currentX, currentY);
-//								break;
-//							}
-//							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
-//							// + ")");
-//						}
-//
-//						currentY = currentY + depostSizeY;
-//						// currentY = currentY + spiralDirectionY;
-//					}
-//					if (isPossiblePlace) {
-//						break;
-//					}
-//
-//					currentY = desiredPosition.getY();
-//					currentX = currentX - depostSizeX;
-//				}
-//			}
+			// À§ ¿À¸¥ÂÊ ¹æÇâ Å½»ö
+			if (isPossiblePlace==false) {
+				currentX = desiredPosition.getX();
+				currentY = desiredPosition.getY();
+				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
+					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
+						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
+								&& currentY < MyBotModule.Broodwar.mapHeight()) {
+
+							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
+
+							if (isPossiblePlace) {
+								resultPosition = new TilePosition(currentX, currentY);
+								break;
+							}
+							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
+							// + ")");
+						}
+
+						currentY = currentY - depostSizeY;
+						// currentY = currentY + spiralDirectionY;
+					}
+					if (isPossiblePlace) {
+						break;
+					}
+
+					currentY = desiredPosition.getY();
+					currentX = currentX + depostSizeX;
+				}
+			}
+
+			// À§ ¿ÞÂÊ ¹æÇâ Å½»ö
+			if (isPossiblePlace==false) {
+				currentX = desiredPosition.getX();
+				currentY = desiredPosition.getY();
+				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
+					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
+						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
+								&& currentY < MyBotModule.Broodwar.mapHeight()) {
+
+							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
+
+							if (isPossiblePlace) {
+								resultPosition = new TilePosition(currentX, currentY);
+								break;
+							}
+							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
+							// + ")");
+						}
+
+						currentY = currentY - depostSizeY;
+						// currentY = currentY + spiralDirectionY;
+					}
+					if (isPossiblePlace) {
+						break;
+					}
+
+					currentY = desiredPosition.getY();
+					currentX = currentX - depostSizeX;
+				}
+			}
+			
+			// ¾Æ·¡ ¿ÞÂÊ ¹æÇâ Å½»ö
+			if (isPossiblePlace==false) {
+				currentX = desiredPosition.getX();
+				currentY = desiredPosition.getY();
+				for (int x_position = 0; x_position < maxSupplyCntX; x_position++) {
+					for (int y_position = 0; y_position < maxSupplyCntY; y_position++) {
+						if (currentX >= 0 && currentX < MyBotModule.Broodwar.mapWidth() && currentY >= 0
+								&& currentY < MyBotModule.Broodwar.mapHeight()) {
+
+							isPossiblePlace = canBuildHereWithSpace(new TilePosition(currentX, currentY), b, 0);
+
+							if (isPossiblePlace) {
+								resultPosition = new TilePosition(currentX, currentY);
+								break;
+							}
+							// System.out.println("is impossible place ==> (" + currentX + " / " + currentY
+							// + ")");
+						}
+
+						currentY = currentY + depostSizeY;
+						// currentY = currentY + spiralDirectionY;
+					}
+					if (isPossiblePlace) {
+						break;
+					}
+
+					currentY = desiredPosition.getY();
+					currentX = currentX - depostSizeX;
+				}
+			}
 			
 			//System.out.println("supply position ==>>>>>>>>>>>  (" +currentX + " , " +currentY + ")");
 			

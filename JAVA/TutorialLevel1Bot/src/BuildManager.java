@@ -579,8 +579,8 @@ System.out.println("t.getUnitType()="+t.getUnitType()+" "+new Exception().getSta
 		 * std::endl;
 		 */
 
-		// desiredPosition 을 찾을 수 없는 경우
 		boolean findAnotherPlace = true;
+		// desiredPosition 을 찾을 수 없는 경우
 		while (desiredPosition == TilePosition.None) {
 
 			switch (seedPositionStrategy) {
