@@ -1167,11 +1167,17 @@ public class CombatManager {
 		
 		for (Region myRegion : InformationManager.Instance().getOccupiedRegions(InformationManager.Instance().selfPlayer)) {
 			if (myRegion == enemyRegion) { // 가스러시 예외처리
+				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+						+ myRegion.getCenter().toTilePosition().getY() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 			}
 			
 			Position regionCenter = myRegion.getCenter();
 			if (!regionCenter.isValid()) {
+				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+						+ myRegion.getCenter().toTilePosition().getY() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 			}
 
@@ -1183,6 +1189,9 @@ public class CombatManager {
 			BaseLocation firstExpansion = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
 			if (!regionCenter.equals(BWTA.getRegion(mainBase.getPosition()).getCenter()) && regionCenter.getDistance(firstExpansion.getPosition()) >= 800) {
 				if (centerIsOccupied(InformationManager.Instance().enemyPlayer)) {
+					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+							+ myRegion.getCenter().toTilePosition().getY() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
 					continue;
 				} else {
 					tooFarToDefense = true;
@@ -1211,6 +1220,9 @@ public class CombatManager {
 	            if (unit.getType() == UnitType.Zerg_Overlord || //TODO 오버로드 오면 방어 안하는거 맞아?ㅡㅡ;;; 드롭도 그렇고.... 오버가 왔는데.. 무시될텐데..
 					unit.getType() == UnitType.Protoss_Observer ||
 					unit.isLifted()) { // floating terran building
+					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+							+ myRegion.getCenter().toTilePosition().getY() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
 	            	continue;
 	            }
 	            
@@ -1219,6 +1231,9 @@ public class CombatManager {
 	            }
 	        }
 	        if (tooFarToDefense && enemyUnitsInRegion.size() >= 5) {
+				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+						+ myRegion.getCenter().toTilePosition().getY() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
 	        	continue;
 	        }
 
@@ -1243,6 +1258,9 @@ public class CombatManager {
 				if (squad != null) {
 	        		squad.clear();
 	        	}
+				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+						+ myRegion.getCenter().toTilePosition().getY() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 	        } else {
 	        	if (squad == null) {
@@ -1389,7 +1407,7 @@ public class CombatManager {
 						+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
 								UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
 					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
-							unit.getTilePosition(), true);
+							unit.getTilePosition(), false);
 				}
 			}
 	    }
