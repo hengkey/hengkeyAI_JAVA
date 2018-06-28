@@ -1258,9 +1258,9 @@ public class CombatManager {
 				if (squad != null) {
 	        		squad.clear();
 	        	}
-				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-						+ myRegion.getCenter().toTilePosition().getY() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//						+ myRegion.getCenter().toTilePosition().getY() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 	        } else {
 	        	if (squad == null) {
@@ -1310,7 +1310,7 @@ public class CombatManager {
 //			if(InformationManager.Instance().isEarlyDefenseNeeded() == true){
 //				updateDefenseSquadUnits(defenseSquad, flyingDefendersNeeded, groundDefendersNeeded, false);
 //			}else{
-//			System.out.println("squadName: " + squadName + ", " + "groundDefendersNeeded" + groundDefendersNeeded);
+			System.out.println("squadName: " + squadName + ", " + "groundDefendersNeeded" + groundDefendersNeeded+" "+ new Exception().getStackTrace()[0].getLineNumber());
 			updateDefenseSquadUnits(defenseSquad, flyingDefendersNeeded, groundDefendersNeeded, pullWorkers, doNotAssignMechanicUnit, doNotAssignTankNGoliath);
 //			}
 //			for (Unit marine : defenseSquad.getUnitSet()){

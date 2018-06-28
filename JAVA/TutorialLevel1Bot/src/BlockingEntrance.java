@@ -149,7 +149,7 @@ public class BlockingEntrance {
 				bunkerY_array = bunkerYY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch) {
-			int[] fix_supplyXX = { 0, 106, 94, 0 };
+			int[] fix_supplyXX = { 18, 106, 94, 0 };
 			fix_supplyX = fix_supplyXX;
 			int[] fix_supplyYY = { 0, 0, 118, 91 };
 			fix_supplyY = fix_supplyYY;
@@ -178,9 +178,9 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] factoryYY_array = { 2, 11, 112, 106 };
 				factoryY_array = factoryYY_array;
 
-				int[] bunkerXX_array = { 15, 97, 113, 35 };
+				int[] bunkerXX_array = { 21, 97, 113, 35 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 16, 13, 108, 114 };
+			    int[] bunkerYY_array = { 20, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
 			    
 				int[] turret1XX_array = { 6, 120, 120, 6 };
@@ -208,9 +208,9 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] factoryYY_array = { 2, 11, 112, 106 };
 				factoryY_array = factoryYY_array;
 
-				int[] bunkerXX_array = { 15, 97, 113, 35 };
+				int[] bunkerXX_array = { 21, 97, 113, 35 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 16, 13, 108, 114 };
+			    int[] bunkerYY_array = { 20, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
 			    
 				int[] turret1XX_array = { 6, 120, 120, 6 };
