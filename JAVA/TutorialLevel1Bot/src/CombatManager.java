@@ -1167,17 +1167,17 @@ public class CombatManager {
 		
 		for (Region myRegion : InformationManager.Instance().getOccupiedRegions(InformationManager.Instance().selfPlayer)) {
 			if (myRegion == enemyRegion) { // 가스러시 예외처리
-				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-						+ myRegion.getCenter().toTilePosition().getY() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//						+ myRegion.getCenter().toTilePosition().getY() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 			}
 			
 			Position regionCenter = myRegion.getCenter();
 			if (!regionCenter.isValid()) {
-				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-						+ myRegion.getCenter().toTilePosition().getY() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//						+ myRegion.getCenter().toTilePosition().getY() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 				continue;
 			}
 
@@ -1187,7 +1187,7 @@ public class CombatManager {
 			
 			BaseLocation mainBase = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
 			BaseLocation firstExpansion = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
-			if (!regionCenter.equals(BWTA.getRegion(mainBase.getPosition()).getCenter()) && regionCenter.getDistance(firstExpansion.getPosition()) >= 800) {
+			if (!regionCenter.equals(BWTA.getRegion(mainBase.getPosition()).getCenter()) && regionCenter.getDistance(firstExpansion.getPosition()) >= 1200/*800*/) {
 				if (centerIsOccupied(InformationManager.Instance().enemyPlayer)) {
 					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
 							+ myRegion.getCenter().toTilePosition().getY() + " "

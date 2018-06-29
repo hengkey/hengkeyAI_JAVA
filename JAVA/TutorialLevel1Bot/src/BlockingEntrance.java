@@ -151,7 +151,7 @@ public class BlockingEntrance {
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch) {
 			int[] fix_supplyXX = { 18, 106, 94, 0 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 0, 0, 118, 91 };
+			int[] fix_supplyYY = { 0, 20, 118, 91 };
 			fix_supplyY = fix_supplyYY;
 			
 System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().enemyRace);			

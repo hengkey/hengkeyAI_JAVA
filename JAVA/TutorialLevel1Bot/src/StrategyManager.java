@@ -1305,7 +1305,7 @@ public class StrategyManager {
 		Boolean isfacexists = false;
 		
 		if(MyBotModule.Broodwar.self().supplyTotal() - MyBotModule.Broodwar.self().supplyUsed() < 4){
-			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
+//			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		
@@ -1334,13 +1334,13 @@ public class StrategyManager {
 //					return;
 //				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Vulture){
-					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_SCV){
-					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.blocking == true){
@@ -1370,7 +1370,7 @@ public class StrategyManager {
 			}
 		}
 		if(isfacexists == false){
-			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
+//			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		
@@ -2187,6 +2187,24 @@ public class StrategyManager {
 		return mineralsNearDepot;
 	}
 	public void executeExpansion() {
+
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits())
+		{
+			if (unit == null) continue;
+			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted() ){
+
+				//멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
+				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
+					if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+							unit.getTilePosition(), 180)
+							+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
+									UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
+								unit.getTilePosition(), false);
+					}
+				}
+			}
+ 		}
 		
 		if(MyBotModule.Broodwar.self().incompleteUnitCount(UnitType.Terran_Command_Center)>0){
 			return;
@@ -2205,6 +2223,17 @@ public class StrategyManager {
 			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted() ){
 				if(getValidMineralsForExspansionNearDepot(unit) > 6){
 					CCcnt++;
+				}
+
+				//멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
+				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
+					if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+							unit.getTilePosition(), 180)
+							+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
+									UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
+								unit.getTilePosition(), false);
+					}
 				}
 			}
  		}
