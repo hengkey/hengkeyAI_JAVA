@@ -91,27 +91,27 @@ public class Config {
 	/// 화면 표시 여부 - 미네랄, 가스
 	public static boolean DrawResourceInfo = false;
 	/// 화면 표시 여부 - 지도
-	public static boolean DrawBWTAInfo = true;
+	public static boolean DrawBWTAInfo = false;
 	/// 화면 표시 여부 - 바둑판
 	public static boolean DrawMapGrid = false;
 
 	/// 화면 표시 여부 - 유닛 HitPoint
-	public static boolean DrawUnitHealthBars = true;
+	public static boolean DrawUnitHealthBars = false;
 	/// 화면 표시 여부 - 유닛 통계
-	public static boolean DrawEnemyUnitInfo = true;
+	public static boolean DrawEnemyUnitInfo = false;
 	/// 화면 표시 여부 - 유닛 ~ Target 간 직선
 	public static boolean DrawUnitTargetInfo = true;
 
 	/// 화면 표시 여부 - 빌드 큐
-	public static boolean DrawProductionInfo = true;
+	public static boolean DrawProductionInfo = false;
 
 	/// 화면 표시 여부 - 건물 Construction 상황
 	public static boolean DrawBuildingInfo = false;
 	/// 화면 표시 여부 - 건물 ConstructionPlace 예약 상황
-	public static boolean DrawReservedBuildingTiles = true;
+	public static boolean DrawReservedBuildingTiles = false;
 	
 	/// 화면 표시 여부 - 정찰 상태
-	public static boolean DrawScoutInfo = true;
+	public static boolean DrawScoutInfo = false;
 	/// 화면 표시 여부 - 일꾼 목록
 	public static boolean DrawWorkerInfo = false;
 	
@@ -130,7 +130,7 @@ public class Config {
 	//전략 2  terranBasic                              //0  1 2  3 4 5  6  7 8  9  0 1 2 3 4  5 6 7 8 9 0 
 	public static final int[] vultureratio = new int[] {0, 1,0 ,1,1,2 ,1 ,5,1 ,0 ,5,5,1,3,0,10,5,0,0 ,5,0}; //기본전략 벌쳐 비, 예 vultureratio[0] 은 BasicvsZerg 에서의 비율
 	public static final int[] tankratio    = new int[] {2, 5,2 ,5,4,4 ,2 ,6,1 ,1 ,6,5,2,3,2 ,5,8,7,9 ,1,0}; //기본전략 탱크 비
-	public static final int[] goliathratio = new int[] {10,2,10,6,3,4 ,10,2,9 ,12,1,0,8,0,0 ,0,1,1,1 ,1,1}; //기본전략 골리앗 비
+	public static final int[] goliathratio = new int[] {10,2,10,6,3,4 ,10,2,9 ,12,1,0,8,0,0 ,0,1,2,2 ,1,1}; //기본전략 골리앗 비
 	public static final int[] wgt          = new int[] {1, 2,1 ,3,1,1 ,1 ,1,3 ,3 ,1,2,3,1,1 ,1,2,3,3 ,2,3}; //기본전략 우선순위 1벌쳐, 2탱크, 3골리앗
 
 															  // 0 1  2  3 4 5 6 7 8 9 0 1 2  3 4 5 6 7 8 9 0 1 2 3 

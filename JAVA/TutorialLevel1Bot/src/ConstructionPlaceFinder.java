@@ -58,7 +58,7 @@ public class ConstructionPlaceFinder {
 	{
 		TilePosition desiredPosition = TilePosition.None;
 
-System.out.println("seedPositionStrategy="+seedPositionStrategy+" "+new Exception().getStackTrace()[0].getLineNumber());
+//System.out.println("seedPositionStrategy="+seedPositionStrategy+" "+new Exception().getStackTrace()[0].getLineNumber());
 		
 		// seedPosition 을 입력한 경우 그 근처에서 찾는다
 		if (seedPosition != TilePosition.None  && seedPosition.isValid() )

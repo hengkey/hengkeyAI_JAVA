@@ -263,7 +263,8 @@ public class MyBotModule extends DefaultBWListener {
 		// BasicBot 1.2 Patch End //////////////////////////////////////////////////
 
 		// 화면 출력 및 사용자 입력 처리
-//		UXManager.Instance().update();
+		if (Broodwar.getFrameCount() % 12 == 0)
+			UXManager.Instance().update();
 
 		checkLostConditions();
 	}

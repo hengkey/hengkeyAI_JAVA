@@ -1326,21 +1326,23 @@ public class StrategyManager {
 					return;
 				}
 //				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType().isAddon()){
-//					return;
-//				}
-//				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
 //					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
 //							+ new Exception().getStackTrace()[0].getLineNumber());
 //					return;
 //				}
+				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					return;
+				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Vulture){
-//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-//							+ new Exception().getStackTrace()[0].getLineNumber());
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_SCV){
-//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-//							+ new Exception().getStackTrace()[0].getLineNumber());
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
 				if(currentItem.blocking == true){
@@ -1354,7 +1356,7 @@ public class StrategyManager {
 				currentItem = tempbuildQueue.getItem();
 			}
 		}else{
-			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
+			System.out.println("executeCombatUnitTrainingBlocked isEmpty "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		
@@ -1370,7 +1372,7 @@ public class StrategyManager {
 			}
 		}
 		if(isfacexists == false){
-//			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
+			System.out.println("executeCombatUnitTrainingBlocked "+ new Exception().getStackTrace()[0].getLineNumber());
 			return;
 		}
 		

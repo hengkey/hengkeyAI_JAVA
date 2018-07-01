@@ -61,14 +61,7 @@ public class UXManager {
 	/// 경기 진행 중 매 프레임마다 추가 정보를 출력하고 사용자 입력을 처리합니다
 	public void update() {
 		//drawGameInformationOnScreen(5, 5);
-
-		// draw tile position of mouse cursor
-		if (Config.DrawMouseCursorInfo) {
-			int mouseX = MyBotModule.Broodwar.getMousePosition().getX() + MyBotModule.Broodwar.getScreenPosition().getX();
-			int mouseY = MyBotModule.Broodwar.getMousePosition().getY() + MyBotModule.Broodwar.getScreenPosition().getY();
-			MyBotModule.Broodwar.drawTextMap(mouseX + 20, mouseY, "(" + (int)(mouseX/Config.TILE_SIZE) + ", " +  (int)(mouseY/Config.TILE_SIZE) + ")");
-		}
-/*		
+		
 		if (Config.DrawEnemyUnitInfo) {
 			drawUnitStatisticsOnScreen(400, 20);
 		}
@@ -134,9 +127,13 @@ public class UXManager {
 			// 미사일, 럴커의 보이지않는 공격등을 표시
 			drawBulletsOnMap();
 		}
-		
-*/
 
+		// draw tile position of mouse cursor
+		if (Config.DrawMouseCursorInfo) {
+			int mouseX = MyBotModule.Broodwar.getMousePosition().getX() + MyBotModule.Broodwar.getScreenPosition().getX();
+			int mouseY = MyBotModule.Broodwar.getMousePosition().getY() + MyBotModule.Broodwar.getScreenPosition().getY();
+			MyBotModule.Broodwar.drawTextMap(mouseX + 20, mouseY, "(" + (int)(mouseX/Config.TILE_SIZE) + ", " +  (int)(mouseY/Config.TILE_SIZE) + ")"+"("+mouseX+","+mouseY+")");
+		}
 	}
 
 	// 게임 개요 정보를 Screen 에 표시합니다

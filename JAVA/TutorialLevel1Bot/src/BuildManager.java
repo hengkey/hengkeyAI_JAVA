@@ -193,7 +193,7 @@ public class BuildManager {
 							if (desiredPosition != TilePosition.None) {
 								// Send the construction task to the
 								// construction manager
-System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()+" "+desiredPosition.getY()+")");
+//System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()+" "+desiredPosition.getY()+")");
 								ConstructionManager.Instance().addConstructionTask(t.getUnitType(), desiredPosition, currentItem.forcedType);
 							} else {
 								// 건물 가능 위치가 없는 경우는, Protoss_Pylon 가 없거나, Creep
@@ -213,7 +213,7 @@ System.out.println("t.getUnitType()="+t.getUnitType()+"("+desiredPosition.getX()
 					}
 					// 지상유닛 / 공중유닛의 경우
 					else {
-System.out.println("t.getUnitType()="+t.getUnitType()+" "+new Exception().getStackTrace()[0].getLineNumber());	
+//System.out.println("t.getUnitType()="+t.getUnitType()+" "+new Exception().getStackTrace()[0].getLineNumber());	
 						producer.train(t.getUnitType());
 //						if(producer.isTraining() == false){
 //							isOkToRemoveQueue = false;

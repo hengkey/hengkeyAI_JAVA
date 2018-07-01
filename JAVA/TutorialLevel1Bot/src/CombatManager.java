@@ -1189,9 +1189,9 @@ public class CombatManager {
 			BaseLocation firstExpansion = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
 			if (!regionCenter.equals(BWTA.getRegion(mainBase.getPosition()).getCenter()) && regionCenter.getDistance(firstExpansion.getPosition()) >= 1200/*800*/) {
 				if (centerIsOccupied(InformationManager.Instance().enemyPlayer)) {
-					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-							+ myRegion.getCenter().toTilePosition().getY() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//							+ myRegion.getCenter().toTilePosition().getY() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 					continue;
 				} else {
 					tooFarToDefense = true;
@@ -1220,9 +1220,9 @@ public class CombatManager {
 	            if (unit.getType() == UnitType.Zerg_Overlord || //TODO 오버로드 오면 방어 안하는거 맞아?ㅡㅡ;;; 드롭도 그렇고.... 오버가 왔는데.. 무시될텐데..
 					unit.getType() == UnitType.Protoss_Observer ||
 					unit.isLifted()) { // floating terran building
-					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-							+ myRegion.getCenter().toTilePosition().getY() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//							+ myRegion.getCenter().toTilePosition().getY() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 	            	continue;
 	            }
 	            
@@ -1231,9 +1231,9 @@ public class CombatManager {
 	            }
 	        }
 	        if (tooFarToDefense && enemyUnitsInRegion.size() >= 5) {
-				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
-						+ myRegion.getCenter().toTilePosition().getY() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("myRegion " + " " + myRegion.getCenter().toTilePosition().getX() + " "
+//						+ myRegion.getCenter().toTilePosition().getY() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 	        	continue;
 	        }
 
@@ -1310,12 +1310,14 @@ public class CombatManager {
 //			if(InformationManager.Instance().isEarlyDefenseNeeded() == true){
 //				updateDefenseSquadUnits(defenseSquad, flyingDefendersNeeded, groundDefendersNeeded, false);
 //			}else{
-			System.out.println("squadName: " + squadName + ", " + "groundDefendersNeeded" + groundDefendersNeeded+" "+ new Exception().getStackTrace()[0].getLineNumber());
 			updateDefenseSquadUnits(defenseSquad, flyingDefendersNeeded, groundDefendersNeeded, pullWorkers, doNotAssignMechanicUnit, doNotAssignTankNGoliath);
+//			System.out.print("squadName: " + squadName+"("+regionCenter.getX()/32+","+regionCenter.getY()/32+")" + ", " + "groundDefendersNeeded" + groundDefendersNeeded+" "+ new Exception().getStackTrace()[0].getLineNumber());
 //			}
+//
 //			for (Unit marine : defenseSquad.getUnitSet()){
-//				System.out.println("marine: " + marine.getID());
+//				System.out.print(" " + marine.getType());
 //			}
+//			System.out.println(" END");
 		}
 		
 	}
