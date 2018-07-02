@@ -1393,26 +1393,42 @@ public class CombatManager {
 	    Squad mainAttackSquad = squadData.getSquad(SquadName.MAIN_ATTACK);
 
 		for (Unit unit : combatUnits) {
-			if (unit.getType() == UnitType.Terran_Vulture
-					|| unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
+			if (unit.getType() == UnitType.Terran_Vulture || unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
 					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode
 					|| unit.getType() == UnitType.Terran_Goliath) {
 				if (squadData.canAssignUnitToSquad(unit, mainAttackSquad)) {
 					squadData.assignUnitToSquad(unit, mainAttackSquad);// 배슬, 드랍십도 포함됨
-		        }
-			}
-			
-			//시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
-			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
-				if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-						unit.getTilePosition(), 180)
-						+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
-								UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
-					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
-							unit.getTilePosition(), false);
 				}
 			}
-	    }
+
+			// 시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
+			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+					int build_turret_cnt = 0;
+					List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
+					build_turret_cnt = 0;
+					for (Unit unit2 : turretInRegion) {
+						if (unit2.getType() == UnitType.Terran_Missile_Turret) {
+							build_turret_cnt++;
+						}
+					}
+
+					if (build_turret_cnt < 1) {
+						if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+								unit.getPosition().toTilePosition(), 50) < 1
+								&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+										UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 50) == 0) {
+							System.out.println("updateAttackSquads " + unit.getType() + "(" + build_turret_cnt + ")"
+									+ "(" + unit.getTilePosition().getX() + "," + unit.getTilePosition().getY() + ") "
+									+ new Exception().getStackTrace()[0].getLineNumber());
+
+							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
+									unit.getTilePosition(), true);
+						}
+					}
+				}
+			}
+		}
 
 //		int bonusRadius = (int) (Math.log(mainAttackSquad.getUnitSet().size()) * 15);
 		SquadOrder mainAttackOrder = new SquadOrder(SquadOrderType.ATTACK, getMainAttackLocation(mainAttackSquad), Combat.ATTACK_RADIUS, "Attack enemy base");

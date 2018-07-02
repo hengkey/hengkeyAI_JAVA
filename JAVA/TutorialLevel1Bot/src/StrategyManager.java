@@ -2190,23 +2190,54 @@ public class StrategyManager {
 	}
 	public void executeExpansion() {
 
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits())
-		{
-			if (unit == null) continue;
-			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted() ){
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+			if (unit == null)
+				continue;
 
-				//멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
+			// 멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
+			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) {
 				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
-					if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-							unit.getTilePosition(), 180)
-							+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
-									UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
-						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
-								unit.getTilePosition(), false);
+					if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+						int build_turret_cnt = 0;
+						List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
+						build_turret_cnt = 0;
+						for (Unit unit2 : turretInRegion) {
+							if (unit2.getType() == UnitType.Terran_Missile_Turret) {
+								build_turret_cnt++;
+							}
+						}
+
+						if (build_turret_cnt < 3) {
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									unit.getPosition().toTilePosition(), 50) < 1
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(),
+											50) == 0) {
+								int radius = 320;
+								Unit nearestMineral = null;
+								for (Unit unit3 : MyBotModule.Broodwar.getMinerals()) {
+									if ((unit3.getType() == UnitType.Resource_Mineral_Field)
+											&& unit3.getDistance(unit) < radius) {
+										nearestMineral = unit3;
+										radius = unit3.getDistance(unit);
+									}
+								}
+
+								if (nearestMineral != null) {
+									System.out.println("executeExpansion " + nearestMineral.getType() + "("
+											+ build_turret_cnt + ")" + "(" + nearestMineral.getTilePosition().getX()
+											+ "," + nearestMineral.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+									
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearestMineral.getTilePosition(), true);
+								}
+							}
+						}
 					}
 				}
 			}
- 		}
+		}
 		
 		if(MyBotModule.Broodwar.self().incompleteUnitCount(UnitType.Terran_Command_Center)>0){
 			return;
