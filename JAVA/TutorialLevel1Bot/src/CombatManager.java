@@ -1414,7 +1414,7 @@ public class CombatManager {
 						}
 					}
 
-					if (build_turret_cnt < 1) {
+					if (build_turret_cnt < 2) {
 						if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
 								unit.getPosition().toTilePosition(), 20) < 1
 								&& ConstructionManager.Instance().getConstructionQueueItemCountNear(

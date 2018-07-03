@@ -1330,11 +1330,11 @@ public class StrategyManager {
 //							+ new Exception().getStackTrace()[0].getLineNumber());
 //					return;
 //				}
-				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
-					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
-					return;
-				}
+//				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
+//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
+//					return;
+//				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Vulture){
 					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
 							+ new Exception().getStackTrace()[0].getLineNumber());
@@ -2199,7 +2199,7 @@ public class StrategyManager {
 					// 멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
 					if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) {
 						int build_turret_cnt = 0;
-						List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 6 * 32);
+						List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
 						build_turret_cnt = 0;
 						for (Unit unit2 : turretInRegion) {
 							if (unit2.getType() == UnitType.Terran_Missile_Turret) {
@@ -2209,10 +2209,10 @@ public class StrategyManager {
 						
 						if (build_turret_cnt < 2) {
 							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-									unit.getPosition().toTilePosition(), 8) < 1
+									unit.getPosition().toTilePosition(), 10) < 1
 									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
 											UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(),
-											8) == 0) {
+											10) == 0) {
 								System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
 										+ unit.getTilePosition().getY() + ") "
 										+ new Exception().getStackTrace()[0].getLineNumber());
@@ -2234,22 +2234,22 @@ public class StrategyManager {
 											+ new Exception().getStackTrace()[0].getLineNumber());
 								}
 
-								//두번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
-								TilePosition nearTilePosition2 = new TilePosition(unit.getTilePosition().getX() - 1,
-										unit.getTilePosition().getY() - 2);
-								if (MyBotModule.Broodwar.canBuildHere(nearTilePosition2, UnitType.Terran_Missile_Turret)) {
-									BuildManager.Instance().buildQueue.queueAsHighestPriority(
-											UnitType.Terran_Missile_Turret, nearTilePosition2, true, true);// 강제건설
-									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
-											+ unit.getTilePosition().getY() + ") "
-											+ new Exception().getStackTrace()[0].getLineNumber());
-								} else {
-									BuildManager.Instance().buildQueue.queueAsHighestPriority(
-											UnitType.Terran_Missile_Turret, nearTilePosition2, true);//자동위치건설
-									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
-											+ unit.getTilePosition().getY() + ") "
-											+ new Exception().getStackTrace()[0].getLineNumber());
-								}
+//								//두번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
+//								TilePosition nearTilePosition2 = new TilePosition(unit.getTilePosition().getX() - 1,
+//										unit.getTilePosition().getY() - 2);
+//								if (MyBotModule.Broodwar.canBuildHere(nearTilePosition2, UnitType.Terran_Missile_Turret)) {
+//									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+//											UnitType.Terran_Missile_Turret, nearTilePosition2, true, true);// 강제건설
+//									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+//											+ unit.getTilePosition().getY() + ") "
+//											+ new Exception().getStackTrace()[0].getLineNumber());
+//								} else {
+//									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+//											UnitType.Terran_Missile_Turret, nearTilePosition2, true);//자동위치건설
+//									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+//											+ unit.getTilePosition().getY() + ") "
+//											+ new Exception().getStackTrace()[0].getLineNumber());
+//								}
 
 								//세번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
 								TilePosition nearTilePosition3 = new TilePosition(unit.getTilePosition().getX(),
