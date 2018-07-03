@@ -1406,6 +1406,7 @@ public class CombatManager {
 				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
 					int build_turret_cnt = 0;
 					List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
+
 					build_turret_cnt = 0;
 					for (Unit unit2 : turretInRegion) {
 						if (unit2.getType() == UnitType.Terran_Missile_Turret) {
@@ -1415,9 +1416,9 @@ public class CombatManager {
 
 					if (build_turret_cnt < 1) {
 						if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-								unit.getPosition().toTilePosition(), 50) < 1
+								unit.getPosition().toTilePosition(), 20) < 1
 								&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
-										UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 50) == 0) {
+										UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) == 0) {
 							System.out.println("updateAttackSquads " + unit.getType() + "(" + build_turret_cnt + ")"
 									+ "(" + unit.getTilePosition().getX() + "," + unit.getTilePosition().getY() + ") "
 									+ new Exception().getStackTrace()[0].getLineNumber());

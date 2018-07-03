@@ -2189,48 +2189,83 @@ public class StrategyManager {
 		return mineralsNearDepot;
 	}
 	public void executeExpansion() {
-
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-			if (unit == null)
-				continue;
-
-			// 멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
-			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) {
-				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
-					if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+		
+		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+					if (unit == null)
+						continue;
+					
+					// 멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
+					if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) {
 						int build_turret_cnt = 0;
-						List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
+						List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 6 * 32);
 						build_turret_cnt = 0;
 						for (Unit unit2 : turretInRegion) {
 							if (unit2.getType() == UnitType.Terran_Missile_Turret) {
 								build_turret_cnt++;
 							}
 						}
-
-						if (build_turret_cnt < 3) {
+						
+						if (build_turret_cnt < 2) {
 							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-									unit.getPosition().toTilePosition(), 50) < 1
+									unit.getPosition().toTilePosition(), 8) < 1
 									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
 											UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(),
-											50) == 0) {
-								int radius = 320;
-								Unit nearestMineral = null;
-								for (Unit unit3 : MyBotModule.Broodwar.getMinerals()) {
-									if ((unit3.getType() == UnitType.Resource_Mineral_Field)
-											&& unit3.getDistance(unit) < radius) {
-										nearestMineral = unit3;
-										radius = unit3.getDistance(unit);
-									}
+											8) == 0) {
+								System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+										+ unit.getTilePosition().getY() + ") "
+										+ new Exception().getStackTrace()[0].getLineNumber());
+
+								//첫번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
+								TilePosition nearTilePosition = new TilePosition(unit.getTilePosition().getX() + 4,
+										unit.getTilePosition().getY() - 1);
+								if (MyBotModule.Broodwar.canBuildHere(nearTilePosition, UnitType.Terran_Missile_Turret)) {
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, true, true);// 강제건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								} else {
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, true);//자동위치건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
 								}
 
-								if (nearestMineral != null) {
-									System.out.println("executeExpansion " + nearestMineral.getType() + "("
-											+ build_turret_cnt + ")" + "(" + nearestMineral.getTilePosition().getX()
-											+ "," + nearestMineral.getTilePosition().getY() + ") "
-											+ new Exception().getStackTrace()[0].getLineNumber());
-									
+								//두번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
+								TilePosition nearTilePosition2 = new TilePosition(unit.getTilePosition().getX() - 1,
+										unit.getTilePosition().getY() - 2);
+								if (MyBotModule.Broodwar.canBuildHere(nearTilePosition2, UnitType.Terran_Missile_Turret)) {
 									BuildManager.Instance().buildQueue.queueAsHighestPriority(
-											UnitType.Terran_Missile_Turret, nearestMineral.getTilePosition(), true);
+											UnitType.Terran_Missile_Turret, nearTilePosition2, true, true);// 강제건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								} else {
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition2, true);//자동위치건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+
+								//세번째 터렛 강제로 해보고 건설이 안되는 위치이면 자동위치 건설로
+								TilePosition nearTilePosition3 = new TilePosition(unit.getTilePosition().getX(),
+										unit.getTilePosition().getY() + 3);
+								if (MyBotModule.Broodwar.canBuildHere(nearTilePosition3, UnitType.Terran_Missile_Turret)) {
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition3, true, true);// 강제건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								} else {
+									BuildManager.Instance().buildQueue.queueAsHighestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition3, true);//자동위치건설
+									System.out.println("executeExpansion=(" + unit.getTilePosition().getX() + ","
+											+ unit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
 								}
 							}
 						}

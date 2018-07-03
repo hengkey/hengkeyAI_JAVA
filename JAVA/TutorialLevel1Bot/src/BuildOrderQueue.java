@@ -347,6 +347,12 @@ public class BuildOrderQueue {
 		queueItem(new BuildOrderItem(metaType, seedPosition, newPriority, blocking, -1));
 	}
 	
+	public void queueAsHighestPriority(UnitType unitType, TilePosition seedPosition, boolean blocking, boolean forcedType)
+	{
+		int newPriority = highestPriority + defaultPrioritySpacing;
+		queueItem(new BuildOrderItem(new MetaType(unitType), seedPosition, newPriority, blocking, -1, forcedType));
+	}
+	
 	public void queueAsHighestPriority(UnitType unitType, TilePosition seedPosition, boolean blocking)
 	{
 		int newPriority = highestPriority + defaultPrioritySpacing;
