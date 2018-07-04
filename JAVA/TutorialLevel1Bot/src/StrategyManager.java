@@ -205,6 +205,7 @@ public class StrategyManager {
 		}
 		
 //		lag.estimate("2");
+		MyBotModule.Broodwar.drawTextScreen(350, 100, "isInit=" + isInitialBuildOrderFinished);
 		
 		if (!isInitialBuildOrderFinished && BuildManager.Instance().buildQueue.isEmpty()) {
 			if(isInitialBuildOrderFinished == false){
@@ -1315,9 +1316,13 @@ public class StrategyManager {
 				
 				
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Goliath){
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+					+ new Exception().getStackTrace()[0].getLineNumber());
 					goliathInTheQueue = true;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Siege_Tank_Tank_Mode){
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+					+ new Exception().getStackTrace()[0].getLineNumber());
 					tankInTheQueue = true;
 				}
 				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Supply_Depot){
@@ -1325,11 +1330,11 @@ public class StrategyManager {
 							+ new Exception().getStackTrace()[0].getLineNumber());
 					return;
 				}
-//				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType().isAddon()){
-//					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
-//							+ new Exception().getStackTrace()[0].getLineNumber());
-//					return;
-//				}
+				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType().isAddon()){
+					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					return;
+				}
 //				if(currentItem.metaType.isUnit() && currentItem.metaType.getUnitType() == UnitType.Terran_Missile_Turret){
 //					System.out.println("executeCombatUnitTrainingBlocked " + currentItem.metaType.getUnitType() + " "
 //							+ new Exception().getStackTrace()[0].getLineNumber());

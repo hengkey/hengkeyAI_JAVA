@@ -87,9 +87,13 @@ public class BuildManager {
 			if (currentItem.seedLocation != TilePosition.None && currentItem.seedLocation != TilePosition.Invalid 
 					&& currentItem.seedLocation != TilePosition.Unknown && currentItem.seedLocation.isValid()) {				
 				seedPosition = currentItem.seedLocation.toPosition();
+				System.out.println("currentItem.seedLocation=" + currentItem.seedLocation + "seedPosition="
+						+ seedPosition + " " + new Exception().getStackTrace()[0].getLineNumber());
 			}
 			else {
 				seedPosition = getSeedPositionFromSeedLocationStrategy(currentItem.seedLocationStrategy);
+				System.out.println("currentItem.seedLocation=" + currentItem.seedLocation + "seedPosition="
+						+ seedPosition + " " + new Exception().getStackTrace()[0].getLineNumber());
 			}
 			
 			// this is the unit which can produce the currentItem
