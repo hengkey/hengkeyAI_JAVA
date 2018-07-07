@@ -57,7 +57,7 @@ System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
-				queueBuild(false, UnitType.Terran_Siege_Tank_Tank_Mode);
+				queueBuild(true, UnitType.Terran_Siege_Tank_Tank_Mode);
 				
 //				queueBuildSeed(true, UnitType.Terran_Command_Center, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);

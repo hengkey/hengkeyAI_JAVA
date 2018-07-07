@@ -1404,8 +1404,11 @@ public class CombatManager {
 			// 시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
 			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
 				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+					System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
+							+ unit.getTilePosition().getY() + ") "
+							+ new Exception().getStackTrace()[0].getLineNumber());
 					int build_turret_cnt = 0;
-					List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 8 * 32);
+					List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 6 * 32);
 
 					build_turret_cnt = 0;
 					for (Unit unit2 : turretInRegion) {
@@ -1414,17 +1417,39 @@ public class CombatManager {
 						}
 					}
 
-					if (build_turret_cnt < 2) {
+					if (build_turret_cnt < 1) {
+						System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
+								+ unit.getTilePosition().getY() + ") "
+								+ new Exception().getStackTrace()[0].getLineNumber());
+						
 						if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
 								unit.getPosition().toTilePosition(), 20) < 1
 								&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
 										UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) == 0) {
-							System.out.println("updateAttackSquads " + unit.getType() + "(" + build_turret_cnt + ")"
-									+ "(" + unit.getTilePosition().getX() + "," + unit.getTilePosition().getY() + ") "
-									+ new Exception().getStackTrace()[0].getLineNumber());
-
-							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
-									unit.getTilePosition(), true);
+							TilePosition nearTilePosition = new TilePosition(unit.getTilePosition().getX() + 3,
+									unit.getTilePosition().getY());
+							if (MyBotModule.Broodwar.canBuildHere(nearTilePosition, UnitType.Terran_Missile_Turret)) {
+								BuildManager.Instance().buildQueue.queueAsHighestPriority(
+										UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+								System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
+										+ unit.getTilePosition().getY() + ") "
+										+ new Exception().getStackTrace()[0].getLineNumber());
+							}
+						}
+						
+						if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+								unit.getPosition().toTilePosition(), 20) < 1
+								&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+										UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) == 0) {
+							TilePosition nearTilePosition = new TilePosition(unit.getTilePosition().getX() - 3,
+									unit.getTilePosition().getY());
+							if (MyBotModule.Broodwar.canBuildHere(nearTilePosition, UnitType.Terran_Missile_Turret)) {
+								BuildManager.Instance().buildQueue.queueAsHighestPriority(
+										UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+								System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
+										+ unit.getTilePosition().getY() + ") "
+										+ new Exception().getStackTrace()[0].getLineNumber());
+							}
 						}
 					}
 				}
