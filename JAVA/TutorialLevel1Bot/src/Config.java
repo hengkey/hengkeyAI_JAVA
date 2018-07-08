@@ -96,24 +96,24 @@ public class Config {
 	public static boolean DrawMapGrid = false;
 
 	/// 화면 표시 여부 - 유닛 HitPoint
-	public static boolean DrawUnitHealthBars = false;
+	public static boolean DrawUnitHealthBars = true;
 	/// 화면 표시 여부 - 유닛 통계
-	public static boolean DrawEnemyUnitInfo = false;
+	public static boolean DrawEnemyUnitInfo = true;
 	/// 화면 표시 여부 - 유닛 ~ Target 간 직선
 	public static boolean DrawUnitTargetInfo = true;
 
 	/// 화면 표시 여부 - 빌드 큐
-	public static boolean DrawProductionInfo = true;
+	public static boolean DrawProductionInfo = false;
 
 	/// 화면 표시 여부 - 건물 Construction 상황
-	public static boolean DrawBuildingInfo = true;
+	public static boolean DrawBuildingInfo = false;
 	/// 화면 표시 여부 - 건물 ConstructionPlace 예약 상황
 	public static boolean DrawReservedBuildingTiles = false;
 	
 	/// 화면 표시 여부 - 정찰 상태
-	public static boolean DrawScoutInfo = false;
+	public static boolean DrawScoutInfo = true;
 	/// 화면 표시 여부 - 일꾼 목록
-	public static boolean DrawWorkerInfo = false;
+	public static boolean DrawWorkerInfo = true;
 	
 	/// 화면 표시 여부 - 마우스 커서	
 	public static boolean DrawMouseCursorInfo = true;

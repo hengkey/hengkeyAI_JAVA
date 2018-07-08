@@ -767,6 +767,13 @@ public class ConstructionPlaceFinder {
 					//System.out.println("here is reserveMap =============");
 					return false;
 				}
+				
+				//factory 고정 위치(14*9)에 짓지 않도록 check
+				if (x >= BlockingEntrance.Instance().factoryX && x <= BlockingEntrance.Instance().factoryX + 14
+						&& y >= BlockingEntrance.Instance().factoryY && y <= BlockingEntrance.Instance().factoryY + 9)
+				{
+					return false;
+				}
 			}
 		}
 
@@ -780,7 +787,7 @@ public class ConstructionPlaceFinder {
 
 		return true;
 	}
-
+	
 	/// seedPosition 근처에서 Refinery 건물 건설 가능 위치를 탐색해서 리턴합니다 <br>
 	/// 지도상의 여러 가스 광산 (Resource_Vespene_Geyser) 중 예약되어있지 않은 곳(isReservedTile), 다른 섬이 아닌 곳, 이미 Refinery 가 지어져있지않은 곳 중<br> 
 	/// seedPosition 과 가장 가까운 곳을 리턴합니다

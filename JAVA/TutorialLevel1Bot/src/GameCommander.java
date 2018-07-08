@@ -62,88 +62,43 @@ public class GameCommander {
 			InformationManager.Instance().update();
 			if (isToFindError)
 				System.out.print("b");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// 각 유닛의 위치를 자체 MapGrid 자료구조에 저장
 			MapGrid.Instance().update();
 			if (isToFindError)
 				System.out.print("c");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// economy and base managers
 			// 일꾼 유닛에 대한 명령 (자원 채취, 이동 정도) 지시 및 정리
 			WorkerManager.Instance().update();
 			if (isToFindError)
 				System.out.print("d");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// 빌드오더큐를 관리하며, 빌드오더에 따라 실제 실행(유닛 훈련, 테크 업그레이드 등)을 지시한다.
 			BuildManager.Instance().update();
 			if (isToFindError)
 				System.out.print("e");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// 빌드오더 중 건물 빌드에 대해서는, 일꾼유닛 선정, 위치선정, 건설 실시, 중단된 건물 빌드 재개를 지시한다
 			ConstructionManager.Instance().update();
 			if (isToFindError)
 				System.out.print("f");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// 게임 초기 정찰 유닛 지정 및 정찰 유닛 컨트롤을 실행한다
 			ScoutManager.Instance().update();
 			if (isToFindError)
 				System.out.print("g");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			// 전략적 판단 및 유닛 컨트롤
 			StrategyManager.Instance().update();
 			if (isToFindError)
 				System.out.print("h");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			CombatManager.Instance().update();
 			if (isToFindError)
 				System.out.print("i)");
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 			logObserver.observe();
-			curtime = System.currentTimeMillis();
-			difftime = curtime - pretime;
-			pretime = curtime;
-			if (difftime > maxdifftime)
-				System.out.println("difftime=" + difftime + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 		} catch (Exception e) {
 			e.printStackTrace();

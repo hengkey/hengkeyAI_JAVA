@@ -151,7 +151,7 @@ public class BlockingEntrance {
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch) {
 			int[] fix_supplyXX = { 18, 106, 94, 0 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 0, 20, 118, 91 };
+			int[] fix_supplyYY = { 0, 20, 119, 91 };
 			fix_supplyY = fix_supplyYY;
 			
 System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().enemyRace);			
@@ -173,9 +173,9 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] barrackYY_array = { 18, 16, 107, 111 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 18, 115, 104, 12 };
+				int[] factoryXX_array = { 14, 114, 100, 7 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 2, 11, 112, 106 };
+				int[] factoryYY_array = { 8, 15, 109, 101 };
 				factoryY_array = factoryYY_array;
 
 				int[] bunkerXX_array = { 21, 97, 113, 35 };
