@@ -267,6 +267,13 @@ public class WorkerManager {
                     setMineralWorker(worker);
                     k++;
                 }
+                //Idle외 아무것도 안하는 worker처리
+                if (workerData.getJobCode(worker) == 'B' && worker.getBuildType()==UnitType.None)
+                {
+                    // send it to the nearest mineral patch
+                    setMineralWorker(worker);
+                    k++;
+                }
                 if(k>0){
                     break;
                 }
@@ -277,6 +284,12 @@ public class WorkerManager {
                 if (worker == null) continue;
                 // if worker's job is idle 
                 if (workerData.getWorkerJob(worker) == WorkerData.WorkerJob.Idle || workerData.getWorkerJob(worker) == WorkerData.WorkerJob.Default )
+                {
+                    // send it to the nearest mineral patch
+                    setMineralWorker(worker);
+                }
+                //Idle외 아무것도 안하는 worker처리
+                if (workerData.getJobCode(worker) == 'B' && worker.getBuildType()==UnitType.None)
                 {
                     // send it to the nearest mineral patch
                     setMineralWorker(worker);
