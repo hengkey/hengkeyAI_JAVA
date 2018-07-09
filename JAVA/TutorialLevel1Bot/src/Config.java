@@ -106,7 +106,7 @@ public class Config {
 	public static boolean DrawProductionInfo = true;
 
 	/// 화면 표시 여부 - 건물 Construction 상황
-	public static boolean DrawBuildingInfo = false;
+	public static boolean DrawBuildingInfo = true;
 	/// 화면 표시 여부 - 건물 ConstructionPlace 예약 상황
 	public static boolean DrawReservedBuildingTiles = false;
 	
