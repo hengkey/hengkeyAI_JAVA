@@ -1,6 +1,3 @@
-- 초반에 컴셋이 두개 high true로 추가되여 초기빌드완료(isInitialBuildOrderFinished)가 안되는 문제
- => command center 갯수보다 컴셋갯수가 적을때만 queue에 넣도록 보완
-- 미네랄좌우에 일정양의 터렛박는 기능
 - 업그레이드 개선(사이언스퍼실러티 좀더빨리짓고, 아머리 두개로)
 - 서플라이존에 미사일터렛추가(서플라이지으러 scv가 계속가서 죽음 무탈이 공격중일때는 가면 안됨.)
 - 패스트 마린,메딕 물량 대비
@@ -27,6 +24,7 @@
 - 벌쳐 공격시 scv우선으로 공격
 
 
+
 <완료목록>
 - svc 무한대(미네랄 1개당 2개)
 - scv가 죽어도 갯수가 줄지 않음 : svc destroy 되었을때 worker.remove 두번 호출하는 오류보완
@@ -45,3 +43,8 @@
 - 미사일터렛 지으러온 scv노는 현상
  =>jobcode=B,getBuildType=None일때 일하도록 지정
 - 미사일터렛 팩토리영역에 짓지 못하도록(14*10)
+- 초반에 컴셋이 두개 high true로 추가되여 초기빌드완료(isInitialBuildOrderFinished)가 안되는 문제
+ => command center 갯수보다 컴셋갯수가 적을때만 queue에 넣도록 보완
+- 미네랄좌우에 일정양의 터렛박는 기능
+- 초반빌드오더에 넣은 시즈탱크가 추가벌쳐때문에 생산되지 못해 isInitialBuildOrderFinished true로 안되는 문제
+ => isInitialBuildOrderFinished=true일때만 이벤트성벌쳐 추가하도록 보완

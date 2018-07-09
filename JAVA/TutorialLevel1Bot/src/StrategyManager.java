@@ -1581,7 +1581,8 @@ public class StrategyManager {
 						// if(selected == UnitType.Terran_Goliath && isarmoryexists == false){
 						// continue;
 						// }
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Vulture) == 0) {
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Vulture) == 0
+								&& isInitialBuildOrderFinished == true) {
 							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Vulture,
 									BuildOrderItem.SeedPositionStrategy.MainBaseLocation, false);
 						}
