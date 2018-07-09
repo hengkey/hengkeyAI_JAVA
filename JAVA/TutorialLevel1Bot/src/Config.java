@@ -103,7 +103,7 @@ public class Config {
 	public static boolean DrawUnitTargetInfo = true;
 
 	/// 화면 표시 여부 - 빌드 큐
-	public static boolean DrawProductionInfo = false;
+	public static boolean DrawProductionInfo = true;
 
 	/// 화면 표시 여부 - 건물 Construction 상황
 	public static boolean DrawBuildingInfo = false;

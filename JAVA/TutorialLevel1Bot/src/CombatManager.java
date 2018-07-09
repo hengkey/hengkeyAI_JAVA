@@ -1431,7 +1431,7 @@ public class CombatManager {
 							ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret, nearTilePosition,
 									false);
 							if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
-								BuildManager.Instance().buildQueue.queueAsHighestPriority(
+								BuildManager.Instance().buildQueue.queueAsLowestPriority(
 										UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
 								System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
 										+ unit.getTilePosition().getY() + ") "
@@ -1448,7 +1448,7 @@ public class CombatManager {
 							ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret, nearTilePosition,
 									false);
 							if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
-								BuildManager.Instance().buildQueue.queueAsHighestPriority(
+								BuildManager.Instance().buildQueue.queueAsLowestPriority(
 										UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
 								System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
 										+ unit.getTilePosition().getY() + ") "

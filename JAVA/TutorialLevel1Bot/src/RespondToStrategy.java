@@ -628,14 +628,21 @@ public class RespondToStrategy {
 				} else {
 					if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Academy) > 0) {
 						// 아카데미가 완성되었고
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Comsat_Station) < 1
-								&& ConstructionManager.Instance()
+						
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Comsat_Station, null)
+								+ ConstructionManager.Instance()
 										.getConstructionQueueItemCount(UnitType.Terran_Comsat_Station, null) == 0) {
 							// 빌드큐에 컴셋이 없는데, 아카데미가 완성되었다면빌드큐에 컴셋 입력
 							if (MyBotModule.Broodwar.self().minerals() >= UnitType.Terran_Comsat_Station.mineralPrice()
 									&& MyBotModule.Broodwar.self().gas() >= UnitType.Terran_Comsat_Station.gasPrice()) {
-								BuildManager.Instance().buildQueue
-										.queueAsHighestPriority(UnitType.Terran_Comsat_Station, true);
+								if (MyBotModule.Broodwar.self()
+										.completedUnitCount(UnitType.Terran_Comsat_Station) < MyBotModule.Broodwar
+												.self().completedUnitCount(UnitType.Terran_Command_Center)) {
+									System.out.println("Terran_Comsat_Station add "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+									BuildManager.Instance().buildQueue
+											.queueAsHighestPriority(UnitType.Terran_Comsat_Station, true);
+								}
 							}
 						}
 					}
