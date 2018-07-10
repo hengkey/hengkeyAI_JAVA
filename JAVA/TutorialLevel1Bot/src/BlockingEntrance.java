@@ -154,7 +154,7 @@ public class BlockingEntrance {
 			int[] fix_supplyYY = { 0, 20, 119, 91 };
 			fix_supplyY = fix_supplyYY;
 			
-System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().enemyRace);			
+            System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().enemyRace);			
 			
 			if (InformationManager.Instance().enemyRace == Race.Protoss
 					|| InformationManager.Instance().enemyRace == Race.Terran) {
@@ -203,14 +203,85 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 				int[] barrackYY_array = { 18, 16, 107, 111 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 18, 115, 104, 12 };
+				int[] factoryXX_array = { 14, 114, 100, 7 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 2, 11, 112, 106 };
+				int[] factoryYY_array = { 8, 15, 109, 101 };
 				factoryY_array = factoryYY_array;
 
 				int[] bunkerXX_array = { 21, 97, 113, 35 };
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 20, 13, 108, 114 };
+			    bunkerY_array = bunkerYY_array;
+			    
+				int[] turret1XX_array = { 6, 120, 120, 6 };
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = { 10, 10, 120, 120 };
+			    turret1Y_array = turret1YY_array;
+			}
+		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) { // koba
+			int[] fix_supplyXX = { 0, 96, 96, 12 };
+			fix_supplyX = fix_supplyXX;
+			int[] fix_supplyYY = { 0, 0, 123, 123 };
+			fix_supplyY = fix_supplyYY;
+			
+            System.out.println("fix_supplyY = CircuitBreaker "+ InformationManager.Instance().enemyRace);			
+			
+			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 
+				InformationManager.Instance().enemyRace == Race.Terran) 
+			{
+				int[] first_suppleXX_array = {  1, 124, 118, 3};
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 25, 25, 102, 100 };
+				first_suppleY_array = first_suppleYY_array;
+
+				int[] second_suppleXX_array = { 1, 113, 120, 0 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 16, 4, 125, 100 };
+				second_suppleY_array = second_suppleYY_array;
+
+				int[] barrackXX_array = { 6, 118, 122, 6 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 23, 23, 100, 102 };
+				barrackY_array = barrackYY_array;
+
+				int[] factoryXX_array = { 10, 104, 104, 11 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 13, 8, 109, 106 };
+				factoryY_array = factoryYY_array;
+
+				int[] bunkerXX_array = { 3, 122, 121, 3 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 23, 23, 103, 102 };
+			    bunkerY_array = bunkerYY_array;
+			    
+				int[] turret1XX_array = { 6, 120, 120, 6 };
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = { 10, 10, 120, 120 };
+			    turret1Y_array = turret1YY_array;
+			} else {
+				int[] first_suppleXX_array = {  1, 124, 118, 3};
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 25, 25, 102, 100 };
+				first_suppleY_array = first_suppleYY_array;
+
+				int[] second_suppleXX_array = { 1, 113, 120, 0 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 16, 4, 125, 100 };
+				second_suppleY_array = second_suppleYY_array;
+
+				int[] barrackXX_array = { 6, 118, 122, 6 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 23, 23, 100, 102 };
+				barrackY_array = barrackYY_array;
+
+				int[] factoryXX_array = { 10, 104, 104, 11 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 13, 8, 109, 106 };
+				factoryY_array = factoryYY_array;
+
+				int[] bunkerXX_array = { 3, 122, 121, 3 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 23, 23, 103, 102 };
 			    bunkerY_array = bunkerYY_array;
 			    
 				int[] turret1XX_array = { 6, 120, 120, 6 };
@@ -364,8 +435,10 @@ System.out.println("fix_supplyY = OverWatch "+ InformationManager.Instance().ene
 			}else if(startingX == 8 && startingY == 47){
 				starting_int = 7;
 			}
-		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch){
-System.out.println("startingX="+startingX+" startingY="+startingY);
+		}
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch)
+		{
+			System.out.println("startingX="+startingX+" startingY="+startingY);
 			if(startingX == 7 && startingY == 7){
 				//11시부터 시계방향
 				starting_int = 0;
@@ -376,7 +449,20 @@ System.out.println("startingX="+startingX+" startingY="+startingY);
 			}else if(startingX == 7 && startingY == 117){
 				starting_int = 3;
 			}
-		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
+		} 
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker)
+		{
+            System.out.println("startingX="+startingX+" startingY="+startingY);
+	    	if(startingX == 7 && startingY == 9){
+			starting_int = 0;
+		}else if(startingX == 117 && startingY == 9){
+			starting_int = 1;
+		}else if(startingX == 117 && startingY == 118){
+			starting_int = 2;
+		}else if(startingX == 7 && startingY == 118){
+			starting_int = 3;
+		}
+	}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
 			if(startingX == 57 && startingY == 6){
 				//11시부터 시계방향
 				starting_int = 0;

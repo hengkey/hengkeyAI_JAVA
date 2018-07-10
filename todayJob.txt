@@ -1,3 +1,5 @@
+- command center 일군죽었을때 종종 새로 일군을 할당하지 못함
+- 건설중인 scv는 다른 건물 빌더로 할당하지 않도록 보완
 - 업그레이드 개선(사이언스퍼실러티 좀더빨리짓고, 아머리 두개로)
 - 배럭 들었다 놨다하는 현상
 - 초반 건설scv공격시 다른 scv가 공격해주는 기능
@@ -39,3 +41,4 @@
 - 미네랄좌우에 일정양의 터렛박는 기능
 - 초반빌드오더에 넣은 시즈탱크가 추가벌쳐때문에 생산되지 못해 isInitialBuildOrderFinished true로 안되는 문제
  => isInitialBuildOrderFinished=true일때만 이벤트성벌쳐 추가하도록 보완
+- Construction job에서 삭제할경우 해당 건물부셔서 돈을 refund 받도록 보완

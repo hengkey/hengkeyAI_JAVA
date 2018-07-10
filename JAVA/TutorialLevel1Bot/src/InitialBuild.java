@@ -48,14 +48,15 @@ System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
 				queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_SCV);
 				queueBuild(true, UnitType.Terran_Marine);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true, true);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true, true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 				queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 				queueBuild(true, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_Machine_Shop);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,true, true);
+
 //				queueBuildSeed(true, UnitType.Terran_Factory, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuild(false, UnitType.Terran_Vulture);
 				queueBuild(false, UnitType.Terran_Vulture);
