@@ -30,8 +30,8 @@ public class InitialBuild {
 		TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
 		TilePosition turret1Pos = new TilePosition(BlockingEntrance.Instance().turret1X,BlockingEntrance.Instance().turret1Y);		
 		
-System.out.println("turret1X="+BlockingEntrance.Instance().turret1X);
-System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
+//System.out.println("turret1X="+BlockingEntrance.Instance().turret1X);
+//System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
 
 		if (InformationManager.Instance().enemyRace == Race.Terran) {
 			

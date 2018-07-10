@@ -908,6 +908,14 @@ public class ConstructionPlaceFinder {
 			// conditions for non-overlap are easy
 			boolean noOverlap = (tx2 < bx1) || (tx1 > bx2) || (ty2 < by1) || (ty1 > by2);
 
+			// comsat 위치 겹치는지 여부 체크
+			bx1 = base.getTilePosition().getX() + 4;
+			by1 = base.getTilePosition().getY() + 1;
+			bx2 = bx1 + 2;
+			by2 = by1 + 2;
+
+			noOverlap = (tx2 < bx1) || (tx1 > bx2) || (ty2 < by1) || (ty1 > by2);
+			
 			// if the reverse is true, return true
 			if (!noOverlap)
 			{
