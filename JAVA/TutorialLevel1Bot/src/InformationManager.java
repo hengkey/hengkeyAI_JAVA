@@ -1642,29 +1642,29 @@ public class InformationManager {
 		}
 		
 		// position으로 map 판단
-		final int posFighting[][] = new int[][]{{288, 3760}, {288, 240}, {3808, 272}, {3808, 3792}};
-		final int posLost[][] = new int[][]{{288, 2832}, {928, 3824}, {3808, 912}, {1888, 240}};
-		final int posOver[][] = new int[][]{{288, 272}, {3808, 272}, {3808, 3792}, {288, 3792}};
-		final int posCircuit[][] = new int[][]{{288, 336}, {3808, 336}, {3808, 3824}, {288, 3824}};
-		if (startingBase.size() == 8) {
+		//final int posFighting[][] = new int[][]{{288, 3760}, {288, 240}, {3808, 272}, {3808, 3792}};
+		final int posFighting[][] = new int[][]{{288, 240}, {3808, 272}, {3808, 3792}, {288, 3760}};
+		final int posLost[][]     = new int[][]{{288, 2832}, {928, 3824}, {3808, 912}, {1888, 240}};
+		final int posOver[][]     = new int[][]{{288, 272},  {3808, 272}, {3808, 3792}, {288, 3792}};
+		final int posCircuit[][]  = new int[][]{{288, 336},  {3808, 336}, {3808, 3824}, {288, 3824}};
+		
+		if (startingBase.size() == 8) 
+		{
 			candiMapByPosition = MAP.TheHunters;
-		} else if (startingBase.size() == 4) {
+		} 
+		else if (startingBase.size() == 4) 
+		{
 			Position basePos = mainBaseLocations.get(selfPlayer).getPosition();
-System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
-//			for (int[] pos : posFighting) {
-//				if (basePos.equals(new Position(pos[0], pos[1]))) {
-//					candiMapByPosition = MAP.FightingSpririts;
-//					break;
-//				}
-//			}
-//			if (candiMapByPosition == null) {
-				for (int[] pos : posLost) {
-					if (basePos.equals(new Position(pos[0], pos[1]))) {
-						candiMapByPosition = MAP.LostTemple;
-						break;
-					}
+			System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
+
+			for (int[] pos : posLost) 
+			{
+				if (basePos.equals(new Position(pos[0], pos[1]))) {
+					candiMapByPosition = MAP.LostTemple;
+					break;
 				}
-//			}
+			}
+
 			if (candiMapByPosition == null) {
 				for (int[] pos : posOver) {
 					if (basePos.equals(new Position(pos[0], pos[1]))) {
@@ -1673,6 +1673,7 @@ System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
 					}
 				}
 			}
+
 			if (candiMapByPosition == null) {
 				for (int[] pos : posCircuit) {
 					if (basePos.equals(new Position(pos[0], pos[1]))) {
@@ -1681,10 +1682,22 @@ System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
 					}
 				}
 			}
-		} else {
+
+			if (candiMapByPosition == null) {
+				for (int[] pos : posCircuit) {
+					if (basePos.equals(new Position(pos[0], pos[1]))) {
+						candiMapByPosition = MAP.FightingSpririts;
+						break;
+					}
+				}
+			}
+		} 
+		else 
+		{
 			candiMapByPosition = MAP.Unknown;
 		}
-System.out.println("map="+candiMapByPosition);
+		
+		System.out.println("Position map="+candiMapByPosition);
 
 		// name으로 map 판단
 		MAP candiMapByName = null;
@@ -1704,21 +1717,24 @@ System.out.println("map="+candiMapByPosition);
 		}
 
 		// 최종 결정
-		MAP mapDecision = MAP.OverWatch;
-		if (candiMapByPosition == candiMapByName) {
+		MAP mapDecision = MAP.CircuitBreaker;
+		if (candiMapByPosition == candiMapByName) 
+		{
 			mapDecision = candiMapByPosition;
-//			System.out.println("map : " + candiMapByPosition + "(100%)");
-		} else {
-			if (candiMapByPosition != MAP.Unknown) {
-				mapDecision = candiMapByPosition;
-//				System.out.println("map : " + mapDecision + "(mapByName is -> " + candiMapByName + ")");
-			} else if (candiMapByName != MAP.Unknown) {
+		} 
+		else 
+		{
+			if (candiMapByName != MAP.Unknown) 
+			{
 				mapDecision = candiMapByName;
-//				System.out.println("map : " + mapDecision + "(mapByPosition is -> " + candiMapByPosition + ")");
 			}
+			else if (candiMapByPosition != MAP.Unknown) 
+			{
+				mapDecision = candiMapByPosition;
+			} 
 		}
 
-System.out.println("map="+mapDecision);
+		System.out.println("Decision map="+mapDecision);
 
 		MapSpecificInformation tempMapInfo = new MapSpecificInformation();
 		tempMapInfo.setMap(mapDecision);

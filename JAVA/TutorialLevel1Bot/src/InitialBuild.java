@@ -17,7 +17,7 @@ public class InitialBuild {
 	
 	
 	public void setInitialBuildOrder() {
-
+	
 		//@@@@@@ 맵과 상대 종족에 따른 initial build 를 따져봐야된다.
 		BlockingEntrance.Instance().SetBlockingPosition();
 		
@@ -28,17 +28,12 @@ public class InitialBuild {
 		TilePosition factoryPos2 = new TilePosition(BlockingEntrance.Instance().factoryX+7,BlockingEntrance.Instance().factoryY);
 		TilePosition factoryPos3 = new TilePosition(BlockingEntrance.Instance().factoryX,BlockingEntrance.Instance().factoryY+3);
 		TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
-		TilePosition turret1Pos = new TilePosition(BlockingEntrance.Instance().turret1X,BlockingEntrance.Instance().turret1Y);		
-		
-//System.out.println("turret1X="+BlockingEntrance.Instance().turret1X);
-//System.out.println("turret1Y="+BlockingEntrance.Instance().turret1Y);
-
+		 
 		if (InformationManager.Instance().enemyRace == Race.Terran) {
 			
 			
 //			if(InformationManager.Instance().getMapSpecificInformation().getMap() != MAP.TheHunters){
 				//기타맵 테란전
-
 				queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
 				queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);

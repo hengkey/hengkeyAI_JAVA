@@ -73,9 +73,6 @@ public class BlockingEntrance {
 	private static int fix_supplyX[] = null; //new int []{26, 54, 98, 104, 90, 52, 14, 20};
 	private static int fix_supplyY[] = null; //new int []{21, 25, 23,   63, 97, 96, 99, 56};
 	
-	private static int turret1X_array[] = null;
-	private static int turret1Y_array[] = null;
-	
 	private int starting_int = 0;
 
 	private static BlockingEntrance instance = new BlockingEntrance();
@@ -182,11 +179,6 @@ public class BlockingEntrance {
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 20, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
-			    
-				int[] turret1XX_array = { 6, 120, 120, 6 };
-			    turret1X_array = turret1XX_array;
-			    int[] turret1YY_array = { 10, 10, 120, 120 };
-			    turret1Y_array = turret1YY_array;
 			} else {
 				int[] first_suppleXX_array = { 18, 95, 109, 34 };
 				first_suppleX_array = first_suppleXX_array;
@@ -212,11 +204,6 @@ public class BlockingEntrance {
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 20, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
-			    
-				int[] turret1XX_array = { 6, 120, 120, 6 };
-			    turret1X_array = turret1XX_array;
-			    int[] turret1YY_array = { 10, 10, 120, 120 };
-			    turret1Y_array = turret1YY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) { // koba
 			int[] fix_supplyXX = { 0, 96, 96, 12 };
@@ -253,11 +240,6 @@ public class BlockingEntrance {
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 22, 22, 104, 104 };
 			    bunkerY_array = bunkerYY_array;
-			    
-				int[] turret1XX_array = { 6, 120, 120, 6 };
-			    turret1X_array = turret1XX_array;
-			    int[] turret1YY_array = { 10, 10, 120, 120 };
-			    turret1Y_array = turret1YY_array;
 			} else {
 				int[] first_suppleXX_array = {  7, 125, 125, 7};
 				first_suppleX_array = first_suppleXX_array;
@@ -283,11 +265,6 @@ public class BlockingEntrance {
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 22, 22, 104, 104 };
 			    bunkerY_array = bunkerYY_array;
-			    
-				int[] turret1XX_array = { 6, 120, 120, 6 };
-			    turret1X_array = turret1XX_array;
-			    int[] turret1YY_array = { 10, 10, 120, 120 };
-			    turret1Y_array = turret1YY_array;
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
 			int[] fix_supplyXX = { 66, 118, 40, 0 };
@@ -348,7 +325,8 @@ public class BlockingEntrance {
 			 * ConstructionPlaceFinder.Instance().maxSupplyCntX = 3;
 			 * ConstructionPlaceFinder.Instance().maxSupplyCntY = 4;
 			 */
-
+            System.out.println("FightingSpririts "+ InformationManager.Instance().enemyRace);
+            
 			int[] fix_supplyXX = { 0, 118, 104, 0 };
 			fix_supplyX = fix_supplyXX;
 			int[] fix_supplyYY = { 15, 17, 118, 102 };
@@ -485,6 +463,7 @@ public class BlockingEntrance {
 				starting_int = 3;
 			}
 		}
+
 		first_suppleX = first_suppleX_array[starting_int];
 		first_suppleY = first_suppleY_array[starting_int];
 		second_suppleX = second_suppleX_array[starting_int];
@@ -497,11 +476,9 @@ public class BlockingEntrance {
 		factoryY = factoryY_array[starting_int];
 		bunkerX = bunkerX_array[starting_int];
 		bunkerY = bunkerY_array[starting_int];
-		turret1X = turret1X_array[starting_int];
-		turret1Y = turret1Y_array[starting_int];
+
 		//avoid supply ¼³Á¤
 		ConstructionPlaceFinder.Instance().setTilesToAvoidSupply();
-	
 	}
 	
 	public void CheckBlockingPosition() {
