@@ -223,25 +223,25 @@ public class BlockingEntrance {
 			fix_supplyX = fix_supplyXX;
 			int[] fix_supplyYY = { 0, 0, 123, 123 };
 			fix_supplyY = fix_supplyYY;
-			
+		 	
             System.out.println("fix_supplyY = CircuitBreaker "+ InformationManager.Instance().enemyRace);			
 			
 			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 
 				InformationManager.Instance().enemyRace == Race.Terran) 
 			{
-				int[] first_suppleXX_array = {  1, 124, 118, 3};
+				int[] first_suppleXX_array = {  7, 125, 125, 7};
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 25, 25, 102, 100 };
+				int[] first_suppleYY_array = { 24, 24, 102, 102 };
 				first_suppleY_array = first_suppleYY_array;
 
-				int[] second_suppleXX_array = { 1, 113, 120, 0 };
+				int[] second_suppleXX_array = { 4, 122, 122, 4 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 16, 4, 125, 100 };
+				int[] second_suppleYY_array = { 24, 24, 102, 102 };
 				second_suppleY_array = second_suppleYY_array;
 
-				int[] barrackXX_array = { 6, 118, 122, 6 };
+				int[] barrackXX_array = { 0, 118, 118, 0 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 23, 23, 100, 102 };
+				int[] barrackYY_array = { 24, 23, 102, 101 };
 				barrackY_array = barrackYY_array;
 
 				int[] factoryXX_array = { 10, 104, 104, 11 };
@@ -249,9 +249,9 @@ public class BlockingEntrance {
 				int[] factoryYY_array = { 13, 8, 109, 106 };
 				factoryY_array = factoryYY_array;
 
-				int[] bunkerXX_array = { 3, 122, 121, 3 };
+				int[] bunkerXX_array = { 4, 123, 123, 5 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 23, 23, 103, 102 };
+			    int[] bunkerYY_array = { 22, 22, 104, 104 };
 			    bunkerY_array = bunkerYY_array;
 			    
 				int[] turret1XX_array = { 6, 120, 120, 6 };
@@ -259,19 +259,19 @@ public class BlockingEntrance {
 			    int[] turret1YY_array = { 10, 10, 120, 120 };
 			    turret1Y_array = turret1YY_array;
 			} else {
-				int[] first_suppleXX_array = {  1, 124, 118, 3};
+				int[] first_suppleXX_array = {  7, 125, 125, 7};
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 25, 25, 102, 100 };
+				int[] first_suppleYY_array = { 24, 24, 102, 102 };
 				first_suppleY_array = first_suppleYY_array;
 
-				int[] second_suppleXX_array = { 1, 113, 120, 0 };
+				int[] second_suppleXX_array = { 4, 122, 122, 4 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 16, 4, 125, 100 };
+				int[] second_suppleYY_array = { 24, 24, 102, 102 };
 				second_suppleY_array = second_suppleYY_array;
 
-				int[] barrackXX_array = { 6, 118, 122, 6 };
+				int[] barrackXX_array = { 0, 118, 118, 0 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 23, 23, 100, 102 };
+				int[] barrackYY_array = { 24, 23, 102, 101 };
 				barrackY_array = barrackYY_array;
 
 				int[] factoryXX_array = { 10, 104, 104, 11 };
@@ -279,9 +279,9 @@ public class BlockingEntrance {
 				int[] factoryYY_array = { 13, 8, 109, 106 };
 				factoryY_array = factoryYY_array;
 
-				int[] bunkerXX_array = { 3, 122, 121, 3 };
+				int[] bunkerXX_array = { 4, 123, 123, 5 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 23, 23, 103, 102 };
+			    int[] bunkerYY_array = { 22, 22, 104, 104 };
 			    bunkerY_array = bunkerYY_array;
 			    
 				int[] turret1XX_array = { 6, 120, 120, 6 };
