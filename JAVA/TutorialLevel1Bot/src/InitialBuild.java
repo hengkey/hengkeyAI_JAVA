@@ -134,7 +134,7 @@ public class InitialBuild {
 				queueBuild(false, UnitType.Terran_SCV);
 				queueBuild(false, UnitType.Terran_Marine);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 				//queueBuildSeed(false, UnitType.Terran_Factory, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 				queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
@@ -183,7 +183,7 @@ public class InitialBuild {
 	            queueBuild(true, UnitType.Terran_Refinery);
 	            queueBuild(false, UnitType.Terran_Marine);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true);
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
 				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 				//BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,false);
 				queueBuild(true, UnitType.Terran_Vulture);
