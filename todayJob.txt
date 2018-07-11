@@ -1,3 +1,4 @@
+- 컨백스홀(최단거리)
 - 아군멀티에 마인 안박도록
 - 멀티 방어병력 투입방안
 - 업그레이드 개선(사이언스퍼실러티 좀더빨리짓고, 아머리 두개로)
@@ -46,3 +47,21 @@
  => 일군이 할당되어 있으나 job형태가 build가 아닌경우 해당일꾼 해제하는 방식으로 변경(소스에서 "건설중인 일꾼 에너지 20이하로" 검색)
 - comsat위치에 터렛 안 박도록
  => isOverlapsWithBaseLocation 여기서 comsat 오버랩 체크여부 추가
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+git init
+git add aaa
+ git clone https://github.com/hengkey/hengkeyAI_JAVA.git --config http.proxy=http://70.10.15.10:8080 --config https.proxy=http://70.10.15.10:8080 --config http.sslVerify=false
