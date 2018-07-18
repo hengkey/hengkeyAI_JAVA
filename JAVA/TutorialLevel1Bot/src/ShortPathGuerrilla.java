@@ -1,11 +1,13 @@
-package vultureGuerrilla;
-
 import java.util.ArrayList;
 
-public class Main {
+import bwapi.TilePosition;
+import bwta.BWTA;
+
+public class ShortPathGuerrilla {
 	public static final int maxGuerillaPosNum = 39;
 	public static final int maxNodeNum = 70;
 	public static ArrayList<GuerillaPos>[] list;
+	public static int prePos = 1;
 
 	static int[][] guerillaPos = { { 8, 10 }, { 8, 29 }, { 7, 37 }, { 29, 37 }, { 36, 15 }, { 45, 23 }, { 51, 38 },
 			{ 54, 15 }, { 64, 4 }, { 74, 15 }, { 83, 24 }, { 77, 39 }, { 92, 14 }, { 98, 37 }, { 120, 36 }, { 120, 29 },
@@ -22,7 +24,7 @@ public class Main {
 			{ 28, 27 }, { 27, 30 }, { 30, 31 }, { 29, 34 }, { 37, 38 }, { 38, 39 }, { 37, 36 }, { 37, 35 }, { 38, 35 },
 			{ 36, 34 }, { 36, 33 }, { 36, 35 }, { 34, 33 }, { 33, 32 }, { 33, 35 }, { 35, 32 }, { 32, 31 } };
 
-	public static void main(String[] args) {
+	public static void init() {
 		list = new ArrayList[maxGuerillaPosNum + 1];
 
 		for (int i = 0; i <= maxGuerillaPosNum; i++) {
@@ -47,23 +49,50 @@ public class Main {
 			}
 			System.out.println("");
 		}
-
-		int prePos = 1, curPos = 1, targetPos = maxGuerillaPosNum;
-
-		while (curPos != targetPos) {
-			updateEnemyRegion();
-			prePos = curPos;
-			list[curPos].get(0).validFlag = false;
-			curPos = getNextPos(curPos, targetPos);
-			System.out
-					.println("(" + curPos + ":" + guerillaPos[curPos - 1][0] + "," + guerillaPos[curPos - 1][1] + ")");
-			if (curPos == prePos) {
-				resetValidFlag();
-				System.out.println("Oh!! My God!!!");
-//				break;
-			}
-		}
 	}
+	
+//	public static void main(String[] args) {
+//		list = new ArrayList[maxGuerillaPosNum + 1];
+//
+//		for (int i = 0; i <= maxGuerillaPosNum; i++) {
+//			list[i] = new ArrayList<GuerillaPos>();
+//		}
+//
+//		TilePos pos = new TilePos(0, 0);
+//		for (int i = 0; i < maxNodeNum; i++) {
+//			pos.x = guerillaPos[nodeInfo[i][0] - 1][0];
+//			pos.y = guerillaPos[nodeInfo[i][0] - 1][1];
+//			list[nodeInfo[i][0]].add(new GuerillaPos(pos, nodeInfo[i][1], true));
+//
+//			pos.x = guerillaPos[nodeInfo[i][1] - 1][0];
+//			pos.y = guerillaPos[nodeInfo[i][1] - 1][1];
+//			list[nodeInfo[i][1]].add(new GuerillaPos(pos, nodeInfo[i][0], true));
+//		}
+//
+//		for (int i = 1; i <= maxGuerillaPosNum; i++) {
+//			System.out.print("(" + i + ", " + "x=" + list[i].get(0).x + ",y=" + list[i].get(0).y + ")");
+//			for (int j = 0; j < list[i].size(); j++) {
+//				System.out.print("(" + i + "," + list[i].get(j).node + ")");
+//			}
+//			System.out.println("");
+//		}
+//
+//		int prePos = 1, curPos = 1, targetPos = maxGuerillaPosNum;
+//
+//		while (curPos != targetPos) {
+//			updateEnemyRegion();
+//			prePos = curPos;
+//			list[curPos].get(0).validFlag = false;
+//			curPos = getNextPos(curPos, targetPos);
+//			System.out
+//					.println("(" + curPos + ":" + guerillaPos[curPos - 1][0] + "," + guerillaPos[curPos - 1][1] + ")");
+//			if (curPos == prePos) {
+//				resetValidFlag();
+//				System.out.println("Oh!! My God!!!");
+////				break;
+//			}
+//		}
+//	}
 
 	public static void resetValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
@@ -81,11 +110,41 @@ public class Main {
 //		list[37].get(0).validFlag = false;
 	}
 
-	public static int getNextPos(int curPosIndex, int targetPosIndex) {
+	public static TilePosition getNextPos(TilePosition curTilePos, TilePosition targetTilePos) {
+		int curPosIndex=1,targetPosIndex=1;
 		int nextPosIndex = curPosIndex;
 		int nearNode = 0;
 		int preDistance = (int) Math.pow(128, 2) * 2 + 1;
 		int curDistance = 0;
+		double preCurDoubleDistance= 999999;
+		double preTargetDoubleDistance= 999999;
+		
+		updateEnemyRegion();
+		
+		//Tile값을 가장 가까운 Position table index값으로 변환
+		for (int i = 0; i < maxGuerillaPosNum; i++) {
+			TilePosition tmpTilePosition = new TilePosition(guerillaPos[i][0], guerillaPos[i][1]);
+			if (BWTA.getGroundDistance(curTilePos, tmpTilePosition) < preCurDoubleDistance) {
+				preCurDoubleDistance = BWTA.getGroundDistance(curTilePos, tmpTilePosition);
+				curPosIndex = i + 1;
+			}
+
+			TilePosition tmpTilePosition2 = new TilePosition(guerillaPos[i][0], guerillaPos[i][1]);
+			if (BWTA.getGroundDistance(targetTilePos, tmpTilePosition2) < preTargetDoubleDistance) {
+				preTargetDoubleDistance = BWTA.getGroundDistance(targetTilePos, tmpTilePosition2);
+				targetPosIndex = i + 1;
+			}
+		}
+
+		list[curPosIndex].get(0).validFlag = false;
+		
+		if (curPosIndex == prePos) {
+			resetValidFlag();
+			System.out.println("Oh!! My God!!!");
+			// break;
+		}
+		
+		prePos = curPosIndex;
 
 		for (int i = 0; i < list[curPosIndex].size(); i++) {
 			nearNode = list[curPosIndex].get(i).node;
@@ -101,7 +160,8 @@ public class Main {
 			}
 		}
 
-		return nextPosIndex;
+		TilePosition nextTilePos = new TilePosition(guerillaPos[nextPosIndex-1][0], guerillaPos[nextPosIndex-1][1]);
+		return nextTilePos;
 	}
 }
 
