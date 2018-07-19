@@ -1,3 +1,5 @@
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
+
 import java.util.List;
 
 import bwapi.Color;
@@ -50,8 +52,11 @@ public class BlockingEntrance {
 	public int build_barrackX = 0;
 	public int build_barrackY = 0;
 	
-	/*public int build_fix_supplyX = 0;
-	public int build_fix_supplyY = 0;*/
+    public int build_engineeringX = 0;
+	public int build_engineeringY = 0;
+	
+	public int[] turretX = {0};
+	public int[] turretY = {0};
 	
 	public static boolean blockingEntranceNow = true;
 	
@@ -72,6 +77,11 @@ public class BlockingEntrance {
 	
 	private static int fix_supplyX[] = null; //new int []{26, 54, 98, 104, 90, 52, 14, 20};
 	private static int fix_supplyY[] = null; //new int []{21, 25, 23,   63, 97, 96, 99, 56};
+    private static int engineeringX_array[] = null; //new int []{26, 54, 98, 104, 90, 52, 14, 20};
+	private static int engineeringY_array[] = null; //new int []{21, 25, 23,   63, 97, 96, 99, 56};
+	
+	private static int turretX_array[][] = null;
+	private static int turretY_array[][] = null;
 	
 	private int starting_int = 0;
 
@@ -205,68 +215,7 @@ public class BlockingEntrance {
 			    int[] bunkerYY_array = { 20, 13, 108, 114 };
 			    bunkerY_array = bunkerYY_array;
 			}
-		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) { // koba
-			int[] fix_supplyXX = { 0, 96, 96, 12 };
-			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 0, 0, 123, 123 };
-			fix_supplyY = fix_supplyYY;
-		 	
-            System.out.println("fix_supplyY = CircuitBreaker "+ InformationManager.Instance().enemyRace);			
-			
-			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 
-				InformationManager.Instance().enemyRace == Race.Terran) 
-			{
-				int[] first_suppleXX_array = {  7, 125, 125, 7};
-				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 24, 24, 102, 102 };
-				first_suppleY_array = first_suppleYY_array;
-
-				int[] second_suppleXX_array = { 4, 122, 122, 4 };
-				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 24, 24, 102, 102 };
-				second_suppleY_array = second_suppleYY_array;
-
-				int[] barrackXX_array = { 0, 118, 118, 0 };
-				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 24, 23, 102, 101 };
-				barrackY_array = barrackYY_array;
-
-				int[] factoryXX_array = { 10, 104, 104, 11 };
-				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 13, 8, 109, 106 };
-				factoryY_array = factoryYY_array;
-
-				int[] bunkerXX_array = { 4, 123, 123, 5 };
-			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 22, 22, 104, 104 };
-			    bunkerY_array = bunkerYY_array;
-			} else {
-				int[] first_suppleXX_array = {  7, 125, 125, 7};
-				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 24, 24, 102, 102 };
-				first_suppleY_array = first_suppleYY_array;
-
-				int[] second_suppleXX_array = { 4, 122, 122, 4 };
-				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 24, 24, 102, 102 };
-				second_suppleY_array = second_suppleYY_array;
-
-				int[] barrackXX_array = { 0, 118, 118, 0 };
-				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 24, 23, 102, 101 };
-				barrackY_array = barrackYY_array;
-
-				int[] factoryXX_array = { 10, 104, 104, 11 };
-				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 13, 8, 109, 106 };
-				factoryY_array = factoryYY_array;
-
-				int[] bunkerXX_array = { 4, 123, 123, 5 };
-			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 22, 22, 104, 104 };
-			    bunkerY_array = bunkerYY_array;
-			}
-		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
+		}else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple) {
 			int[] fix_supplyXX = { 66, 118, 40, 0 };
 			fix_supplyX = fix_supplyXX;
 			int[] fix_supplyYY = { 0, 37, 118, 74 };
@@ -320,65 +269,220 @@ public class BlockingEntrance {
 				int[] bunkerYY_array = { 9, 30, 116, 90 };
 				bunkerY_array = bunkerYY_array;
 			}
-		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts) {
-			/*
-			 * ConstructionPlaceFinder.Instance().maxSupplyCntX = 3;
-			 * ConstructionPlaceFinder.Instance().maxSupplyCntY = 4;
-			 */
+		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) 
+		{
+			int[] fix_supplyXX = { 0, 100, 100, 12 };
+			fix_supplyX = fix_supplyXX;
+			int[] fix_supplyYY = { 0, 0, 123, 123 };
+			fix_supplyY = fix_supplyYY;
+		 				
+			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 
+				InformationManager.Instance().enemyRace == Race.Terran) 
+			{
+				int[] first_suppleXX_array = {  7, 125, 125, 7};
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 24, 24, 102, 102 };
+				first_suppleY_array = first_suppleYY_array;
+
+				int[] second_suppleXX_array = { 4, 122, 122, 4 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 24, 24, 102, 102 };
+				second_suppleY_array = second_suppleYY_array;
+
+				int[] barrackXX_array = { 0, 118, 118, 0 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 24, 23, 102, 101 };
+				barrackY_array = barrackYY_array;
+
+				int[] factoryXX_array = { 10, 104, 104, 11 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 13, 8, 109, 106 };
+				factoryY_array = factoryYY_array;
+
+				int[] bunkerXX_array = { 4, 123, 123, 5 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 22, 22, 104, 104 };
+			    bunkerY_array = bunkerYY_array;
+
+				int[] engineeringXX_array = { 4, 123, 123, 5 };
+			    engineeringX_array = engineeringXX_array;
+			    int[] engineeringYY_array = { 18, 18, 127, 110 };
+			    engineeringY_array = engineeringYY_array;
+			    
+			    int[][] turretXX_array = {
+			    		{ 30, 30,  25,  22,  22,  22,  20,  17,  11,   0},
+			    		{ 96, 96, 100, 104, 104, 104, 108, 115, 125, 125},
+			    		{ 96, 96,  99, 103, 104, 105, 107, 114, 124, 125},
+			    		{ 28, 28,  23,  22,  22,  22,  18,  13,   0,   0}
+			    };
+			    
+			    int[][] turretYY_array = {
+			    		{  0,   3,   5,   7,  11, 15,   20,  23,  23, 16},
+			    		{  0,   3,   5,   7,  12, 16,   21,  23,  20, 17},
+			    		{125, 123, 121, 119, 115, 107, 103, 102, 100, 106},
+			    		{125, 122, 120, 117, 113, 109, 103, 103, 106, 109}
+			    };
+			    
+			    turretX_array = turretXX_array;
+	    		turretY_array = turretYY_array;
+			} 
+			else 
+			{
+				int[] first_suppleXX_array = {  7, 125, 125, 7};
+				first_suppleX_array = first_suppleXX_array;
+				int[] first_suppleYY_array = { 24, 24, 102, 102 };
+				first_suppleY_array = first_suppleYY_array;
+
+				int[] second_suppleXX_array = { 4, 122, 122, 4 };
+				second_suppleX_array = second_suppleXX_array;
+				int[] second_suppleYY_array = { 24, 24, 102, 102 };
+				second_suppleY_array = second_suppleYY_array;
+
+				int[] barrackXX_array = { 0, 118, 118, 0 };
+				barrackX_array = barrackXX_array;
+				int[] barrackYY_array = { 24, 23, 102, 101 };
+				barrackY_array = barrackYY_array;
+
+				int[] factoryXX_array = { 10, 104, 104, 11 };
+				factoryX_array = factoryXX_array;
+				int[] factoryYY_array = { 13, 8, 109, 106 };
+				factoryY_array = factoryYY_array;
+
+				int[] bunkerXX_array = { 4, 123, 123, 5 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 22, 22, 104, 104 };
+			    bunkerY_array = bunkerYY_array;
+	    
+				int[] engineeringXX_array = { 4, 123, 117, 5 };
+			    engineeringX_array = engineeringXX_array;
+			    int[] engineeringYY_array = { 18, 18, 110, 110 };
+			    engineeringY_array = engineeringYY_array;
+			    
+			    int[][] turretXX_array = {
+			    		{ 30, 30,  25,  22,  22,  22,  20,  17,  11,   0},
+			    		{ 96, 96, 100, 104, 104, 104, 108, 115, 125, 125},
+			    		{ 96, 96,  99, 103, 104, 105, 107, 114, 124, 125},
+			    		{ 28, 28,  23,  22,  22,  22,  18,  13,   0,   0}
+			    };
+			    
+			    int[][] turretYY_array = {
+			    		{  0,   3,   5,   7,  11, 15,   20,  23,  23, 16},
+			    		{  0,   3,   5,   7,  12, 16,   21,  23,  20, 17},
+			    		{125, 123, 121, 119, 115, 107, 103, 102, 100, 106},
+			    		{125, 122, 120, 117, 113, 109, 103, 103, 106, 109}
+			    };
+			    
+			    turretX_array = turretXX_array;
+	    		turretY_array = turretYY_array;
+			}
+		} 
+		else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts) 
+		{
             System.out.println("FightingSpririts "+ InformationManager.Instance().enemyRace);
             
-			int[] fix_supplyXX = { 0, 118, 104, 0 };
+			int[] fix_supplyXX = { 0, 122, 108, 0 };
 			fix_supplyX = fix_supplyXX;
 			int[] fix_supplyYY = { 15, 17, 118, 102 };
 			fix_supplyY = fix_supplyYY;
-			if (InformationManager.Instance().enemyRace == Race.Protoss
-					|| InformationManager.Instance().enemyRace == Race.Terran) {
-				int[] first_suppleXX_array = { 7, 100, 118, 25 };// private
-																	// static
-																	// intnew
-																	// int []
+			
+			if (InformationManager.Instance().enemyRace == Race.Protoss ||
+				InformationManager.Instance().enemyRace == Race.Terran) 
+			{
+				int[] first_suppleXX_array = { 7, 100, 118, 25 };
 				first_suppleX_array = first_suppleXX_array;
 				int[] first_suppleYY_array = { 26, 7, 100, 120 };
 				first_suppleY_array = first_suppleYY_array;
+				
 				int[] second_suppleXX_array = { 10, 97, 120, 28 };
 				second_suppleX_array = second_suppleXX_array;
 				int[] second_suppleYY_array = { 26, 5, 98, 121 };
 				second_suppleY_array = second_suppleYY_array;
+				
 				int[] barrackXX_array = { 4, 102, 114, 21 };
 				barrackX_array = barrackXX_array;
 				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
-				int[] factoryXX_array = { 11, 104, 110, 15 };
+				
+				int[] factoryXX_array = { 11, 104, 104, 11 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 16, 0, 107, 111 };
+				int[] factoryYY_array = { 12, 0, 106, 107 };
 				factoryY_array = factoryYY_array;
+				
 				int[] bunkerXX_array = { 13, 100, 111, 25 };
 			    bunkerX_array = bunkerXX_array;
 			    int[] bunkerYY_array = { 26, 5, 101, 122 };
 			    bunkerY_array = bunkerYY_array; 
-			} else {
-				int[] first_suppleXX_array = { 8, 117, 117, 8 };// private
-																// static intnew
-																// int []
+			    
+				int[] engineeringXX_array = { 4, 117, 117, 9 };
+			    engineeringX_array = engineeringXX_array;
+			    int[] engineeringYY_array = { 18, 14, 123, 122 };
+			    engineeringY_array = engineeringYY_array;			    
+				
+			    int[][] turretXX_array = {
+			    		{ 22, 21,  21,  23,  25,  25,  26,  22,  16,   0},
+			    		{114,110, 102, 102, 106,  93,  96, 116, 119, 125},
+			    		{103,102, 102, 100, 100, 100, 103, 107, 124, 125},
+			    		{ 32, 32,  19,  22,  23,  16,  11,   7,    3,  0}
+			    };
+			    
+			    int[][] turretYY_array = {
+			    		{  0,   3,   5,   8,  10,  15,  18,  23, 26,  28},
+			    		{ 25,  21,  19,  17,  12,   3,   0,  27, 28,  28},
+			    		{126, 122, 118, 115, 110, 107, 102, 100, 98, 104},
+			    		{125, 122, 115, 109, 105, 104,  98,  98, 98, 105}
+			    };
+			    
+			    turretX_array = turretXX_array;
+	    		turretY_array = turretYY_array;
+			} 
+			else 
+			{
+				int[] first_suppleXX_array = { 7, 100, 118, 25 };
 				first_suppleX_array = first_suppleXX_array;
-				int[] first_suppleYY_array = { 11, 12, 122, 121 };
+				int[] first_suppleYY_array = { 26, 7, 100, 120 };
 				first_suppleY_array = first_suppleYY_array;
-				int[] second_suppleXX_array = { 11, 114, 114, 11 };
+				
+				int[] second_suppleXX_array = { 10, 97, 120, 28 };
 				second_suppleX_array = second_suppleXX_array;
-				int[] second_suppleYY_array = { 5, 7, 117, 115 };
+				int[] second_suppleYY_array = { 26, 5, 98, 121 };
 				second_suppleY_array = second_suppleYY_array;
-				int[] barrackXX_array = { 11, 113, 113, 11 };
+				
+				int[] barrackXX_array = { 4, 102, 114, 21 };
 				barrackX_array = barrackXX_array;
-				int[] barrackYY_array = { 9, 9, 119, 119 };
+				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
-				int[] factoryXX_array = { 11, 113, 113, 11 };
+				
+				int[] factoryXX_array = { 11, 104, 104, 11 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 13, 123, 122 };
+				int[] factoryYY_array = { 12, 0, 106, 107 };
 				factoryY_array = factoryYY_array;
-				int[] bunkerXX_array = { 8, 117, 117, 8 };
-				bunkerX_array = bunkerXX_array;
-				int[] bunkerYY_array = { 9, 10, 120, 119 };
-				bunkerY_array = bunkerYY_array;
+				
+				int[] bunkerXX_array = { 13, 100, 111, 25 };
+			    bunkerX_array = bunkerXX_array;
+			    int[] bunkerYY_array = { 26, 5, 101, 122 };
+			    bunkerY_array = bunkerYY_array; 
+			    
+				int[] engineeringXX_array = { 4, 117, 117, 9 };
+			    engineeringX_array = engineeringXX_array;
+			    int[] engineeringYY_array = { 18, 14, 123, 122 };
+			    engineeringY_array = engineeringYY_array;			    
+				
+			    int[][] turretXX_array = {
+			    		{ 22, 21,  21,  23,  25,  25,  26,  22,  16,   0},
+			    		{114,110, 102, 102, 106,  93,  96, 116, 119, 125},
+			    		{103,102, 102, 100, 100, 100, 103, 107, 124, 125},
+			    		{ 32, 32,  19,  22,  23,  16,  11,   7,    3,  0}
+			    };
+			    
+			    int[][] turretYY_array = {
+			    		{  0,   3,   5,   8,  10,  15,  18,  23, 26,  28},
+			    		{ 25,  21,  19,  17,  12,   3,   0,  27, 28,  28},
+			    		{126, 122, 118, 115, 110, 107, 102, 100, 98, 104},
+			    		{125, 122, 115, 109, 105, 104,  98,  98, 98, 105}
+			    };
+			    
+			    turretX_array = turretXX_array;
+	    		turretY_array = turretYY_array;
 			}
 		}
 		
@@ -386,10 +490,11 @@ public class BlockingEntrance {
 		
 		
 		
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-			if(unit.getType() == UnitType.Terran_Command_Center){
-				//System.out.println("unit.getTilePosition().getX() ==>> " + unit.getTilePosition().getX() + "  //  unit.getTilePosition().getY() ==>> " +unit.getTilePosition().getY());
-				startingX = unit.getTilePosition().getX(); //unit.getPosition().getX();// getTilePosition().getX();
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+		{
+			if(unit.getType() == UnitType.Terran_Command_Center)
+			{
+				startingX = unit.getTilePosition().getX();
 				startingY = unit.getTilePosition().getY();
 			}
 		}
@@ -414,33 +519,7 @@ public class BlockingEntrance {
 				starting_int = 7;
 			}
 		}
-		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch)
-		{
-			System.out.println("startingX="+startingX+" startingY="+startingY);
-			if(startingX == 7 && startingY == 7){
-				//11시부터 시계방향
-				starting_int = 0;
-			}else if(startingX == 117 && startingY == 7){
-				starting_int = 1;
-			}else if(startingX == 117 && startingY == 117){
-				starting_int = 2;
-			}else if(startingX == 7 && startingY == 117){
-				starting_int = 3;
-			}
-		} 
-		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker)
-		{
-            System.out.println("startingX="+startingX+" startingY="+startingY);
-	    	if(startingX == 7 && startingY == 9){
-			starting_int = 0;
-		}else if(startingX == 117 && startingY == 9){
-			starting_int = 1;
-		}else if(startingX == 117 && startingY == 118){
-			starting_int = 2;
-		}else if(startingX == 7 && startingY == 118){
-			starting_int = 3;
-		}
-	}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
 			if(startingX == 57 && startingY == 6){
 				//11시부터 시계방향
 				starting_int = 0;
@@ -451,36 +530,56 @@ public class BlockingEntrance {
 			}else if(startingX == 7&& startingY == 87){
 				starting_int = 3;
 			}
-		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts){
-			if(startingX == 7 && startingY == 6){
-				//11시부터 시계방향
-				starting_int = 0;
-			}else if(startingX == 117 && startingY == 7){
-				starting_int = 1;
-			}else if(startingX == 117 && startingY == 117){
-				starting_int = 2;
-			}else if(startingX == 7 && startingY == 116){
-				starting_int = 3;
-			}
+		}
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch)
+		{
+			System.out.println("startingX="+startingX+" startingY="+startingY);
+			if(startingX == 7 && startingY == 7)			starting_int = 0;
+			else if(startingX == 117 && startingY == 7)		starting_int = 1;
+			else if(startingX == 117 && startingY == 117)	starting_int = 2;
+			else if(startingX == 7 && startingY == 117)		starting_int = 3;
+		} 
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker)
+		{
+            System.out.println("startingX="+startingX+" startingY="+startingY);
+	    	if(startingX == 7 && startingY == 9)			starting_int = 0;
+		    else if(startingX == 117 && startingY == 9)	    starting_int = 1;
+		    else if(startingX == 117 && startingY == 118)   starting_int = 2;
+		    else if(startingX == 7 && startingY == 118)     starting_int = 3;
+		}
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts)
+		{
+			if(startingX == 7 && startingY == 6)			starting_int = 0;
+			else if(startingX == 117 && startingY == 7)		starting_int = 1;
+			else if(startingX == 117 && startingY == 117)	starting_int = 2;
+			else if(startingX == 7 && startingY == 116)		starting_int = 3;
 		}
 
 		first_suppleX = first_suppleX_array[starting_int];
 		first_suppleY = first_suppleY_array[starting_int];
+		
 		second_suppleX = second_suppleX_array[starting_int];
 		second_suppleY = second_suppleY_array[starting_int];
-		//suppleX = 102;
-		//suppleY = 61;
+		
 		barrackX = barrackX_array[starting_int];
 		barrackY = barrackY_array[starting_int];
+		
 		factoryX = factoryX_array[starting_int];
 		factoryY = factoryY_array[starting_int];
+		
 		bunkerX = bunkerX_array[starting_int];
 		bunkerY = bunkerY_array[starting_int];
+		
+		build_engineeringX = engineeringX_array[starting_int];
+		build_engineeringY = engineeringY_array[starting_int];
+		
+		turretX = turretX_array[starting_int];
+		turretY = turretY_array[starting_int];
 
-		//avoid supply 설정
 		ConstructionPlaceFinder.Instance().setTilesToAvoidSupply();
 	}
 	
+/*
 	public void CheckBlockingPosition() {
 		if(InformationManager.Instance().enemyRace == Race.Protoss || InformationManager.Instance().enemyRace == Race.Terran){
 			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
@@ -501,6 +600,7 @@ public class BlockingEntrance {
 			}
 		}
 	}
+*/
 	
 	
 	public final TilePosition getSupplyPosition(TilePosition tilepos)
@@ -527,17 +627,6 @@ public class BlockingEntrance {
 			}else if(startingX == 8 && startingY == 47){
 				starting_int = 7;
 			}
-		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch){
-			if(startingX == 9 && startingY == 8){
-				//11시부터 시계방향
-				starting_int = 0;
-			}else if(startingX == 119 && startingY == 8){
-				starting_int = 1;
-			}else if(startingX == 119 && startingY == 118){
-				starting_int = 2;
-			}else if(startingX == 9 && startingY == 118){
-				starting_int = 3;
-			}
 		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
 			if(startingX == 57 && startingY == 6){
 				//11시부터 시계방향
@@ -549,23 +638,37 @@ public class BlockingEntrance {
 			}else if(startingX == 7&& startingY == 87){
 				starting_int = 3;
 			}
-		}else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts){
-			if(startingX == 7 && startingY == 6){
-				//11시부터 시계방향
-				starting_int = 0;
-			}else if(startingX == 117 && startingY == 7){
-				starting_int = 1;
-			}else if(startingX == 117 && startingY == 117){
-				starting_int = 2;
-			}else if(startingX == 7 && startingY == 116){
-				starting_int = 3;
-			}
+		}
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.OverWatch)
+		{
+			System.out.println("startingX="+startingX+" startingY="+startingY);
+			if(startingX == 7 && startingY == 7)			starting_int = 0;
+			else if(startingX == 117 && startingY == 7)		starting_int = 1;
+			else if(startingX == 117 && startingY == 117)	starting_int = 2;
+			else if(startingX == 7 && startingY == 117)		starting_int = 3;
+		} 
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker)
+		{
+	        System.out.println("startingX="+startingX+" startingY="+startingY);
+		   	if(startingX == 7 && startingY == 9)			starting_int = 0;
+		    else if(startingX == 117 && startingY == 9)	    starting_int = 1;
+		    else if(startingX == 117 && startingY == 118)   starting_int = 2;
+		    else if(startingX == 7 && startingY == 118)     starting_int = 3;
+		}
+		else if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts)
+		{
+			if(startingX == 7 && startingY == 6)			starting_int = 0;
+			else if(startingX == 117 && startingY == 7)		starting_int = 1;
+			else if(startingX == 117 && startingY == 117)	starting_int = 2;
+			else if(startingX == 7 && startingY == 116)		starting_int = 3;
 		}
 		
-		if(starting_int==10000){
+		if(starting_int==10000)
+		{
 			return null;
-		}else{
-		//다음 포지션으ㅢ
+		}
+		else
+		{
 			TilePosition supply_pos= new TilePosition(fix_supplyX[starting_int], fix_supplyY[starting_int]);
 			return supply_pos;
 		}

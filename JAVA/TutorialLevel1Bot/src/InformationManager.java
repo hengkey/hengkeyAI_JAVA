@@ -1,4 +1,4 @@
-
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1656,6 +1656,7 @@ public class InformationManager {
 		{
 			Position basePos = mainBaseLocations.get(selfPlayer).getPosition();
 			System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");
+			System.out.println("mainBaseLocations=("+basePos.getX()/32+","+basePos.getY()/32+")");
 
 			for (int[] pos : posLost) 
 			{

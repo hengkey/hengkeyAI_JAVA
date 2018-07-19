@@ -123,12 +123,14 @@ public class ShortPathGuerrilla {
 		
 		//Tile값을 가장 가까운 Position table index값으로 변환
 		for (int i = 0; i < maxGuerillaPosNum; i++) {
+			//current
 			TilePosition tmpTilePosition = new TilePosition(guerillaPos[i][0], guerillaPos[i][1]);
 			if (BWTA.getGroundDistance(curTilePos, tmpTilePosition) < preCurDoubleDistance) {
 				preCurDoubleDistance = BWTA.getGroundDistance(curTilePos, tmpTilePosition);
 				curPosIndex = i + 1;
 			}
 
+			//target
 			TilePosition tmpTilePosition2 = new TilePosition(guerillaPos[i][0], guerillaPos[i][1]);
 			if (BWTA.getGroundDistance(targetTilePos, tmpTilePosition2) < preTargetDoubleDistance) {
 				preTargetDoubleDistance = BWTA.getGroundDistance(targetTilePos, tmpTilePosition2);

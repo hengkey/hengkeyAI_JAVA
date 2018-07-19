@@ -1,5 +1,6 @@
 /*
 +----------------------------------------------------------------------+
+
 | BuildServerCode                                                             |
 +----------------------------------------------------------------------+
 | Samsung SDS - 2017 Algorithm Contest                                 |
@@ -22,6 +23,8 @@
 | Author: David Churchill <dave.churchill@gmail.com>                   |
 +----------------------------------------------------------------------+
 */
+
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

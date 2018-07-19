@@ -1,4 +1,4 @@
-
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -235,7 +235,8 @@ public class CombatManager {
 				updateEarlyDefenseSquad();
 			}
 			
-			if(MyBotModule.Broodwar.getFrameCount() < 11000){
+			//if(MyBotModule.Broodwar.getFrameCount() < 11000){
+			if(MyBotModule.Broodwar.getFrameCount() < 10000){
 				updateBunker();
 			}
 			
@@ -261,6 +262,7 @@ public class CombatManager {
 	
 	private void updateBunker() {
 		
+        /*
 		bwta.BaseLocation base = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
 		bwta.Region myRegion = base.getRegion();
 		if (myRegion == null || !myRegion.getCenter().isValid()) {
@@ -270,24 +272,41 @@ public class CombatManager {
 		if(enemyUnitsInRegion.size() == 0){
 			return;
 		}
+		*/
 		
 		List<Unit> myUnits = MyBotModule.Broodwar.self().getUnits();
-		List<Unit> bunkers = new ArrayList<Unit>();
-		List<Unit> myMarines = new ArrayList<Unit>();
-		for(Unit unit : myUnits){
-			if(unit.getType() == UnitType.Terran_Marine && unit.isCompleted()){
-				myMarines.add(unit);
+		//List<Unit> bunkers = new ArrayList<Unit>();
+		//List<Unit> myMarines = new ArrayList<Unit>();
+		
+		Unit bunker=null;
+		Unit marine=null;
+		for(Unit unit : myUnits)
+		{
+			if(unit.getType() == UnitType.Terran_Marine && unit.isCompleted())
+			{
+				//myMarines.add(unit);
+				marine = unit;
 			}
+			
 			if(unit.getType() == UnitType.Terran_Bunker && unit.isCompleted()){
-				bunkers.add(unit);
+				//bunkers.add(unit);
+				bunker = unit;
+			}
+			
+			if ((bunker != null) && (marine != null))
+			{
+				//System.out.println("MicroMarine : in to the bunker");
+				bunker.load(marine);
+				
+				marine = null;
 			}
 		}
 		
-		if(bunkers.size() == 0){
-			return;
-		}
+		//if(bunkers.size() == 0){
+		//	return;
+		//}
 		
-		
+		/*
 		for (Unit bunker : bunkers) {
 			boolean bunkerOut = true;
 			if (enemyUnitsInRegion != null) {
@@ -300,6 +319,7 @@ public class CombatManager {
 				}
 			}
 		}
+		*/
 	}
 		
 	private Unit closestTarget(Unit bunker, List<Unit> bunkertargets) {

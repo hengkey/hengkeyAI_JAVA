@@ -1,3 +1,4 @@
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -61,12 +62,55 @@ public class StrategyManager {
 	public boolean LiftChecker = false;
 
 	public enum Strategys {
-		zergBasic, zergBasic_HydraWave, zergBasic_GiftSet, zergBasic_HydraMutal, zergBasic_LingHydra, zergBasic_LingLurker, zergBasic_LingMutal, zergBasic_LingUltra, zergBasic_Mutal, zergBasic_MutalMany, zergBasic_Ultra, protossBasic, protossBasic_Carrier, protossBasic_DoublePhoto, terranBasic, terranBasic_Bionic, terranBasic_Mechanic, terranBasic_MechanicWithWraith, terranBasic_MechanicAfter, terranBasic_BattleCruiser, AttackIsland
+		zergBasic, 
+		zergBasic_HydraWave, 
+		zergBasic_GiftSet, 
+		zergBasic_HydraMutal, 
+		zergBasic_LingHydra, 
+		zergBasic_LingLurker, 
+		zergBasic_LingMutal, 
+		zergBasic_LingUltra, 
+		zergBasic_Mutal, 
+		zergBasic_MutalMany, 
+		zergBasic_Ultra, 
+		protossBasic, 
+		protossBasic_Carrier, 
+		protossBasic_DoublePhoto, 
+		terranBasic, 
+		terranBasic_Bionic, 
+		terranBasic_Mechanic, 
+		terranBasic_MechanicWithWraith, 
+		terranBasic_MechanicAfter, 
+		terranBasic_BattleCruiser, 
+		AttackIsland
 		// ,terranBasic_ReverseRush
 	} // 기본 전략 나열
 
 	public enum StrategysException {
-		zergException_FastLurker, zergException_Guardian, zergException_NongBong, zergException_OnLyLing, zergException_PrepareLurker, zergException_ReverseRush, zergException_HighTech, protossException_CarrierMany, protossException_Dark, protossException_Reaver, protossException_Scout, protossException_Shuttle, protossException_ShuttleMix, protossException_ReadyToZealot, protossException_ZealotPush, protossException_ReadyToDragoon, protossException_DragoonPush, protossException_PhotonRush, protossException_DoubleNexus, protossException_Arbiter, terranException_CheeseRush, terranException_NuClear, terranException_WraithCloak, Init
+		zergException_FastLurker, 
+		zergException_Guardian, 
+		zergException_NongBong, 
+		zergException_OnLyLing, 
+		zergException_PrepareLurker, 
+		zergException_ReverseRush, 
+		zergException_HighTech, 
+		protossException_CarrierMany, 
+		protossException_Dark, 
+		protossException_Reaver, 
+		protossException_Scout, 
+		protossException_Shuttle, 
+		protossException_ShuttleMix, 
+		protossException_ReadyToZealot, 
+		protossException_ZealotPush, 
+		protossException_ReadyToDragoon, 
+		protossException_DragoonPush, 
+		protossException_PhotonRush, 
+		protossException_DoubleNexus, 
+		protossException_Arbiter, 
+		terranException_CheeseRush, 
+		terranException_NuClear, 
+		terranException_WraithCloak, 
+		Init
 	} // 예외 전략 나열, 예외가 아닐때는 무조건 Init 으로
 
 	/// static singleton 객체를 리턴합니다
@@ -2783,48 +2827,111 @@ public class StrategyManager {
 
 	private void executeFly() {
 
-		if (MyBotModule.Broodwar.getFrameCount() > 12000) {
-			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) > 1) {
-				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-					if (unit.isLifted() == false && (unit.getType() == UnitType.Terran_Barracks
-							|| unit.getType() == UnitType.Terran_Engineering_Bay) && unit.isCompleted()) {
-
-						unit.lift();
-						LiftChecker = true;
+		//if (MyBotModule.Broodwar.getFrameCount() > 12000) {
+		if (MyBotModule.Broodwar.getFrameCount() > 6000) 
+		{
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) > 1) 
+			{
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+				{
+					if (unit.isLifted() == false && 
+					    unit.getType() == UnitType.Terran_Barracks && //|| unit.getType() == UnitType.Terran_Engineering_Bay) && 
+					    unit.isCompleted()) 
+					{
+						List <BaseLocation> baseLocation = InformationManager.Instance().getOccupiedBaseLocations(InformationManager.Instance().selfPlayer);
+						//base = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
+						for(BaseLocation base : baseLocation) 
+						{
+							List <Unit> enemy = MapGrid.Instance().getUnitsNear(base.getPosition(), 800, false, true, null);
+							if(enemy.size() > 0)
+							{
+								System.out.println("enemy attack!! barrak land!!");
+								
+								unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,
+														   BlockingEntrance.Instance().barrackY));
+								LiftChecker = false;
+							}
+							else
+							{
+								unit.lift();
+								LiftChecker = true;
+							}
+						}
+						
 						BuildOrderQueue tempbuildQueue = BuildManager.Instance().getBuildQueue();
 						BuildOrderItem checkItem = null;
 
-						if (!tempbuildQueue.isEmpty()) {
+						if (!tempbuildQueue.isEmpty()) 
+						{
 							checkItem = tempbuildQueue.getHighestPriorityItem();
-							while (true) {
-								if (tempbuildQueue.canGetNextItem() == true) {
+							while (true) 
+							{
+								if (tempbuildQueue.canGetNextItem() == true) 
+								{
 									tempbuildQueue.canGetNextItem();
-								} else {
+								} 
+								else 
+								{
 									break;
 								}
 								tempbuildQueue.PointToNextItem();
 								checkItem = tempbuildQueue.getItem();
 
-								if (checkItem.metaType.isUnit()
-										&& checkItem.metaType.getUnitType() == UnitType.Terran_Marine) {
+								if (checkItem.metaType.isUnit() && 
+									checkItem.metaType.getUnitType() == UnitType.Terran_Marine) 
+								{
 									tempbuildQueue.removeCurrentItem();
 								}
 							}
 						}
 					}
-					if (InformationManager.Instance().enemyRace != Race.Zerg) {
-						if (unit.getType() == UnitType.Terran_Marine) {
-							CommandUtil.move(unit, InformationManager.Instance()
-									.getSecondChokePoint(InformationManager.Instance().selfPlayer).getPoint());
+					
+					if (InformationManager.Instance().enemyRace != Race.Zerg) 
+					{
+						if (unit.getType() == UnitType.Terran_Marine) 
+						{
+							CommandUtil.move(unit, InformationManager.Instance().getSecondChokePoint(InformationManager.Instance().selfPlayer).getPoint());
 						}
 					}
 				}
 			}
 		}
-
-		else {
-			if (InformationManager.Instance().enemyRace == Race.Terran) {
-
+		else 
+		{
+			// 2nd Supply 완성하고 SCV가 밖으로 나가면 못들어 오니까 잠깐 들었다가 놓을까?
+			if((MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) <= 2) &&
+			   (MyBotModule.Broodwar.getFrameCount() < 2000))
+			{
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+				{
+					if (unit.isLifted() == false && 
+					    unit.getType()  == UnitType.Terran_Barracks && 
+					    unit.isCompleted()) 
+					{
+							unit.lift();
+							LiftChecker = true;
+					}
+				}
+			}
+		
+			if (MyBotModule.Broodwar.getFrameCount() > 2000) 
+			{
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+				{
+					if (unit.isLifted() == true && 
+					    unit.getType() == UnitType.Terran_Barracks && 
+					    unit.isCompleted()) 
+					{
+						unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,
+								                   BlockingEntrance.Instance().barrackY));
+						LiftChecker = false;
+					}
+				}
+			}
+			
+			/* koba
+			if (InformationManager.Instance().enemyRace == Race.Terran) 
+			{
 				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
 					if (unit.isLifted() == true && (unit.getType() == UnitType.Terran_Barracks
 							|| unit.getType() == UnitType.Terran_Engineering_Bay) && unit.isCompleted()) {
@@ -2881,18 +2988,26 @@ public class StrategyManager {
 					}
 				}
 			}
-			if (InformationManager.Instance().enemyRace == Race.Protoss) {
-
-				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-					if (unit.isLifted() == true && (unit.getType() == UnitType.Terran_Barracks
-							|| unit.getType() == UnitType.Terran_Engineering_Bay) && unit.isCompleted()) {
-						if (unit.isLifted()) {
+			
+			if (InformationManager.Instance().enemyRace == Race.Protoss) 
+			{
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+				{
+					if (unit.isLifted() == true && 
+					   (unit.getType() == UnitType.Terran_Barracks || unit.getType() == UnitType.Terran_Engineering_Bay) && 
+					    unit.isCompleted()) 
+					{
+						if (unit.isLifted()) 
+						{
 							if (unit.canLand(new TilePosition(BlockingEntrance.Instance().barrackX,
-									BlockingEntrance.Instance().barrackY))) {
+								                              BlockingEntrance.Instance().barrackY))) 
+							{
 								unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,
-										BlockingEntrance.Instance().barrackY));
+										                   BlockingEntrance.Instance().barrackY));
 								LiftChecker = false;
-							} else {
+							} 
+							else 
+							{
 								unit.land(unit.getTilePosition());
 								LiftChecker = false;
 							}
@@ -2903,13 +3018,7 @@ public class StrategyManager {
 				int dragooncnt = 0;
 				int zealotcnt = 0;
 
-				// if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory)
-				// >= 1
-				// && MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) >=
-				// 1) {
-
-				bwapi.Position checker = InformationManager.Instance()
-						.getFirstChokePoint(InformationManager.Instance().selfPlayer).getPoint();
+				bwapi.Position checker = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().selfPlayer).getPoint();
 				List<Unit> eniemies = MapGrid.Instance().getUnitsNear(checker, 500, false, true, null);
 
 				Boolean lift = false;
@@ -3016,7 +3125,7 @@ public class StrategyManager {
 						// }
 					}
 				}
-			}
+			}*/
 		}
 	}
 	// private void executeFly() {

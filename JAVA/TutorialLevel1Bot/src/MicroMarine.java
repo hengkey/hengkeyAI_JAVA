@@ -1,3 +1,4 @@
+/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.util.List;
 
@@ -53,17 +54,20 @@ public class MicroMarine extends MicroManager {
 				}
 
 				Unit target = getTarget(marine, targets);
-				if (target != null) {
-
-					if (DontGoFar) {
+				if (target != null) 
+				{
+					if (DontGoFar) 
+					{
 						if (marine.getDistance(mineralpos) > 30) {
 							CommandUtil.move(marine, mineralpos);
 						}
 					} else {
 						MicroUtils.preciseKiting(marine, target, kitingOption);
 					}
-				} else {
-					if (InformationManager.Instance().enemyRace == Race.Zerg) {
+				} else 
+				{
+					if (InformationManager.Instance().enemyRace == Race.Zerg) 
+					{
 					// if we're not near the order position, go there
 						if (marine.getDistance(mineralpos) > 30) {
 							CommandUtil.move(marine, mineralpos);
@@ -73,15 +77,23 @@ public class MicroMarine extends MicroManager {
 					}
 				}
 			}
-		} else {// 벙커가 있으면
-			
+		} 
+		else 
+		{			
 			Position bunkerpos = bunker.getPosition();
 			kitingOption.setGoalPosition(bunkerpos);
-			for (Unit marine : marines) {
-				if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) {
+			for (Unit marine : marines) 
+			{
+				/* koba
+				if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) 
+				{
 					continue;
 				}
+				*/
 				
+				bunker.load(marine);
+				
+				/*
 				Unit target = getTarget(marine, targets);
 				if (target != null) {
 
@@ -116,51 +128,11 @@ public class MicroMarine extends MicroManager {
 						CommandUtil.move(marine, bunkerpos);
 					}
 				}
+				*/
 			}
 		}
 	}
-	// public Unit getClosestMineral(Unit depot)
-	// {
-	// double bestDist = 99999;
-	// Unit bestMineral = null;
-	//
-	// for (Unit mineral : MyBotModule.Broodwar.getAllUnits()){
-	// if ((mineral.getType() == UnitType.Resource_Mineral_Field) &&
-	// mineral.getDistance(depot) < 320){
-	// double dist = mineral.getDistance(depot);
-	// if (dist < bestDist){
-	// bestMineral = mineral;
-	// bestDist = dist;
-	// }
-	// }
-	// }
-	// return bestMineral;
-	// }
 
-	// public Position getBestPosition(Unit depot)
-	// {
-	// int x =0;
-	// int y =0;
-	// int finalx =0;
-	// int finaly =0;
-	// int minCnt = 0;
-	// for (Unit mineral : MyBotModule.Broodwar.getAllUnits()){
-	// if ((mineral.getType() == UnitType.Resource_Mineral_Field) &&
-	// mineral.getDistance(depot) < 320){
-	// x += mineral.getPosition().getX();
-	// y += mineral.getPosition().getY();
-	// minCnt++;
-	// }
-	// }
-	// finalx = x/minCnt;
-	// finaly = y/minCnt;
-	// finalx = (finalx + depot.getPosition().getX())/2;
-	// finaly = (finaly + depot.getPosition().getY())/2;
-	//
-	// Position res = new Position(finalx, finaly);
-	// return res;
-	// }
-	//
 	private Unit getTarget(Unit marine, List<Unit> targets) {
 		int bestScore = -999999;
 		Unit bestTarget = null;
