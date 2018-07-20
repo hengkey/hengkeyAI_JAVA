@@ -101,34 +101,36 @@ public class ShortPathGuerrilla {
 
 	public static void resetValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
-			list[i].get(0).validFlag = true;
+			if (list[i].size() > 0)
+				list[i].get(0).validFlag = true;
 		}
 	}
-	
+
 	public static void resetEnemyValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
-			list[i].get(0).enemyValidFlag = true;
+			if (list[i].size() > 0)
+				list[i].get(0).enemyValidFlag = true;
 		}
 	}
 
 	// 업데이트 적군 존재 위치
 	public static void updateEnemyRegion() {
-		
+
 		resetEnemyValidFlag();
-		
+
 		for (Unit unit : MyBotModule.Broodwar.enemy().getUnits()) {
 			if (CommandUtil.IsCombatUnit(unit)) {
 				for (int i = 1; i <= maxGuerillaPosNum; i++) {
-					Position tmpPos = new Position(guerillaTilePos[i][0] * 32, guerillaTilePos[i][1] * 32);
+					Position tmpPos = new Position(guerillaTilePos[i - 1][0] * 32, guerillaTilePos[i - 1][1] * 32);
 					if (unit.canAttack(tmpPos)) {
 						list[i].get(0).enemyValidFlag = false;
-						System.out.print("(" + i + ", " + "x=" + list[i].get(0).x + ",y=" + list[i].get(0).y + ")");
+						System.out.print("enemyValidFlag=false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
+								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
 					}
 				}
 			}
 		}
 
-		
 		// list[6].get(0).validFlag = false;
 		// list[7].get(0).validFlag = false;
 		// list[20].get(0).validFlag = false;
@@ -145,7 +147,7 @@ public class ShortPathGuerrilla {
 		int curDistance = 0;
 		double preCurDoubleDistance = 999999;
 		double preTargetDoubleDistance = 999999;
-
+		System.out.println("getNextPos Oh!! My God!!!" + " " + new Exception().getStackTrace()[0].getLineNumber());
 		TilePosition curTilePos = curPos.toTilePosition();
 		TilePosition targetTilePos = targetPos.toTilePosition();
 
@@ -154,27 +156,20 @@ public class ShortPathGuerrilla {
 		// Tile값을 가장 가까운 Position table index값으로 변환
 		for (int i = 0; i < maxGuerillaPosNum; i++) {
 			// current
-			TilePosition tmpTilePosition = new TilePosition(guerillaTilePos[i][0], guerillaTilePos[i][1]);
-			if (BWTA.getGroundDistance(curTilePos, tmpTilePosition) < preCurDoubleDistance) {
-				preCurDoubleDistance = BWTA.getGroundDistance(curTilePos, tmpTilePosition);
+			if (curTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]) < preCurDoubleDistance) {
+				preCurDoubleDistance = curTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]);
 				curPosIndex = i + 1;
 			}
 
 			// target
-			TilePosition tmpTilePosition2 = new TilePosition(guerillaTilePos[i][0], guerillaTilePos[i][1]);
-			if (BWTA.getGroundDistance(targetTilePos, tmpTilePosition2) < preTargetDoubleDistance) {
-				preTargetDoubleDistance = BWTA.getGroundDistance(targetTilePos, tmpTilePosition2);
+			if (targetTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]) < preTargetDoubleDistance) {
+				preTargetDoubleDistance = targetTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]);
 				targetPosIndex = i + 1;
 			}
 		}
 
+		prePos = curPosIndex;
 		list[curPosIndex].get(0).validFlag = false;
-
-		if (curPosIndex == prePos) {
-			resetValidFlag();
-			System.out.println("Oh!! My God!!!");
-			// break;
-		}
 
 		prePos = curPosIndex;
 
@@ -195,6 +190,13 @@ public class ShortPathGuerrilla {
 		TilePosition nextTilePos = new TilePosition(guerillaTilePos[nextPosIndex - 1][0],
 				guerillaTilePos[nextPosIndex - 1][1]);
 		Position nextPos = nextTilePos.toPosition();
+
+		if (nextPosIndex == prePos) {
+			resetValidFlag();
+			System.out.println("Oh!! My God!!!");
+		}
+		System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" + nextTilePos.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+
 		return nextPos;
 	}
 }
@@ -203,8 +205,8 @@ class GuerillaPos {
 	int x;
 	int y;
 	int node;
-	boolean validFlag;//지나온 위치 false로해서 다시 안가도록
-	boolean enemyValidFlag;//enemy가 공격 가능한 범위여부 판별
+	boolean validFlag;// 지나온 위치 false로해서 다시 안가도록
+	boolean enemyValidFlag;// enemy가 공격 가능한 범위여부 판별
 
 	public GuerillaPos(TilePos pos, int node, boolean value) {
 		this.x = pos.x;
