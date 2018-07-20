@@ -122,11 +122,13 @@ public class ShortPathGuerrilla {
 					Position tmpPos = new Position(guerillaTilePos[i][0] * 32, guerillaTilePos[i][1] * 32);
 					if (unit.canAttack(tmpPos)) {
 						list[i].get(0).enemyValidFlag = false;
+						System.out.print("(" + i + ", " + "x=" + list[i].get(0).x + ",y=" + list[i].get(0).y + ")");
 					}
 				}
 			}
 		}
 
+		
 		// list[6].get(0).validFlag = false;
 		// list[7].get(0).validFlag = false;
 		// list[20].get(0).validFlag = false;
