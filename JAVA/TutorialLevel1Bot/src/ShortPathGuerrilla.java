@@ -135,9 +135,9 @@ public class ShortPathGuerrilla {
 //						System.out.print("false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
 //								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
 						System.out.print("(" + i + ")");
-						MyBotModule.Broodwar.drawCircleMap(tmpPos, 50, Color.Red, true);
+						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Red, true);
 					} else {
-						MyBotModule.Broodwar.drawCircleMap(tmpPos, 50, Color.Green, true);
+						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Green, true);
 					}
 				}
 //				System.out.println();

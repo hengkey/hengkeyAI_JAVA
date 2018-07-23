@@ -1652,7 +1652,7 @@ public class InformationManager {
 		{
 			candiMapByPosition = MAP.TheHunters;
 		} 
-		else if (startingBase.size() == 4) 
+		else if (startingBase.size() <= 4) 
 		{
 			Position basePos = mainBaseLocations.get(selfPlayer).getPosition();
 			System.out.println("mainBaseLocations=("+basePos.getX()+","+basePos.getY()+")");

@@ -290,7 +290,7 @@ public class VultureTravelManager {
 					System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
 							+ new Exception().getStackTrace()[0].getLineNumber());
 					MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
-							MicroSet.Vulture.GEURILLA_RADIUS, Color.White, true);
+							MicroSet.Vulture.GEURILLA_RADIUS, Color.White, false);
 				}
 			}
 		}

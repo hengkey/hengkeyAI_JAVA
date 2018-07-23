@@ -185,7 +185,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 			CommandUtil.move(vulture, movePosition);
 			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
 					+ new Exception().getStackTrace()[0].getLineNumber());
-			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White, true);
+			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS/5, Color.Blue, false);
 		} else { // 목적지 도착
 			if (vulture.isIdle() || vulture.isBraking()) {
 				// Position randomPosition = MicroUtils.randomPosition(vulture.getPosition(),
@@ -194,8 +194,8 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 				vulture.holdPosition();
 				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
 						+ new Exception().getStackTrace()[0].getLineNumber());
-				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White,
-						true);
+				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS/4, Color.Orange,
+						false);
 			}
 		}
 	}
