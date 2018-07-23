@@ -184,6 +184,7 @@ public class StrategyManager {
 		InitialBuild.Instance().setInitialBuildOrder();
 		AnalyzeStrategy.Instance().AnalyzeEnemyStrategyInit();
 		AnalyzeStrategy.Instance().AnalyzeEnemyStrategy();
+		ShortPathGuerrilla.init();
 
 		InitFaccnt = BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Factory);
 	}

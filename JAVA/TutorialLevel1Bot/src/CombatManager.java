@@ -26,6 +26,7 @@ class SquadName {
 	public static final String BASE_DEFENSE_ = "BaseDefense_";
 	public static final String CHECKER = "Checker";
 	public static final String GUERILLA_ = "Guerilla_";
+	public static final String MULTIGUERILLA_ = "MultiGuerilla_";
 	public static final String MARINE = "Marine";
 	public static final String WRAITH = "Wraith";
 	public static final String VESSEL = "Vessel";
@@ -203,8 +204,10 @@ public class CombatManager {
 				if((unit.getType() == UnitType.Terran_Marine || unit.getType() == UnitType.Terran_Vulture) && unit.isCompleted()){
 					ScoutDefenseNeeded = false;
 					Squad scoutDefenseSquad = squadData.getSquad(SquadName.SCOUT_DEFENSE);
-					if (!scoutDefenseSquad.isEmpty()) {
-					   	scoutDefenseSquad.clear();
+					if (scoutDefenseSquad != null) {
+						if (!scoutDefenseSquad.isEmpty()) {
+							scoutDefenseSquad.clear();
+						}
 					}
 				}
 			}
@@ -246,7 +249,8 @@ public class CombatManager {
 			updateVesselSquad(); //AttackSquads 뒤에
 			updateBuildingSquad();
 			updateCheckerSquad();
-			updateGuerillaSquad();
+			updateGuerillaSquad(); 
+//			updateMultiGuerillaSquad(); 
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
@@ -344,8 +348,14 @@ public class CombatManager {
 					&& !MicroUtils.isUnitContainedInUnitSet(unit, combatUnits)
 					&& (CommandUtil.IsCombatUnit(unit) || unit.getType().isWorker())) {
 				MicroUtils.addUnitToUnitSet(unit, combatUnits);
+
+//				if (unit.getType() == UnitType.Terran_Vulture)
+//				{
+//					MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
+//				}
 			}
 		}
+
 		return combatUnits;
 	}
 	
@@ -1703,7 +1713,7 @@ public class CombatManager {
 			int enemyPower = CombatExpectation.enemyPowerByUnitInfo(enemiesInfo, false);
 			
 			if (vulturePower > enemyPower) {
-				String squadName = SquadName.GUERILLA_ + bestGuerillaSite.getPosition().toString();
+				String squadName = SquadName.GUERILLA_ + bestGuerillaSite.getPosition().toTilePosition().toString();
 				Squad guerillaSquad = squadData.getSquad(squadName);
 				// 게릴라 스쿼드 생성(포지션 별)
 				if (guerillaSquad == null) {
@@ -1723,6 +1733,8 @@ public class CombatManager {
     					}
     				}
         			VultureTravelManager.Instance().guerillaStart(squadName);
+				System.out.println("putSquad " + guerillaSquad.toString() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
         		}
 			}
 		}
@@ -1741,31 +1753,116 @@ public class CombatManager {
 			if (MyBotModule.Broodwar.isVisible(squad.getOrder().getPosition().toTilePosition())) {
 				List<Unit> enemies = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(), MicroSet.Vulture.GEURILLA_RADIUS, false, true, null);
 				if (enemies.isEmpty()) {
-					
 					squad.clear();
+					System.out.println(
+							"clear " + squad.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
 					continue;
 				}
 			}
 			
-			List<Unit> workers = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(), MicroSet.Vulture.GEURILLA_RADIUS, false, true, InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
+			List<Unit> workers = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(),
+					MicroSet.Vulture.GEURILLA_RADIUS, false, true,
+					InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
 			if (workers.isEmpty()) {
-				List<UnitInfo> enemiesInfo = InformationManager.Instance().getNearbyForce(squad.getOrder().getPosition(), InformationManager.Instance().enemyPlayer, MicroSet.Vulture.GEURILLA_RADIUS, true);
+				List<UnitInfo> enemiesInfo = InformationManager.Instance().getNearbyForce(
+						squad.getOrder().getPosition(), InformationManager.Instance().enemyPlayer,
+						MicroSet.Vulture.GEURILLA_RADIUS, true);
 				Result result = CombatExpectation.expectByUnitInfo(squad.getUnitSet(), enemiesInfo, false);
 				if (result == Result.Loss) {
-					
+					System.out
+							.println(squad.toString() + "clear " + new Exception().getStackTrace()[0].getLineNumber());
 					squad.clear();
 					continue;
 				}
 
 				int guerillaScore = CombatExpectation.guerillaScoreByUnitInfo(enemiesInfo);
 				if (guerillaScore <= 0) {
-					
+					System.out
+							.println(squad.toString() + "clear " + new Exception().getStackTrace()[0].getLineNumber());
 					squad.clear();
 					continue;
 				}
 			}
 		}
 		
+	}
+	
+	private void updateMultiGuerillaSquad() {
+
+		List<Unit> assignableVultures = new ArrayList<>();
+		for (Unit unit : combatUnits) {
+			if (unit.getType() == UnitType.Terran_Vulture) {
+
+//				MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
+
+				assignableVultures.add(unit);
+				if (assignableVultures.size() >= 4)
+					break;
+			}
+		}
+		
+		// 1. Travel Site에 대한 처리
+		BaseLocation bestGuerillaSite = VultureTravelManager.Instance().getBestMultiGuerillaSite(assignableVultures);
+		if (bestGuerillaSite != null) {
+			String squadName = SquadName.MULTIGUERILLA_ + bestGuerillaSite.getPosition().toTilePosition().toString();
+			Squad guerillaSquad = squadData.getSquad(squadName);
+			
+			// 게릴라 스쿼드 생성(포지션 별)
+			if (guerillaSquad == null) {
+				SquadOrder squadOrder = new SquadOrder(SquadOrderType.MULTIGUERILLA, bestGuerillaSite.getPosition(),
+						MicroSet.Vulture.MULTIGEURILLA_RADIUS, "Let's get it on");
+				guerillaSquad = new Squad(squadName, squadOrder, Combat.GUERILLA_PRIORITY);
+				squadData.putSquad(guerillaSquad);
+			}
+			
+			// 게릴라 유닛이 남아 있다면 더 할당하지 않는다.
+			if (!guerillaSquad.getUnitSet().isEmpty()) {
+				VultureTravelManager.Instance().guerillaStart(squadName);
+			} else {
+				for (Unit assignableVulture : assignableVultures) {
+					System.out.println("putSquad " + assignableVulture.getType().toString() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					squadData.assignUnitToSquad(assignableVulture, guerillaSquad);
+				}
+				
+				VultureTravelManager.Instance().guerillaStart(squadName);
+				System.out.println("putSquad " + guerillaSquad.toString() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
+			}
+		}
+		
+		// TODO 2. base가 아닌 지역에 대한 처리
+		
+		// 게릴라 임무 종료 조건
+		// 1. 게릴라 지역이 clear 되었다.
+		// 2. 현재 병력으로 이길수 없다.
+		List<Squad> guerillaSquads = squadData.getSquadList(SquadName.MULTIGUERILLA_);
+		for (Squad squad : guerillaSquads) {
+			if (squad.getUnitSet().isEmpty()) {
+				continue;
+			}
+			
+			if (MyBotModule.Broodwar.isVisible(squad.getOrder().getPosition().toTilePosition())) {
+				List<Unit> enemies = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(),
+						MicroSet.Vulture.GEURILLA_RADIUS, false, true, null);
+				if (enemies.isEmpty()) {
+					squad.clear();
+					System.out.println(
+							"clear " + squad.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+					continue;
+				}
+
+				List<Unit> workers = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(),
+						MicroSet.Vulture.GEURILLA_RADIUS, false, true,
+						InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
+				if (workers.isEmpty()) {
+					System.out
+							.println("clear " + squad.toString() + new Exception().getStackTrace()[0].getLineNumber());
+					squad.clear();
+					continue;
+				}
+			}
+		}
 	}
 	
 	private boolean centerIsOccupied(Player player) {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Color;
 import bwapi.Unit;
 import bwapi.UnitType;
 import bwta.BaseLocation;
@@ -188,33 +189,114 @@ public class VultureTravelManager {
 	public BaseLocation getBestGuerillaSite(List<Unit> assignableVultures) {
 		int vulturePower = CombatExpectation.getVulturePower(assignableVultures);
 		int currFrame = MyBotModule.Broodwar.getFrameCount();
-		
+
 		int bestScore = 0;
 		TravelSite bestTravelSite = null;
-		
+
 		for (TravelSite travelSite : travelSites) {
-			if (assignableVultures.size() < MicroSet.Vulture.GEURILLA_FREE_VULTURE_COUNT && currFrame - travelSite.guerillaExamFrame < MicroSet.Vulture.GEURILLA_INTERVAL_FRAME) {
+			if (assignableVultures.size() < MicroSet.Vulture.GEURILLA_FREE_VULTURE_COUNT
+					&& currFrame - travelSite.guerillaExamFrame < MicroSet.Vulture.GEURILLA_INTERVAL_FRAME) {
 				continue;
 			}
-			 
+
+			// System.out.println(travelSite.baseLocation.getTilePosition().toString() + " "
+			// + new Exception().getStackTrace()[0].getLineNumber());
+
+			// MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
+			// MicroSet.Vulture.GEURILLA_RADIUS,
+			// Color.Orange);
+
 			List<UnitInfo> enemiesInfo = InformationManager.Instance().getNearbyForce(
-					travelSite.baseLocation.getPosition(), InformationManager.Instance().enemyPlayer, MicroSet.Vulture.GEURILLA_RADIUS, true);
+					travelSite.baseLocation.getPosition(), InformationManager.Instance().enemyPlayer,
+					MicroSet.Vulture.GEURILLA_RADIUS, true);
+			if (enemiesInfo.isEmpty()) { // 적군이 존재하지 않음
+				continue;
+			}
+						
+//			for (UnitInfo unitInfo : enemiesInfo) {
+				// System.out.println(unitInfo.getType() +
+				// unitInfo.getUnit().getTilePosition().toString() + " "
+				// + new Exception().getStackTrace()[0].getLineNumber());
+
+//				if (unitInfo.getType() == UnitType.Terran_Command_Center) {
+					// 안개속의 적 구성을 가늠해 게릴라 타게팅이 가능한지 확인한다.
+					int enemyPower = CombatExpectation.enemyPowerByUnitInfo(enemiesInfo, false);
+					int score = CombatExpectation.guerillaScoreByUnitInfo(enemiesInfo);
+
+					if (vulturePower > enemyPower && score > bestScore) {
+						bestScore = score;
+
+						bestTravelSite = travelSite;
+						System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
+								+ new Exception().getStackTrace()[0].getLineNumber());
+//						 MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
+//						 MicroSet.Vulture.GEURILLA_RADIUS,
+//						 Color.White, true);
+					}
+//				}
+//			}
+		}
+		
+		if (bestTravelSite != null) {
+//			System.out.println();
+			bestTravelSite.guerillaExamFrame = currFrame;
+			return bestTravelSite.baseLocation;
+		} else {
+			return null;
+		}
+	}
+	
+	public BaseLocation getBestMultiGuerillaSite(List<Unit> assignableVultures) {
+		TravelSite bestTravelSite = null;
+
+		for (TravelSite travelSite : travelSites) {
+			// System.out.println(travelSite.baseLocation.getTilePosition().toString() + " "
+			// + new Exception().getStackTrace()[0].getLineNumber());
+
+			// MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
+			// MicroSet.Vulture.GEURILLA_RADIUS,
+			// Color.Orange);
+
+			List<UnitInfo> enemiesInfo = InformationManager.Instance().getNearbyForce(
+					travelSite.baseLocation.getPosition(), InformationManager.Instance().enemyPlayer,
+					MicroSet.Vulture.MULTIGEURILLA_RADIUS, true);
+
 			if (enemiesInfo.isEmpty()) { // 적군이 존재하지 않음
 				continue;
 			}
 			
-			// 안개속의 적 구성을 가늠해 게릴라 타게팅이 가능한지 확인한다.			
-			int enemyPower = CombatExpectation.enemyPowerByUnitInfo(enemiesInfo, false);
-			int score = CombatExpectation.guerillaScoreByUnitInfo(enemiesInfo);
-			
-			if (vulturePower > enemyPower && score > bestScore) {
-				bestScore = score;
-				bestTravelSite = travelSite;
+			int workerCnt = 0;
+			boolean baseBuildingFlag = false;
+			for (UnitInfo unitInfo : enemiesInfo) {
+				// System.out.println(unitInfo.getType() +
+				// unitInfo.getUnit().getTilePosition().toString() + " "
+				// + new Exception().getStackTrace()[0].getLineNumber());
+
+				if (unitInfo.getUnit().canAttack() && !unitInfo.getType().isWorker()) {
+					System.out.println("There is attacker " + unitInfo.getType() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					bestTravelSite = null;
+					break;
+				}
+				
+				if (unitInfo.getType().isWorker())
+					workerCnt++;
+
+				if (unitInfo.getType() == UnitType.Terran_Command_Center)
+					baseBuildingFlag = true;
+
+				if (workerCnt > 0 && baseBuildingFlag == true) {
+					bestTravelSite = travelSite;
+					System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
+							MicroSet.Vulture.GEURILLA_RADIUS, Color.White, true);
+				}
 			}
 		}
-		
+
 		if (bestTravelSite != null) {
-			bestTravelSite.guerillaExamFrame = currFrame;
+			// System.out.println();
 			return bestTravelSite.baseLocation;
 		} else {
 			return null;

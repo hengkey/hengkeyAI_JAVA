@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 
+import bwapi.Color;
 import bwapi.Order;
 import bwapi.Position;
 import bwapi.TilePosition;
 import bwapi.Unit;
+import bwapi.UnitType;
 import bwta.BWTA;
 
 public class ShortPathGuerrilla {
@@ -118,16 +120,27 @@ public class ShortPathGuerrilla {
 
 		resetEnemyValidFlag();
 
+//		System.out.println(
+//				"MyBotModule.Broodwar.enemy().getUnits().size()" + MyBotModule.Broodwar.enemy().getUnits().size() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
+		
 		for (Unit unit : MyBotModule.Broodwar.enemy().getUnits()) {
-			if (CommandUtil.IsCombatUnit(unit)) {
+			if (CommandUtil.IsCombatUnit(unit) && unit.getType()!=UnitType.Unknown) {
+//				System.out.println(unit.getType() + unit.getPosition().toTilePosition().toString() + " "
+//						+ unit.getType().sightRange() + " " + new Exception().getStackTrace()[0].getLineNumber());
 				for (int i = 1; i <= maxGuerillaPosNum; i++) {
 					Position tmpPos = new Position(guerillaTilePos[i - 1][0] * 32, guerillaTilePos[i - 1][1] * 32);
-					if (unit.canAttack(tmpPos)) {
+					if (unit.getType().groundWeapon().maxRange() > unit.getPosition().getDistance(tmpPos)) {
 						list[i].get(0).enemyValidFlag = false;
-						System.out.print("enemyValidFlag=false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
-								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
+//						System.out.print("false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
+//								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
+						System.out.print("(" + i + ")");
+						MyBotModule.Broodwar.drawCircleMap(tmpPos, 50, Color.Red, true);
+					} else {
+						MyBotModule.Broodwar.drawCircleMap(tmpPos, 50, Color.Green, true);
 					}
 				}
+//				System.out.println();
 			}
 		}
 
@@ -147,7 +160,7 @@ public class ShortPathGuerrilla {
 		int curDistance = 0;
 		double preCurDoubleDistance = 999999;
 		double preTargetDoubleDistance = 999999;
-		System.out.println("getNextPos Oh!! My God!!!" + " " + new Exception().getStackTrace()[0].getLineNumber());
+//		System.out.println("getNextPos Oh!! My God!!!" + " " + new Exception().getStackTrace()[0].getLineNumber());
 		TilePosition curTilePos = curPos.toTilePosition();
 		TilePosition targetTilePos = targetPos.toTilePosition();
 

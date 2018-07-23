@@ -73,6 +73,9 @@ public class Squad {
 		} else if (name.equals(SquadName.CHECKER) || name.startsWith(SquadName.GUERILLA_)) {
 			updateVultureSquad();
 			return;
+		} else if (name.startsWith(SquadName.MULTIGUERILLA_)) {
+			updateMultiGuerillaSquad();
+			return;
 		} else if (name.startsWith(SquadName.BASE_DEFENSE_)) {
 			updateDefenseSquad();
 			return;
@@ -352,6 +355,26 @@ public class Squad {
 
 //		boolean saveUnit = !CombatExpectation.expectByUnitInfo(microVulture.getUnits(), vultureEnemies);
 		
+		mechanicVulture.prepareMechanic(order, vultureEnemies);
+		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevel, false);
+		
+		for (Unit vulture : microVulture.getUnits()) {
+			mechanicVulture.executeMechanicMicro(vulture);
+		}
+	}
+	
+	private void updateMultiGuerillaSquad() {
+		List<UnitInfo> vultureEnemies = new ArrayList<>();
+
+		int saveUnitLevel = 0;
+		for (Unit vulture : microVulture.getUnits()) {
+			InformationManager.Instance().getNearbyForce(vultureEnemies, vulture.getPosition(),
+					InformationManager.Instance().enemyPlayer, order.getRadius());
+		}
+		
+		InformationManager.Instance().getNearbyForce(vultureEnemies, order.getPosition(),
+				InformationManager.Instance().enemyPlayer, order.getRadius());
+
 		mechanicVulture.prepareMechanic(order, vultureEnemies);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevel, false);
 		

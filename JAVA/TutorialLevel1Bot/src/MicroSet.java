@@ -18,7 +18,8 @@ public class MicroSet {
 //	}
 	
 	public static class Vulture {
-		public static final int GEURILLA_RADIUS = 400;
+		public static final int GEURILLA_RADIUS = 300;
+		public static final int MULTIGEURILLA_RADIUS = 200;
 		public static final int PELOTON_RADIUS = 400;
 		public static final int GEURILLA_EXTRA_POWER = 150;
 		public static final int GEURILLA_INTERVAL_FRAME = 35 * 24; // 35√ 
