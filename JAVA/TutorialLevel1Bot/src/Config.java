@@ -102,7 +102,7 @@ public class Config {
 	/// 화면 표시 여부 - 유닛 통계
 	public static boolean DrawEnemyUnitInfo = false;
 	/// 화면 표시 여부 - 유닛 ~ Target 간 직선
-	public static boolean DrawUnitTargetInfo = false;
+	public static boolean DrawUnitTargetInfo = true;
 
 	/// 화면 표시 여부 - 빌드 큐
 	public static boolean DrawProductionInfo = false;

@@ -374,12 +374,20 @@ public class Squad {
 		
 		InformationManager.Instance().getNearbyForce(vultureEnemies, order.getPosition(),
 				InformationManager.Instance().enemyPlayer, order.getRadius());
-
+	
 		mechanicVulture.prepareMechanic(order, vultureEnemies);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevel, false);
 		
 		for (Unit vulture : microVulture.getUnits()) {
-			mechanicVulture.executeMechanicMicro(vulture);
+			String shortPathName = SquadName.MULTIGUERILLA_ + vulture.getType() + vulture.getID();
+			ShortPathGuerrilla tmpShortPath = mechanicVulture.getShortPath(shortPathName);
+			if(tmpShortPath==null)
+			{
+				tmpShortPath = new ShortPathGuerrilla(shortPathName);
+				mechanicVulture.putShortPath(shortPathName, tmpShortPath);
+			}
+			
+			mechanicVulture.executeMechanicMultiGuerillaMicro(vulture, tmpShortPath);
 		}
 	}
 	

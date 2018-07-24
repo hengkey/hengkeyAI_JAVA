@@ -9,10 +9,19 @@ import bwapi.UnitType;
 import bwta.BWTA;
 
 public class ShortPathGuerrilla {
+	public ShortPathGuerrilla(String name) {
+		this.name = name;
+		init();
+	}
+
+	private String name;
+	private Position sourcePos;
+	private Position targetPos;
+	
 	public static final int maxGuerillaPosNum = 39;
 	public static final int maxNodeNum = 70;
-	public static ArrayList<GuerillaPos>[] list;
-	public static int prePos = 1;
+	public ArrayList<GuerillaPos>[] list;
+	public int prePos = 1;
 
 	static int[][] guerillaTilePos = { { 8, 10 }, { 8, 29 }, { 7, 37 }, { 29, 37 }, { 36, 15 }, { 45, 23 }, { 51, 38 },
 			{ 54, 15 }, { 64, 4 }, { 74, 15 }, { 83, 24 }, { 77, 39 }, { 92, 14 }, { 98, 37 }, { 120, 36 }, { 120, 29 },
@@ -29,7 +38,7 @@ public class ShortPathGuerrilla {
 			{ 28, 27 }, { 27, 30 }, { 30, 31 }, { 29, 34 }, { 37, 38 }, { 38, 39 }, { 37, 36 }, { 37, 35 }, { 38, 35 },
 			{ 36, 34 }, { 36, 33 }, { 36, 35 }, { 34, 33 }, { 33, 32 }, { 33, 35 }, { 35, 32 }, { 32, 31 } };
 
-	public static void init() {
+	public void init() {
 		list = new ArrayList[maxGuerillaPosNum + 1];
 
 		for (int i = 0; i <= maxGuerillaPosNum; i++) {
@@ -56,59 +65,14 @@ public class ShortPathGuerrilla {
 		}
 	}
 
-	// public static void main(String[] args) {
-	// list = new ArrayList[maxGuerillaPosNum + 1];
-	//
-	// for (int i = 0; i <= maxGuerillaPosNum; i++) {
-	// list[i] = new ArrayList<GuerillaPos>();
-	// }
-	//
-	// TilePos pos = new TilePos(0, 0);
-	// for (int i = 0; i < maxNodeNum; i++) {
-	// pos.x = guerillaPos[nodeInfo[i][0] - 1][0];
-	// pos.y = guerillaPos[nodeInfo[i][0] - 1][1];
-	// list[nodeInfo[i][0]].add(new GuerillaPos(pos, nodeInfo[i][1], true));
-	//
-	// pos.x = guerillaPos[nodeInfo[i][1] - 1][0];
-	// pos.y = guerillaPos[nodeInfo[i][1] - 1][1];
-	// list[nodeInfo[i][1]].add(new GuerillaPos(pos, nodeInfo[i][0], true));
-	// }
-	//
-	// for (int i = 1; i <= maxGuerillaPosNum; i++) {
-	// System.out.print("(" + i + ", " + "x=" + list[i].get(0).x + ",y=" +
-	// list[i].get(0).y + ")");
-	// for (int j = 0; j < list[i].size(); j++) {
-	// System.out.print("(" + i + "," + list[i].get(j).node + ")");
-	// }
-	// System.out.println("");
-	// }
-	//
-	// int prePos = 1, curPos = 1, targetPos = maxGuerillaPosNum;
-	//
-	// while (curPos != targetPos) {
-	// updateEnemyRegion();
-	// prePos = curPos;
-	// list[curPos].get(0).validFlag = false;
-	// curPos = getNextPos(curPos, targetPos);
-	// System.out
-	// .println("(" + curPos + ":" + guerillaPos[curPos - 1][0] + "," +
-	// guerillaPos[curPos - 1][1] + ")");
-	// if (curPos == prePos) {
-	// resetValidFlag();
-	// System.out.println("Oh!! My God!!!");
-	//// break;
-	// }
-	// }
-	// }
-
-	public static void resetValidFlag() {
+	public void resetValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
 			if (list[i].size() > 0)
 				list[i].get(0).validFlag = true;
 		}
 	}
 
-	public static void resetEnemyValidFlag() {
+	public void resetEnemyValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
 			if (list[i].size() > 0)
 				list[i].get(0).enemyValidFlag = true;
@@ -116,7 +80,7 @@ public class ShortPathGuerrilla {
 	}
 
 	// 업데이트 적군 존재 위치
-	public static void updateEnemyRegion() {
+	public void updateEnemyRegion() {
 
 		resetEnemyValidFlag();
 
@@ -134,7 +98,7 @@ public class ShortPathGuerrilla {
 						list[i].get(0).enemyValidFlag = false;
 //						System.out.print("false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
 //								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
-						System.out.print("(" + i + ")");
+//						System.out.print("(" + i + ")");
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Red, true);
 					} else {
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Green, true);
@@ -143,16 +107,9 @@ public class ShortPathGuerrilla {
 //				System.out.println();
 			}
 		}
-
-		// list[6].get(0).validFlag = false;
-		// list[7].get(0).validFlag = false;
-		// list[20].get(0).validFlag = false;
-		// list[28].get(0).validFlag = false;
-		// list[34].get(0).validFlag = false;
-		// list[37].get(0).validFlag = false;
 	}
 
-	public static Position getNextPos(Position curPos, Position targetPos) {
+	public Position getNextPos(Position curPos, Position targetPos) {
 		int curPosIndex = 1, targetPosIndex = 1;
 		int nextPosIndex = curPosIndex;
 		int nearNode = 0;
@@ -208,7 +165,7 @@ public class ShortPathGuerrilla {
 			resetValidFlag();
 			System.out.println("Oh!! My God!!!");
 		}
-		System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" + nextTilePos.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+//		System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" + nextTilePos.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 		return nextPos;
 	}

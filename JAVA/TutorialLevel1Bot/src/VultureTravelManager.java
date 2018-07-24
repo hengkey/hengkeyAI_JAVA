@@ -287,8 +287,8 @@ public class VultureTravelManager {
 
 				if (workerCnt > 0 && baseBuildingFlag == true) {
 					bestTravelSite = travelSite;
-					System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 					MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
 							MicroSet.Vulture.GEURILLA_RADIUS, Color.White, false);
 				}

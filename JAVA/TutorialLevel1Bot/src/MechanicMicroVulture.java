@@ -1,7 +1,9 @@
 /* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import bwapi.Color;
 import bwapi.Position;
@@ -22,6 +24,16 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 	
 	private boolean attackWithMechanics = false;
 	private int stickToMechanicRadius = 0;
+	
+	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
+	
+	public ShortPathGuerrilla getShortPath(String squadName) {
+		return shortPathInfo.get(squadName);
+	}
+	
+	public void putShortPath(String shortPathName, ShortPathGuerrilla tmpShortPath) {
+		shortPathInfo.put(shortPathName, tmpShortPath);
+	}
 	
 	public void prepareMechanic(SquadOrder order, List<UnitInfo> enemiesInfo) {
 		this.order = order;
@@ -47,11 +59,9 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 			return;
 		}
 		
-		if (order.getType() == SquadOrderType.MULTIGUERILLA)
-		{
-			executeMechanicMultiGuerillaMicro(vulture);
-			return;
-		}
+		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
+				"" + order.getType());
+		MyBotModule.Broodwar.drawCircleMap(vulture.getPosition(), 10, Color.Cyan, true);
 		
 		MechanicMicroDecision decision = MechanicMicroDecision.makeDecision(vulture, enemiesInfo, null, saveUnitLevel); // 0: flee, 1: kiting, 2: attack
 
@@ -174,17 +184,17 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 		}
 	}
 	
-	public void executeMechanicMultiGuerillaMicro(Unit vulture) {
+	public void executeMechanicMultiGuerillaMicro(Unit vulture, ShortPathGuerrilla tmpShortPathGuerrilla) {
 		// checker : 각각의 목표지역(travelBase)으로 이동. (order position은 null이다.)
 		// watcher : 목표지역(적base)으로 이동. 앞에 보이지 않는 적이 있으면 본진base로 후퇴.
 		Position movePosition = order.getPosition();
-		movePosition = ShortPathGuerrilla.getNextPos(vulture.getPosition(), order.getPosition());
+		movePosition = tmpShortPathGuerrilla.getNextPos(vulture.getPosition(), order.getPosition());
 
 		// 이동지역까지 attackMove로 간다.
 		if (vulture.getDistance(movePosition) > order.getRadius()) {
 			CommandUtil.move(vulture, movePosition);
-			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
-					+ new Exception().getStackTrace()[0].getLineNumber());
+//			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
+//					+ new Exception().getStackTrace()[0].getLineNumber());
 			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS/5, Color.Blue, false);
 		} else { // 목적지 도착
 			if (vulture.isIdle() || vulture.isBraking()) {
@@ -192,12 +202,16 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 				// 100);
 				// CommandUtil.attackMove(vulture, randomPosition);
 				vulture.holdPosition();
-				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS/4, Color.Orange,
 						false);
 			}
 		}
+		
+		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
+				"" + order.getType());
+		MyBotModule.Broodwar.drawCircleMap(vulture.getPosition(), 10, Color.Orange, true);
 	}
 	
 	private boolean useReservedSpiderMine(Unit vulture) {
