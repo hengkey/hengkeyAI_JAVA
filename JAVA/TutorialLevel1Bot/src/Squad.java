@@ -369,7 +369,7 @@ public class Squad {
 		int saveUnitLevel = 0;
 		for (Unit vulture : microVulture.getUnits()) {
 			InformationManager.Instance().getNearbyForce(vultureEnemies, vulture.getPosition(),
-					InformationManager.Instance().enemyPlayer, order.getRadius());
+					InformationManager.Instance().enemyPlayer, UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange()+50);
 		}
 		
 		InformationManager.Instance().getNearbyForce(vultureEnemies, order.getPosition(),

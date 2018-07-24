@@ -1844,7 +1844,7 @@ public class CombatManager {
 			
 			if (MyBotModule.Broodwar.isVisible(squad.getOrder().getPosition().toTilePosition())) {
 				List<Unit> enemies = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(),
-						MicroSet.Vulture.GEURILLA_RADIUS, false, true, null);
+						MicroSet.Vulture.MULTIGEURILLA_RADIUS, false, true, null);
 				if (enemies.isEmpty()) {
 					squad.clear();
 					System.out.println(
@@ -1853,7 +1853,7 @@ public class CombatManager {
 				}
 
 				List<Unit> workers = MapGrid.Instance().getUnitsNear(squad.getOrder().getPosition(),
-						MicroSet.Vulture.GEURILLA_RADIUS, false, true,
+						MicroSet.Vulture.MULTIGEURILLA_RADIUS, false, true,
 						InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
 				if (workers.isEmpty()) {
 					System.out

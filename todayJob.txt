@@ -31,6 +31,7 @@
 - command center 주위에 터렛박기
 - 미사일 터렛 촘촘히하고 공격 영역에도 추가
 - fix_supplyXX, fix_supplyYY 위치 서플라이를 최대한 많이 지을수 있는 곳으로 지정
+- 멀티게릴라시 적군사정거리에 들면 nextpos를 다시 설정하는 스킴추가필요
 - 서플라이 짓는 지역을 3,4 -> 4,5로 늘림(thers is no place 이거 안뜨게 하려고)
 - command center 근처에 미사일터렛 지을때 미네랄 위치 기준으로 건설하도록 추가
 - command center 근처에 미사일터렛 지을때 command center기준 +4X,-1Y 해서 건설하도록 추가
@@ -53,20 +54,9 @@
 - comsat위치에 터렛 안 박도록
  => isOverlapsWithBaseLocation 여기서 comsat 오버랩 체크여부 추가
 
+- 멀티게릴라시 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격하는 기능 추가
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-git init
-git add aaa
- git clone https://github.com/hengkey/hengkeyAI_JAVA.git --config http.proxy=http://70.10.15.10:8080 --config https.proxy=http://70.10.15.10:8080 --config http.sslVerify=false

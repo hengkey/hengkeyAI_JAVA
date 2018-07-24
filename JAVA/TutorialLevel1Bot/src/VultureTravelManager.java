@@ -289,14 +289,16 @@ public class VultureTravelManager {
 					bestTravelSite = travelSite;
 //					System.out.println(bestTravelSite.baseLocation.getTilePosition().toString() + " "
 //							+ new Exception().getStackTrace()[0].getLineNumber());
-					MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
-							MicroSet.Vulture.GEURILLA_RADIUS, Color.White, false);
+//					MyBotModule.Broodwar.drawCircleMap(travelSite.baseLocation.getPosition(),
+//							MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White, false);
 				}
 			}
 		}
 
 		if (bestTravelSite != null) {
 			// System.out.println();
+			MyBotModule.Broodwar.drawCircleMap(bestTravelSite.baseLocation.getPosition(),
+					MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White, false);
 			return bestTravelSite.baseLocation;
 		} else {
 			return null;

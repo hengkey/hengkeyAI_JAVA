@@ -11,6 +11,8 @@ import bwta.BWTA;
 public class ShortPathGuerrilla {
 	public ShortPathGuerrilla(String name) {
 		this.name = name;
+		sourcePos = null;
+		targetPos = null;
 		init();
 	}
 
@@ -65,6 +67,14 @@ public class ShortPathGuerrilla {
 		}
 	}
 
+	public Position getSourcePos() {
+		return sourcePos;
+	}
+	
+	public Position getTargetPos() {
+		return targetPos;
+	}
+	
 	public void resetValidFlag() {
 		for (int i = 1; i <= maxGuerillaPosNum; i++) {
 			if (list[i].size() > 0)
@@ -79,6 +89,16 @@ public class ShortPathGuerrilla {
 		}
 	}
 
+	public void setEnemyValidFlag(Position pos) {
+		for (int i = 0; i < maxGuerillaPosNum; i++) {
+			if (guerillaTilePos[i][0] == pos.toTilePosition().getX()
+					&& guerillaTilePos[i][1] == pos.toTilePosition().getY()) {
+				list[i+1].get(0).enemyValidFlag = false;
+				break;
+			}
+		}
+	}
+	
 	// 업데이트 적군 존재 위치
 	public void updateEnemyRegion() {
 
@@ -157,16 +177,21 @@ public class ShortPathGuerrilla {
 			}
 		}
 
+		TilePosition sourceTilePos = new TilePosition(guerillaTilePos[curPosIndex - 1][0],
+				guerillaTilePos[curPosIndex - 1][1]);
+		sourcePos = sourceTilePos.toPosition();
+		
 		TilePosition nextTilePos = new TilePosition(guerillaTilePos[nextPosIndex - 1][0],
 				guerillaTilePos[nextPosIndex - 1][1]);
 		Position nextPos = nextTilePos.toPosition();
+		targetPos = nextPos;
 
 		if (nextPosIndex == prePos) {
 			resetValidFlag();
 			System.out.println("Oh!! My God!!!");
 		}
 //		System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" + nextTilePos.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
-
+		
 		return nextPos;
 	}
 }
