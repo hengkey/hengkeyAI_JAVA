@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import bwapi.Color;
 import bwapi.Order;
@@ -19,11 +22,12 @@ public class ShortPathGuerrilla {
 	private String name;
 	private Position sourcePos;
 	private Position targetPos;
-	
+
 	public static final int maxGuerillaPosNum = 39;
 	public static final int maxNodeNum = 70;
-	public ArrayList<GuerillaPos>[] list;
-	public int prePos = 1;
+	private Map<String, GuerillaPos> posMap = new HashMap<>();
+	private Map<String, GuerillaPath> pathMap = new HashMap<>();
+	public TilePosition prePos = null;
 
 	static int[][] guerillaTilePos = { { 8, 10 }, { 8, 29 }, { 7, 37 }, { 29, 37 }, { 36, 15 }, { 45, 23 }, { 51, 38 },
 			{ 54, 15 }, { 64, 4 }, { 74, 15 }, { 83, 24 }, { 77, 39 }, { 92, 14 }, { 98, 37 }, { 120, 36 }, { 120, 29 },
@@ -41,183 +45,169 @@ public class ShortPathGuerrilla {
 			{ 36, 34 }, { 36, 33 }, { 36, 35 }, { 34, 33 }, { 33, 32 }, { 33, 35 }, { 35, 32 }, { 32, 31 } };
 
 	public void init() {
-		list = new ArrayList[maxGuerillaPosNum + 1];
-
-		for (int i = 0; i <= maxGuerillaPosNum; i++) {
-			list[i] = new ArrayList<GuerillaPos>();
+		for (int i = 0; i < maxGuerillaPosNum; i++) {
+			posMap.put("[" + guerillaTilePos[i][0] + " ," + guerillaTilePos[i][0] + "]",
+					new GuerillaPos(new TilePosition(guerillaTilePos[i][0], guerillaTilePos[i][1]), true, true));
 		}
-
-		TilePos pos = new TilePos(0, 0);
+		
 		for (int i = 0; i < maxNodeNum; i++) {
-			pos.x = guerillaTilePos[nodeInfo[i][0] - 1][0];
-			pos.y = guerillaTilePos[nodeInfo[i][0] - 1][1];
-			list[nodeInfo[i][0]].add(new GuerillaPos(pos, nodeInfo[i][1], true));
+			TilePosition srcPos = new TilePosition(guerillaTilePos[nodeInfo[i][0] - 1][0],
+					guerillaTilePos[nodeInfo[i][0] - 1][1]);
+			TilePosition targetPos = new TilePosition(guerillaTilePos[nodeInfo[i][1] - 1][0],
+					guerillaTilePos[nodeInfo[i][1] - 1][1]);
 
-			pos.x = guerillaTilePos[nodeInfo[i][1] - 1][0];
-			pos.y = guerillaTilePos[nodeInfo[i][1] - 1][1];
-			list[nodeInfo[i][1]].add(new GuerillaPos(pos, nodeInfo[i][0], true));
+			// 정방향설정
+			pathMap.put("{" + srcPos.toString() + "=>" + targetPos.toString() + "}",
+					new GuerillaPath(srcPos, targetPos, true, true));
+
+			// 역방향설정
+			pathMap.put("{" + targetPos.toString() + "=>" + srcPos.toString() + "}",
+					new GuerillaPath(targetPos, srcPos, true, true));
 		}
 
-		for (int i = 1; i <= maxGuerillaPosNum; i++) {
-			System.out.print("(" + i + ", " + "x=" + list[i].get(0).x + ",y=" + list[i].get(0).y + ")");
-			for (int j = 0; j < list[i].size(); j++) {
-				System.out.print("(" + i + "," + list[i].get(j).node + ")");
-			}
-			System.out.println("");
+		for (String iterator : pathMap.keySet()) {
+			System.out.println(iterator);
 		}
 	}
 
 	public Position getSourcePos() {
 		return sourcePos;
 	}
-	
+
 	public Position getTargetPos() {
 		return targetPos;
 	}
-	
+
 	public void resetValidFlag() {
-		for (int i = 1; i <= maxGuerillaPosNum; i++) {
-			if (list[i].size() > 0)
-				list[i].get(0).validFlag = true;
+		for (String iterator : pathMap.keySet()) {
+			pathMap.get(iterator).validFlag = true;
 		}
 	}
 
 	public void resetEnemyValidFlag() {
-		for (int i = 1; i <= maxGuerillaPosNum; i++) {
-			if (list[i].size() > 0)
-				list[i].get(0).enemyValidFlag = true;
+		for (String iterator : pathMap.keySet()) {
+			pathMap.get(iterator).enemyValidFlag = true;
 		}
 	}
 
-	public void setEnemyValidFlag(Position pos) {
-		for (int i = 0; i < maxGuerillaPosNum; i++) {
-			if (guerillaTilePos[i][0] == pos.toTilePosition().getX()
-					&& guerillaTilePos[i][1] == pos.toTilePosition().getY()) {
-				list[i+1].get(0).enemyValidFlag = false;
-				break;
-			}
-		}
+	public void setPosValidFlag(TilePosition pos, boolean flag) {
+		pathMap.get(pos.toString()).validFlag = flag;
 	}
 	
+	public void setPosEnemyValidFlag(TilePosition pos, boolean flag) {
+		pathMap.get(pos.toString()).enemyValidFlag = flag;
+	}
+	
+	public void setPathValidFlag(TilePosition srcPos, TilePosition targetPos, boolean flag) {
+		pathMap.get("{" + srcPos.toString() + "=>" + targetPos.toString() + "}").validFlag = flag;
+	}
+	
+	public void setPathEnemyValidFlag(TilePosition srcPos, TilePosition targetPos, boolean flag) {
+		pathMap.get("{" + srcPos.toString() + "=>" + targetPos.toString() + "}").enemyValidFlag = flag;
+	}
+
 	// 업데이트 적군 존재 위치
 	public void updateEnemyRegion() {
 
 		resetEnemyValidFlag();
 
-//		System.out.println(
-//				"MyBotModule.Broodwar.enemy().getUnits().size()" + MyBotModule.Broodwar.enemy().getUnits().size() + " "
-//						+ new Exception().getStackTrace()[0].getLineNumber());
-		
+		// System.out.println(
+		// "MyBotModule.Broodwar.enemy().getUnits().size()" +
+		// MyBotModule.Broodwar.enemy().getUnits().size() + " "
+		// + new Exception().getStackTrace()[0].getLineNumber());
+
 		for (Unit unit : MyBotModule.Broodwar.enemy().getUnits()) {
-			if (CommandUtil.IsCombatUnit(unit) && unit.getType()!=UnitType.Unknown) {
-//				System.out.println(unit.getType() + unit.getPosition().toTilePosition().toString() + " "
-//						+ unit.getType().sightRange() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			if (CommandUtil.IsCombatUnit(unit) && unit.getType() != UnitType.Unknown) {
+				// System.out.println(unit.getType() +
+				// unit.getPosition().toTilePosition().toString() + " "
+				// + unit.getType().sightRange() + " " + new
+				// Exception().getStackTrace()[0].getLineNumber());
 				for (int i = 1; i <= maxGuerillaPosNum; i++) {
 					Position tmpPos = new Position(guerillaTilePos[i - 1][0] * 32, guerillaTilePos[i - 1][1] * 32);
 					if (unit.getType().groundWeapon().maxRange() > unit.getPosition().getDistance(tmpPos)) {
-						list[i].get(0).enemyValidFlag = false;
-//						System.out.print("false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
-//								+ list[i].get(0).y + ")" + " " + new Exception().getStackTrace()[0].getLineNumber());
-//						System.out.print("(" + i + ")");
+//						list[i].get(0).enemyValidFlag = false;
+						// System.out.print("false" + "(" + i + ", " + "x=" + list[i].get(0).x + ",y="
+						// + list[i].get(0).y + ")" + " " + new
+						// Exception().getStackTrace()[0].getLineNumber());
+						// System.out.print("(" + i + ")");
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Red, true);
 					} else {
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Green, true);
 					}
 				}
-//				System.out.println();
+				// System.out.println();
 			}
 		}
 	}
 
 	public Position getNextPos(Position curPos, Position targetPos) {
 		int curPosIndex = 1, targetPosIndex = 1;
-		int nextPosIndex = curPosIndex;
-		int nearNode = 0;
-		int preDistance = (int) Math.pow(128, 2) * 2 + 1;
-		int curDistance = 0;
+		Position nextPos = curPos;
+		TilePosition nearNode = null;
+		double preDistance = Math.pow(128, 2) * 2 + 1;
+		double curDistance = 0;
 		double preCurDoubleDistance = 999999;
 		double preTargetDoubleDistance = 999999;
-//		System.out.println("getNextPos Oh!! My God!!!" + " " + new Exception().getStackTrace()[0].getLineNumber());
+
+		// System.out.println("getNextPos Oh!! My God!!!" + " " + new
+		// Exception().getStackTrace()[0].getLineNumber());
 		TilePosition curTilePos = curPos.toTilePosition();
 		TilePosition targetTilePos = targetPos.toTilePosition();
 
-		updateEnemyRegion();
+//		updateEnemyRegion();
 
-		// Tile값을 가장 가까운 Position table index값으로 변환
-		for (int i = 0; i < maxGuerillaPosNum; i++) {
-			// current
-			if (curTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]) < preCurDoubleDistance) {
-				preCurDoubleDistance = curTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]);
-				curPosIndex = i + 1;
-			}
+		setPosValidFlag(curTilePos, false);
 
-			// target
-			if (targetTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]) < preTargetDoubleDistance) {
-				preTargetDoubleDistance = targetTilePos.getDistance(guerillaTilePos[i][0], guerillaTilePos[i][1]);
-				targetPosIndex = i + 1;
-			}
-		}
-
-		prePos = curPosIndex;
-		list[curPosIndex].get(0).validFlag = false;
-
-		prePos = curPosIndex;
-
-		for (int i = 0; i < list[curPosIndex].size(); i++) {
-			nearNode = list[curPosIndex].get(i).node;
-
-			if (list[nearNode].get(0).validFlag == false || list[nearNode].get(0).enemyValidFlag == false)
+		for (String iterator : pathMap.keySet()) {
+			if (!iterator.contains("{" + curTilePos.toString()))
 				continue;
 
-			curDistance = (int) Math.pow(guerillaTilePos[targetPosIndex - 1][0] - guerillaTilePos[nearNode - 1][0], 2)
-					+ (int) Math.pow(guerillaTilePos[targetPosIndex - 1][1] - guerillaTilePos[nearNode - 1][1], 2);
+			nearNode = pathMap.get(iterator).targetPos;
+
+			if (posMap.get(nearNode.toString()).validFlag == false || posMap.get(nearNode.toString()).enemyValidFlag == false)
+				continue;
+
+			curDistance = curTilePos.getDistance(nearNode);
 			if (curDistance < preDistance) {
 				preDistance = curDistance;
-				nextPosIndex = nearNode;
+				nextPos = nearNode.toPosition();
 			}
 		}
 
-		TilePosition sourceTilePos = new TilePosition(guerillaTilePos[curPosIndex - 1][0],
-				guerillaTilePos[curPosIndex - 1][1]);
-		sourcePos = sourceTilePos.toPosition();
-		
-		TilePosition nextTilePos = new TilePosition(guerillaTilePos[nextPosIndex - 1][0],
-				guerillaTilePos[nextPosIndex - 1][1]);
-		Position nextPos = nextTilePos.toPosition();
-		targetPos = nextPos;
-
-		if (nextPosIndex == prePos) {
+		if (nextPos == null) {
 			resetValidFlag();
 			System.out.println("Oh!! My God!!!");
 		}
-//		System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" + nextTilePos.toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
-		
+		// System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" +
+		// nextTilePos.toString() + " " + new
+		// Exception().getStackTrace()[0].getLineNumber());
+
 		return nextPos;
 	}
 }
 
-class GuerillaPos {
-	int x;
-	int y;
-	int node;
+class GuerillaPath {
+	TilePosition srcPos;
+	TilePosition targetPos;
 	boolean validFlag;// 지나온 위치 false로해서 다시 안가도록
 	boolean enemyValidFlag;// enemy가 공격 가능한 범위여부 판별
 
-	public GuerillaPos(TilePos pos, int node, boolean value) {
-		this.x = pos.x;
-		this.y = pos.y;
-		this.node = node;
-		this.validFlag = value;
-		this.enemyValidFlag = value;
+	public GuerillaPath(TilePosition srcPos, TilePosition targetPos, boolean validFlag, boolean enemyValidFlag) {
+		this.srcPos = srcPos;
+		this.targetPos = targetPos;
+		this.validFlag = validFlag;
+		this.enemyValidFlag = enemyValidFlag;
 	}
 }
 
-class TilePos {
-	int x;
-	int y;
+class GuerillaPos {
+	TilePosition Pos;
+	boolean validFlag;// 해당 Position false로해서 다시 안가도록
+	boolean enemyValidFlag;// enemy가 공격 가능한 범위여부 판별
 
-	public TilePos(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public GuerillaPos(TilePosition pos, boolean validFlag, boolean enemyValidFlag) {
+		this.Pos = pos;
+		this.validFlag = validFlag;
+		this.enemyValidFlag = enemyValidFlag;
 	}
 }
