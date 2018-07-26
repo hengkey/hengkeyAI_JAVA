@@ -1,15 +1,13 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import bwapi.Color;
-import bwapi.Order;
 import bwapi.Position;
 import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
-import bwta.BWTA;
 
 public class ShortPathGuerrilla {
 	public ShortPathGuerrilla(String name) {
@@ -139,6 +137,18 @@ public class ShortPathGuerrilla {
 			}
 		}
 	}
+	
+	// 큐를 사용한 업데이트 무게값 업데이트
+	public void updateWeightValue(TilePosition curPos, TilePosition targetPos) {
+		Queue<TilePosition> tmpQueue = new LinkedList<>();
+
+		tmpQueue.offer(targetPos);
+
+		while(!tmpQueue.isEmpty()){
+			TilePosition tmpPos = tmpQueue.poll();
+			posMap.get(tmpPos.toString());
+		}
+	}
 
 	public Position getNextPos(Position curPos, Position targetPos) {
 		int curPosIndex = 1, targetPosIndex = 1;
@@ -202,11 +212,13 @@ class GuerillaPath {
 
 class GuerillaPos {
 	TilePosition Pos;
+	int weightValue;
 	boolean validFlag;// 해당 Position false로해서 다시 안가도록
 	boolean enemyValidFlag;// enemy가 공격 가능한 범위여부 판별
 
 	public GuerillaPos(TilePosition pos, boolean validFlag, boolean enemyValidFlag) {
 		this.Pos = pos;
+		this.weightValue = 0xFFFF;
 		this.validFlag = validFlag;
 		this.enemyValidFlag = enemyValidFlag;
 	}
