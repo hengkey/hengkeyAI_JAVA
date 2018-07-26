@@ -142,11 +142,12 @@ public class ShortPathGuerrilla {
 	public void updateWeightValue(TilePosition curPos, TilePosition targetPos) {
 		Queue<TilePosition> tmpQueue = new LinkedList<>();
 
+		posMap.get(targetPos.toString()).weightValue=0;
 		tmpQueue.offer(targetPos);
 
 		while(!tmpQueue.isEmpty()){
 			TilePosition tmpPos = tmpQueue.poll();
-			posMap.get(tmpPos.toString());
+			posMap.get(tmpPos.toString()).weightValue=0;
 		}
 	}
 
