@@ -198,6 +198,11 @@ public class CombatManager {
 //		test.estimate();
 //		System.out.println(scvcount1 + ", " + scvcount2);
 		
+//		ShortPathGuerrilla path = new ShortPathGuerrilla("aaa");
+//		path.init();
+//		TilePosition curPos = new TilePosition(8, 10);
+//		TilePosition targetPos = new TilePosition(119, 119);
+//		path.updateWeightValue(curPos, targetPos);		
 		
 		if(ScoutDefenseNeeded){
 			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {

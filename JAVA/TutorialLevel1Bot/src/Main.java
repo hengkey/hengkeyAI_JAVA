@@ -1,3 +1,5 @@
+import bwapi.TilePosition;
+
 /* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 public class Main {
@@ -10,7 +12,13 @@ public class Main {
 	/// 봇 프로그램 실행 시 맵 파일 분석에 소요되는 딜레이를 줄일 수 있습니다.
     public static void main(String[] args) {
     	try{
-            new MyBotModule().run();   		
+            new MyBotModule().run();
+
+//			ShortPathGuerrilla path = new ShortPathGuerrilla("aaa");
+//			path.init();
+//			TilePosition curPos = new TilePosition(8, 10);
+//			TilePosition targetPos = new TilePosition(119, 119);
+//			path.updateWeightValue(curPos, targetPos);
     	}
     	catch(Exception e) {
     		System.out.println(e.toString());

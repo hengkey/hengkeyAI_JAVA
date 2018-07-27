@@ -44,7 +44,8 @@ public class ShortPathGuerrilla {
 
 	public void init() {
 		for (int i = 0; i < maxGuerillaPosNum; i++) {
-			posMap.put("[" + guerillaTilePos[i][0] + " ," + guerillaTilePos[i][0] + "]",
+			TilePosition tmpTilePos = new TilePosition(guerillaTilePos[i][0], guerillaTilePos[i][1]);
+			posMap.put(tmpTilePos.toString(),
 					new GuerillaPos(new TilePosition(guerillaTilePos[i][0], guerillaTilePos[i][1]), true, true));
 		}
 		
@@ -141,13 +142,43 @@ public class ShortPathGuerrilla {
 	// 큐를 사용한 업데이트 무게값 업데이트
 	public void updateWeightValue(TilePosition curPos, TilePosition targetPos) {
 		Queue<TilePosition> tmpQueue = new LinkedList<>();
-
+		
 		posMap.get(targetPos.toString()).weightValue=0;
 		tmpQueue.offer(targetPos);
 
 		while(!tmpQueue.isEmpty()){
+			System.out.println("==============================");
 			TilePosition tmpPos = tmpQueue.poll();
-			posMap.get(tmpPos.toString()).weightValue=0;
+			for (String iterator : pathMap.keySet()) {
+				if (iterator.contains("{" + tmpPos.toString())
+						&& posMap.get(pathMap.get(iterator).targetPos.toString()).weightValue == 0xffff) {
+					posMap.get(pathMap.get(iterator).targetPos.toString()).weightValue = posMap
+							.get(tmpPos.toString()).weightValue + 1;
+					tmpQueue.offer(pathMap.get(iterator).targetPos);
+					System.out.println(iterator.toString());
+				}
+			}
+			System.out.println(tmpQueue);
+//			break;
+		}
+		
+		//탐색위치 무게값 출력
+		for (String iterator : posMap.keySet()) {
+			MyBotModule.Broodwar.drawCircleMap(posMap.get(iterator).Pos.toPosition(), 10, Color.Green, true);
+			MyBotModule.Broodwar.drawTextMap(posMap.get(iterator).Pos.toPosition(),
+					posMap.get(iterator).Pos.toString() + "(" + posMap.get(iterator).weightValue + ")");
+			System.out.println(posMap.get(iterator).Pos.toString() + "(" + posMap.get(iterator).weightValue + ")");
+		}
+
+		//탐색 path 정보 출력
+		for (String iterator : pathMap.keySet()) {
+			if (pathMap.get(iterator).enemyValidFlag || pathMap.get(iterator).validFlag) {
+				MyBotModule.Broodwar.drawLineMap(pathMap.get(iterator).srcPos.toPosition(),
+						pathMap.get(iterator).targetPos.toPosition(), Color.Yellow);
+			} else {
+				MyBotModule.Broodwar.drawLineMap(pathMap.get(iterator).srcPos.toPosition(),
+						pathMap.get(iterator).targetPos.toPosition(), Color.Blue);
+			}
 		}
 	}
 
