@@ -26,6 +26,8 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 	private int stickToMechanicRadius = 0;
 	
 	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
+	int attackIgnoreFrame = 0;
+	int preDistanceFromEnemy = 0xffff;
 	
 	public ShortPathGuerrilla getShortPath(String squadName) {
 		return shortPathInfo.get(squadName);
@@ -191,41 +193,71 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 
 		//squad 할당되고 맨처음
 		if (movePosition==null) {
-			movePosition = tmpShortPathGuerrilla.getNextPos(vulture.getPosition(), order.getPosition());
-		}
-		//sub target에 도착함.
-		else if (vulture.getDistance(movePosition) < MicroSet.Vulture.MULTIGEURILLA_RADIUS / 10) {
-			movePosition = tmpShortPathGuerrilla.getNextPos(movePosition, order.getPosition());
-		}
-		
-		// source -> target 으로 이동중간에 적을 만나면 target을 변경하여 다른경로로 이동
-//		for(UnitInfo enemyInfo:enemiesInfo)
-//		{
-//			if(enemyInfo.getUnit().getType().isWorker())
-//				continue;
-//			
-//			//공격할수 있는 unit을 만났을경우
-//			if (vulture.getDistance(enemyInfo.getUnit()
-//					.getPosition()) <= UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 50) {
-//				System.out.println(enemyInfo.getUnit().getType()+"^^^^^^^^^^^");
-//				tmpShortPathGuerrilla.setEnemyValidFlag(movePosition);
-//				movePosition = tmpShortPathGuerrilla.getNextPos(movePosition, order.getPosition());
-//				break;
-//			}
-//		}
-		
-		// 이동지역까지 attackMove로 간다.
-		if (vulture.getDistance(order.getPosition()) > order.getRadius()) {
-			CommandUtil.move(vulture, movePosition);
+			movePosition = tmpShortPathGuerrilla.getNextPos(vulture.getPosition(), order.getPosition(), true);
 //			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
 //					+ new Exception().getStackTrace()[0].getLineNumber());
-			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS/5, Color.Blue, false);
+		}
+		//sub target에 도착함.
+		else if (vulture.getDistance(movePosition) < MicroSet.Vulture.MULTIGEURILLA_RADIUS / 2) {
+			movePosition = tmpShortPathGuerrilla.getNextPos(movePosition, order.getPosition(), true);
+//			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
+//					+ new Exception().getStackTrace()[0].getLineNumber());
+		}
+		else
+		{
+			// source -> target 으로 이동중간에 적을 만나면 target을 변경하여 다른경로로 이동
+			for(UnitInfo enemyInfo:enemiesInfo)
+			{
+				if(enemyInfo.getUnit().getType().isWorker())
+					continue;
+				
+//				if (attackIgnoreFrame > 0)
+//					attackIgnoreFrame--;
+				
+				// 공격할수 있는 unit을 만났을경우
+				if (vulture.getDistance(enemyInfo.getUnit().getPosition()) <= UnitType.Terran_Siege_Tank_Siege_Mode
+						.groundWeapon().maxRange() + 100) {
+					tmpShortPathGuerrilla.setPathMapValidFlag(false);
+					// movePosition =
+					// tmpShortPathGuerrilla.getNextPos(tmpShortPathGuerrilla.getSourcePos(),
+					// order.getPosition(), true);
+
+					// movePosition = tmpShortPathGuerrilla.getSourcePos();
+					// Position tmpPos=new Position(294, 329);
+					movePosition = tmpShortPathGuerrilla.getPosOutOfEnemy(vulture, enemyInfo);
+
+					tmpShortPathGuerrilla.setSourcetPos(movePosition);
+					tmpShortPathGuerrilla.setTargetPos(movePosition);
+//					attackIgnoreFrame = 1000;
+//					preDistanceFromEnemy = vulture.getDistance(enemyInfo.getUnit().getPosition());
+					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
+							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
+							+ movePosition.toTilePosition().toString());
+					break;
+				}
+//				else
+//				{
+//					attackIgnoreFrame = 0;
+//					preDistanceFromEnemy = 0xffff;
+//				}
+			}			
+		}
+				
+		// 이동지역까지 attackMove로 간다.
+		if (vulture.getDistance(order.getPosition()) > order.getRadius()) {
+			vulture.move(movePosition);
+			// CommandUtil.move(vulture, movePosition);
+			// System.out.println("move to " + movePosition.toTilePosition().toString() + "
+			// "
+			// + new Exception().getStackTrace()[0].getLineNumber());
+			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 5, Color.Blue,
+					false);
 		} else { // 목적지 도착
 			if (vulture.isIdle() || vulture.isBraking()) {
 				Position randomPosition = MicroUtils.randomPosition(order.getPosition(), 200);
 				
 				List<Unit> workers = MapGrid.Instance().getUnitsNear(order.getPosition(),
-						MicroSet.Vulture.MULTIGEURILLA_RADIUS, false, true,
+						MicroSet.Vulture.MULTIGEURILLA_RADIUS+10, false, true,
 						InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
 				
 				// 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격
@@ -237,15 +269,15 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 				
 				CommandUtil.attackMove(vulture, randomPosition);
 //				vulture.holdPosition();
-//				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
-//						+ new Exception().getStackTrace()[0].getLineNumber());
+				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
+						+ new Exception().getStackTrace()[0].getLineNumber());
 				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4,
 						Color.Orange, false);
 			}
 		}
 		
 		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
-				"" + order.getType());
+				order.getType() + order.getPosition().toTilePosition().toString());
 		MyBotModule.Broodwar.drawCircleMap(vulture.getPosition(), 10, Color.Orange, true);
 	}
 	

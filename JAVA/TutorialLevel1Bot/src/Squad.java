@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import bwapi.Color;
 import bwapi.Position;
 import bwapi.Race;
 import bwapi.Unit;
@@ -366,6 +367,8 @@ public class Squad {
 	private void updateMultiGuerillaSquad() {
 		List<UnitInfo> vultureEnemies = new ArrayList<>();
 
+		MyBotModule.Broodwar.drawCircleMap(order.getPosition(), 100, Color.Orange, false);
+		
 		int saveUnitLevel = 0;
 		for (Unit vulture : microVulture.getUnits()) {
 			InformationManager.Instance().getNearbyForce(vultureEnemies, vulture.getPosition(),

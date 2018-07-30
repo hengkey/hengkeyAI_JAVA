@@ -39,8 +39,9 @@ class Combat {
 	public static final int WATCHER_PRIORITY = 3;
 	public static final int CHECKER_PRIORITY = 4;
 	public static final int GUERILLA_PRIORITY = 5;
-	public static final int BASE_DEFENSE_PRIORITY = 6;
-	public static final int SCOUT_DEFENSE_PRIORITY = 7;
+	public static final int MULTIGUERILLA_PRIORITY = 6;
+	public static final int BASE_DEFENSE_PRIORITY = 7;
+	public static final int SCOUT_DEFENSE_PRIORITY = 8;
 	public static final int EARLY_DEFENSE_PRIORITY = 10;
 
 	public static final int WRAITH_PRIORITY = 100;
@@ -200,8 +201,8 @@ public class CombatManager {
 		
 //		ShortPathGuerrilla path = new ShortPathGuerrilla("aaa");
 //		path.init();
-//		TilePosition curPos = new TilePosition(8, 10);
-//		TilePosition targetPos = new TilePosition(119, 119);
+//		TilePosition curPos = new TilePosition(51, 38);
+//		TilePosition targetPos = new TilePosition(92,14);
 //		path.updateWeightValue(curPos, targetPos);		
 		
 		if(ScoutDefenseNeeded){
@@ -1816,7 +1817,7 @@ public class CombatManager {
 			if (guerillaSquad == null) {
 				SquadOrder squadOrder = new SquadOrder(SquadOrderType.MULTIGUERILLA, bestGuerillaSite.getPosition(),
 						MicroSet.Vulture.MULTIGEURILLA_RADIUS, "Let's get it on");
-				guerillaSquad = new Squad(squadName, squadOrder, Combat.GUERILLA_PRIORITY);
+				guerillaSquad = new Squad(squadName, squadOrder, Combat.MULTIGUERILLA_PRIORITY);
 				squadData.putSquad(guerillaSquad);
 			}
 			

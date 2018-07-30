@@ -287,7 +287,6 @@ public class ScoutManager{
 						}
 					}
 				}
-
 				
 				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false){
 				    CommandUtil.move(currentScoutUnit, new TilePosition(64,64).toPosition());
@@ -300,7 +299,8 @@ public class ScoutManager{
 					currentScoutTargetBaseLocation = closestBaseLocation;
 				}else{
 					//TF 에서 정찰 일꾼 안나가는 버그 해결법 추가 -> 확인 필요
-					CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
+					if (currentScoutTargetBaseLocation != null)
+						CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
 				}
 			}else{//BasicBot1.2
 				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false){
