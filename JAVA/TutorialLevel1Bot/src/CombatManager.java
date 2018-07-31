@@ -255,8 +255,8 @@ public class CombatManager {
 			updateVesselSquad(); //AttackSquads 뒤에
 			updateBuildingSquad();
 			updateCheckerSquad();
-			updateGuerillaSquad(); 
-//			updateMultiGuerillaSquad(); 
+//			updateGuerillaSquad(); 
+			updateMultiGuerillaSquad(); 
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
@@ -1425,7 +1425,7 @@ public class CombatManager {
 		}
 	}
 	
-	private void makeTurretNearUnit(Unit unit) {
+	void makeTurretNearUnit(Unit unit) {
 	
 		if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
 			// System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() +
@@ -1433,7 +1433,7 @@ public class CombatManager {
 			// + unit.getTilePosition().getY() + ") "
 			// + new Exception().getStackTrace()[0].getLineNumber());
 			int build_turret_cnt = 0;
-			List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 6 * 32);
+			List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 150);
 
 			build_turret_cnt = 0;
 			for (Unit unit2 : turretInRegion) {
@@ -1493,11 +1493,6 @@ public class CombatManager {
 				if (squadData.canAssignUnitToSquad(unit, mainAttackSquad)) {
 					squadData.assignUnitToSquad(unit, mainAttackSquad);// 배슬, 드랍십도 포함됨
 				}
-			}
-
-			// 시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
-			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
-				makeTurretNearUnit(unit);
 			}
 		}
 

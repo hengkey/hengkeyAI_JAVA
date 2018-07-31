@@ -208,7 +208,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 			// source -> target 으로 이동중간에 적을 만나면 target을 변경하여 다른경로로 이동
 			for(UnitInfo enemyInfo:enemiesInfo)
 			{
-				if(enemyInfo.getUnit().getType().isWorker())
+				if(enemyInfo.getUnit().getType().isWorker() || !CommandUtil.IsCombatUnit(enemyInfo.getUnit()) )
 					continue;
 				
 //				if (attackIgnoreFrame > 0)
@@ -233,6 +233,8 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
 							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
 							+ movePosition.toTilePosition().toString());
+					MyBotModule.Broodwar.drawCircleMap(enemyInfo.getUnit().getPosition(),
+							UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 100, Color.Red, false);
 					break;
 				}
 //				else
@@ -254,7 +256,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 					false);
 		} else { // 목적지 도착
 			if (vulture.isIdle() || vulture.isBraking()) {
-				Position randomPosition = MicroUtils.randomPosition(order.getPosition(), 200);
+//				Position randomPosition = MicroUtils.randomPosition(order.getPosition(), 200);
 				
 				List<Unit> workers = MapGrid.Instance().getUnitsNear(order.getPosition(),
 						MicroSet.Vulture.MULTIGEURILLA_RADIUS+10, false, true,
@@ -262,15 +264,16 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 				
 				// 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격
 				if (workers.isEmpty()) {
-					randomPosition = MicroUtils.randomPosition(order.getPosition(), MicroSet.Vulture.MULTIGEURILLA_RADIUS);
+//					randomPosition = MicroUtils.randomPosition(order.getPosition(), MicroSet.Vulture.MULTIGEURILLA_RADIUS);
+//						CommandUtil.attackMove(vulture, randomPosition);
 				} else {
-					randomPosition = workers.get(0).getPosition();
+						vulture.rightClick(workers.get(0));
 				}
 				
-				CommandUtil.attackMove(vulture, randomPosition);
+//				CommandUtil.attackMove(vulture, randomPosition);
 //				vulture.holdPosition();
-				System.out.println("hold to " + vulture.getTilePosition().toString() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("hold to " + workers.get(0).getType() + vulture.getTilePosition().toString() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4,
 						Color.Orange, false);
 			}

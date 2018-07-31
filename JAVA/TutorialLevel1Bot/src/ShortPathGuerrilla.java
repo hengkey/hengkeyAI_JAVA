@@ -292,7 +292,7 @@ public class ShortPathGuerrilla {
 			}
 		}
 
-		if (nearNode == null) {
+		if (nextPos == curPos) {
 			resetValidFlag();
 			System.out.println("Oh!! My God!!!");
 		}

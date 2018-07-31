@@ -271,9 +271,9 @@ public class BlockingEntrance {
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) 
 		{
-			int[] fix_supplyXX = { 0, 100, 100, 12 };
+			int[] fix_supplyXX = { 0, 96, 97, 8 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 0, 0, 123, 123 };
+			int[] fix_supplyYY = { 0, 0, 123, 121 };
 			fix_supplyY = fix_supplyYY;
 		 				
 			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 
@@ -294,9 +294,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 24, 23, 102, 101 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 10, 104, 104, 11 };
+				int[] factoryXX_array = { 8, 104, 104, 12 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 13, 8, 109, 106 };
+				int[] factoryYY_array = { 12, 10, 109, 109 };
 				factoryY_array = factoryYY_array;
 
 				int[] bunkerXX_array = { 4, 123, 123, 5 };
@@ -343,9 +343,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 24, 23, 102, 101 };
 				barrackY_array = barrackYY_array;
 
-				int[] factoryXX_array = { 10, 104, 104, 11 };
+				int[] factoryXX_array = { 8, 104, 104, 12 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 13, 8, 109, 106 };
+				int[] factoryYY_array = { 12, 10, 109, 109 };
 				factoryY_array = factoryYY_array;
 
 				int[] bunkerXX_array = { 4, 123, 123, 5 };

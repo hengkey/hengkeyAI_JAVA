@@ -186,6 +186,10 @@ public class RespondToStrategy {
 			}
 			if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode || unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode) {
 				chk_siege_tank = true;
+
+				// 시즈탱크 근처에 일정양의 미사일터렛을 건설한다.
+				if (unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode)
+					CombatManager.Instance().makeTurretNearUnit(unit);
 			}
 			if (unit.getType() == UnitType.Terran_Wraith) {
 				chk_wraith = true;
@@ -630,20 +634,31 @@ public class RespondToStrategy {
 				} else {
 					if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Academy) > 0) {
 						// 아카데미가 완성되었고
-						
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Comsat_Station, null)
-								+ ConstructionManager.Instance()
-										.getConstructionQueueItemCount(UnitType.Terran_Comsat_Station, null) == 0) {
-							// 빌드큐에 컴셋이 없는데, 아카데미가 완성되었다면빌드큐에 컴셋 입력
-							if (MyBotModule.Broodwar.self().minerals() >= UnitType.Terran_Comsat_Station.mineralPrice()
-									&& MyBotModule.Broodwar.self().gas() >= UnitType.Terran_Comsat_Station.gasPrice()) {
-								if (MyBotModule.Broodwar.self()
-										.completedUnitCount(UnitType.Terran_Comsat_Station) < MyBotModule.Broodwar
-												.self().completedUnitCount(UnitType.Terran_Command_Center)) {
-									System.out.println("Terran_Comsat_Station add "
-											+ new Exception().getStackTrace()[0].getLineNumber());
-									BuildManager.Instance().buildQueue
-											.queueAsHighestPriority(UnitType.Terran_Comsat_Station, true);
+
+						if (MyBotModule.Broodwar.self()
+								.completedUnitCount(UnitType.Terran_Comsat_Station) < MyBotModule.Broodwar.self()
+										.completedUnitCount(UnitType.Terran_Command_Center)) {
+
+							for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+								if (unit == null)
+									continue;
+								if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()
+										&& unit.canBuildAddon() && MyBotModule.Broodwar.self()
+												.allUnitCount(UnitType.Terran_Comsat_Station) < 1) {
+
+									if (MyBotModule.Broodwar.self().minerals() > 50
+											&& MyBotModule.Broodwar.self().gas() > 50) {
+										if (BuildManager.Instance().buildQueue
+												.getItemCount(UnitType.Terran_Comsat_Station, null)
+												+ ConstructionManager.Instance().getConstructionQueueItemCount(
+														UnitType.Terran_Comsat_Station, null) == 0) {
+											System.out.println("Terran_Comsat_Station add "
+													+ new Exception().getStackTrace()[0].getLineNumber());
+											BuildManager.Instance().buildQueue
+													.queueAsHighestPriority(UnitType.Terran_Comsat_Station, true);
+											break;
+										}
+									}
 								}
 							}
 						}
@@ -685,7 +700,7 @@ public class RespondToStrategy {
 							if(BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, tempBaseLocation.getPosition().toTilePosition(), 300)
 							
 								+ ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, tempBaseLocation.getPosition().toTilePosition(), 300) == 0){
-								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, tempBaseLocation.getPosition().toTilePosition(), true);
+//								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, tempBaseLocation.getPosition().toTilePosition(), true);
 							}
 						}
  					}
@@ -704,7 +719,7 @@ public class RespondToStrategy {
    						if (!firstChokeMainHalfTurret) {
    							if(BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,firstChokeMainHalf.toTilePosition(), 180) 
    									+ ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, firstChokeMainHalf.toTilePosition(), 180) == 0){
-   								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, firstChokeMainHalf.toTilePosition(), true);
+//   								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, firstChokeMainHalf.toTilePosition(), true);
    							}
    						}
 					}
@@ -721,7 +736,7 @@ public class RespondToStrategy {
 							if (!firstChokeTurret) {
 								if(BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, tempChokePoint.getCenter().toTilePosition(), 150) 
 									+ ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, tempChokePoint.getCenter().toTilePosition(), 150) == 0){
-									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, tempChokePoint.getCenter().toTilePosition(), true);
+//									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, tempChokePoint.getCenter().toTilePosition(), true);
 								}
 							}
 						}  
@@ -738,7 +753,7 @@ public class RespondToStrategy {
 	   						if (!firstChokeExpHalfTurret) {
 	   							if(BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,firstChokeExpHalf.toTilePosition(), 150) 
 	   									+ ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, firstChokeExpHalf.toTilePosition(), 150) == 0){
-	   								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, firstChokeExpHalf.toTilePosition(), true);
+//	   								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, firstChokeExpHalf.toTilePosition(), true);
 	   							}
 	   						}
 						}
@@ -757,7 +772,7 @@ public class RespondToStrategy {
  							if (!secondChokeTurret) {
  								if(BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, temp2ChokePoint.getCenter().toTilePosition(), 100) 
  										+ ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, temp2ChokePoint.getCenter().toTilePosition(), 100) == 0){
- 									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,  temp2ChokePoint.getCenter().toTilePosition(), true);
+// 									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,  temp2ChokePoint.getCenter().toTilePosition(), true);
  								}
  							}
  						}
@@ -855,7 +870,7 @@ public class RespondToStrategy {
 						if (build_turret_cnt < max_turret_to_mutal) {
 							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, mainBase.getPosition().toTilePosition(), 300) < 1
 									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret,	mainBase.getPosition().toTilePosition(), 300) == 0) {
-								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, mainBase.getPosition().toTilePosition(),true);
+//								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, mainBase.getPosition().toTilePosition(),true);
 							}
 						}
 					}
@@ -873,7 +888,7 @@ public class RespondToStrategy {
 							if (build_turret_cnt < max_turret_to_mutal) {
 								if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, expBase.getPosition().toTilePosition(), 300) < 1
 										&& ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret,	expBase.getPosition().toTilePosition(), 300) == 0) {
-									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, expBase.getPosition().toTilePosition(),true);
+//									BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret, expBase.getPosition().toTilePosition(),true);
 								}
 							}
 						}
