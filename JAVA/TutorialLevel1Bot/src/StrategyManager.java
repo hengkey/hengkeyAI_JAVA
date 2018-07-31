@@ -2632,15 +2632,15 @@ public class StrategyManager {
 				}
 
 				// 멀티이후 Command_Center 근처에 일정양의 미사일터렛을 건설한다.
-				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
-					if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-							unit.getTilePosition(), 180)
-							+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
-									UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
-						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
-								unit.getTilePosition(), false);
-					}
-				}
+//				if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
+//					if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+//							unit.getTilePosition(), 180)
+//							+ ConstructionManager.Instance().getConstructionQueueItemCountNear(
+//									UnitType.Terran_Missile_Turret, unit.getTilePosition(), 180) == 0) {
+//						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Missile_Turret,
+//								unit.getTilePosition(), false);
+//					}
+//				}
 			}
 		}
 		if (CCcnt >= MaxCCcount) {
