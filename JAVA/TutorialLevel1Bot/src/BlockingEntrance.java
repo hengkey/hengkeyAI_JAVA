@@ -380,9 +380,9 @@ public class BlockingEntrance {
 		{
             System.out.println("FightingSpririts "+ InformationManager.Instance().enemyRace);
             
-			int[] fix_supplyXX = { 0, 122, 108, 0 };
+			int[] fix_supplyXX = { 0, 112, 102, 0 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 15, 17, 118, 102 };
+			int[] fix_supplyYY = { 15, 17, 118, 95 };
 			fix_supplyY = fix_supplyYY;
 			
 			if (InformationManager.Instance().enemyRace == Race.Protoss ||
@@ -403,9 +403,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
 				
-				int[] factoryXX_array = { 11, 104, 104, 11 };
+				int[] factoryXX_array = { 11, 105, 100, 12 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 0, 106, 107 };
+				int[] factoryYY_array = { 12, 0, 107, 105 };
 				factoryY_array = factoryYY_array;
 				
 				int[] bunkerXX_array = { 13, 100, 111, 25 };
@@ -452,9 +452,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
 				
-				int[] factoryXX_array = { 11, 104, 104, 11 };
+				int[] factoryXX_array = { 11, 105, 100, 12 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 0, 106, 107 };
+				int[] factoryYY_array = { 12, 0, 107, 105 };
 				factoryY_array = factoryYY_array;
 				
 				int[] bunkerXX_array = { 13, 100, 111, 25 };
