@@ -1,6 +1,7 @@
 /* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import bwapi.Color;
@@ -50,6 +51,7 @@ public class WorkerManager {
 				handleMoveWorkers();
 				handleCombatWorkers();
 				handleRepairWorkers();
+				handleRemoveMineWorkers();
 			}
 		}else {
 			if (MyBotModule.Broodwar.getFrameCount() % 19 == 0){
@@ -67,6 +69,7 @@ public class WorkerManager {
 				handleMoveWorkers();
 				handleCombatWorkers();
 				handleRepairWorkers();
+				handleRemoveMineWorkers();
 			}
 		}
 	}
@@ -384,6 +387,36 @@ public class WorkerManager {
 				{
 					commandUtil.attackUnit(worker, target);
 				}
+			}
+		}
+	}
+	
+	public void handleRemoveMineWorkers() {	
+		List<Unit> selfUnit = MapGrid.Instance().getUnitsNear(
+				InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer)
+						.getPosition(),
+				MicroSet.Vulture.MULTIGEURILLA_RADIUS / 3, true, false, UnitType.Terran_Vulture_Spider_Mine);
+
+		for (Unit unit : selfUnit) {
+//			System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+//					+ new Exception().getStackTrace()[0].getLineNumber());
+			if (unit.getType() == UnitType.Terran_Vulture_Spider_Mine) {
+//				System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
+				
+				Unit worker=getRemoveMineWorker();
+				if(worker==null) {
+					worker = WorkerManager.Instance().chooseRepairWorkerClosestTo(unit, 0);
+					if (worker == null)
+						continue;
+					WorkerManager.Instance().setRemoveMineWorker(worker);
+				}
+
+				commandUtil.attackUnit(worker, unit);
+
+				MyBotModule.Broodwar.drawTextMap(worker.getPosition().getX(), worker.getPosition().getY() + 10,
+						"RemoveMine");
+				MyBotModule.Broodwar.drawCircleMap(worker.getPosition(), 10, Color.Purple, true);
 			}
 		}
 	}
@@ -822,7 +855,17 @@ public class WorkerManager {
 
 		return chosenWorker;
 	}
-	
+		
+	public Unit getRemoveMineWorker() {
+		// for each of our workers
+		for (Unit worker : workerData.getWorkers()) {
+			if (workerData.getWorkerJob(worker) == WorkerData.WorkerJob.RemoveMine) {
+				return worker;
+			}
+		}
+
+		return null;
+	}
 
 	/// Mineral 혹은 Idle 일꾼 유닛들 중에서 Scout 임무를 수행할 일꾼 유닛을 정해서 리턴합니다
 	public Unit getScoutWorker()
@@ -954,7 +997,15 @@ public class WorkerManager {
 
 		workerData.setWorkerJob(worker, WorkerData.WorkerJob.Combat, (Unit)null);
 	}
+	
+	/// 해당 일꾼 유닛에게 mine 제거 임무를 부여합니다
+	public void setRemoveMineWorker(Unit worker)
+	{
+		if (worker == null) return;
 
+		workerData.setWorkerJob(worker, WorkerData.WorkerJob.RemoveMine, (Unit)null);
+	}
+	
 	/// 모든 Combat 일꾼 유닛에 대해 임무를 해제합니다
 	public void stopCombat()
 	{
@@ -1113,6 +1164,11 @@ public class WorkerManager {
 		if (worker == null) return false;
 
 		return (workerData.getWorkerJob(worker) == WorkerData.WorkerJob.Build);
+	}
+	
+	public int getNumRemoveMineWorkers() 
+	{
+		return workerData.getNumRemoveMineWorkers();	
 	}
 
 	public int getNumMineralWorkers() 

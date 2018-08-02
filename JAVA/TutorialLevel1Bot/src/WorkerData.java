@@ -21,6 +21,7 @@ public class WorkerData {
 		Gas,			///< 가스 채취
 		Build,			///< 건물 건설
 		Combat, 		///< 전투
+		RemoveMine, 	///< mine 제거
 		Idle,			///< 하는 일 없음. 대기 상태. 
 		Repair,			///< 수리. Terran_SCV 만 가능
 		Move,			///< 이동
@@ -411,6 +412,19 @@ public class WorkerData {
 		return workers.size();
 	}
 
+	public final int getNumRemoveMineWorkers()
+	{
+		int num = 0;
+		for (Unit unit : workers)
+		{
+			if (workerJobMap.get(unit.getID()) == WorkerData.WorkerJob.RemoveMine)
+			{
+				num++;
+			}
+		}
+		return num;
+	}
+	
 	public final int getNumMineralWorkers()
 	{
 		int num = 0;
