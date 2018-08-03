@@ -1,4 +1,4 @@
-/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
+//# Prebot (피뿌리는컴파일러 / 알고리즘 경진대회 2017)
 
 import bwapi.Race;
 import bwapi.TechType;
@@ -59,8 +59,6 @@ public class InitialBuild {
 			queueBuild(false, UnitType.Terran_Vulture);
 			queueBuild(true, UnitType.Terran_Siege_Tank_Tank_Mode);
 			queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
-
-		
 		}
 		else if (InformationManager.Instance().enemyRace == Race.Protoss) 
 		{

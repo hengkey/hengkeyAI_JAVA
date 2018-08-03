@@ -23,7 +23,7 @@ public class Squad {
 	private int priority;
 	private boolean pushLine;
 	
-	public MicroScv microScv = new MicroScv();
+//	public MicroScv microScv = new MicroScv();
 	public MicroMarine microMarine = new MicroMarine();
 	public MicroVulture microVulture = new MicroVulture();
 	public MicroTank microTank = new MicroTank();
@@ -100,7 +100,7 @@ public class Squad {
 			}
 		}
 		
-		microScv.setMicroInformation(order, nearbyEnemies);
+//		microScv.setMicroInformation(order, nearbyEnemies);
 		microMarine.setMicroInformation(order, nearbyEnemies);
 		microVulture.setMicroInformation(order, nearbyEnemies);
 		microTank.setMicroInformation(order, nearbyEnemies);
@@ -109,7 +109,7 @@ public class Squad {
 		microVessel.setMicroInformation(order, nearbyEnemies);
 		microBuilding.setMicroInformation(order, nearbyEnemies);
 		
-		microScv.execute();
+//		microScv.execute();
 		microMarine.execute();
 		microVulture.execute();
 		microTank.execute();
@@ -518,7 +518,7 @@ public class Squad {
 			}
 		}
 
-		microScv.setUnits(scvUnits);
+//s		microScv.setUnits(scvUnits);
 		microMarine.setUnits(marineUnits);
 		microVulture.setUnits(vultureUnits);
 		microTank.setUnits(tankUnits);
