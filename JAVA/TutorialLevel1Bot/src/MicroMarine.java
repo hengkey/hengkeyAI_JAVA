@@ -80,8 +80,8 @@ public class MicroMarine extends MicroManager {
 		} 
 		else 
 		{			
-			Position bunkerpos = bunker.getPosition();
-			kitingOption.setGoalPosition(bunkerpos);
+			//Position bunkerpos = bunker.getPosition();
+			//kitingOption.setGoalPosition(bunkerpos);
 			for (Unit marine : marines) 
 			{
 				/* koba

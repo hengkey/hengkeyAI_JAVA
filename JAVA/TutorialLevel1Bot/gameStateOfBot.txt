@@ -1,14 +1,14 @@
-hengkey
-Epsilon Squadron
-[(4)CircuitBreakers+1.0].scm
-97308
-8100
+hengko
+Sargas Tribe
+(4)Spirit.scx
+14400
+4900
 0
-1949555
-1
+290675
+-1
+-1
 0
-1
-1
-1
+0
+3
 0
 0
