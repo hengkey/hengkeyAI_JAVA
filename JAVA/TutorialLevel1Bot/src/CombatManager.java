@@ -637,6 +637,13 @@ public class CombatManager {
 				if(InformationManager.Instance().getFirstExpansionLocation(enemyPlayer)!=null){
 					scanArea.add(InformationManager.Instance().getSecondChokePoint(enemyPlayer).getCenter().toTilePosition());
 				}
+				
+				// 앞마당 멀티외 가장 가까운 가능멀티지역 2개 추가
+				if(InformationManager.Instance().getOtherExpansionLocations(enemyPlayer)!=null){
+					scanArea.add(InformationManager.Instance().getOtherExpansionLocations(enemyPlayer).get(0).getTilePosition());
+					scanArea.add(InformationManager.Instance().getOtherExpansionLocations(enemyPlayer).get(1).getTilePosition());
+				}
+				
 				if(MyBotModule.Broodwar.getFrameCount() > 20000){
 					if(InformationManager.Instance().getIslandBaseLocations() !=null ){
 						for(BaseLocation islands : InformationManager.Instance().getIslandBaseLocations()){
@@ -1821,14 +1828,14 @@ public class CombatManager {
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			} else {
 				for (Unit assignableVulture : assignableVultures) {
-					System.out.println("putSquad " + assignableVulture.getType().toString() + " "
-							+ new Exception().getStackTrace()[0].getLineNumber());
+//					System.out.println("putSquad " + assignableVulture.getType().toString() + " "
+//							+ new Exception().getStackTrace()[0].getLineNumber());
 					squadData.assignUnitToSquad(assignableVulture, guerillaSquad);
 				}
 				
 				VultureTravelManager.Instance().guerillaStart(squadName);
-				System.out.println("putSquad " + guerillaSquad.toString() + " "
-						+ new Exception().getStackTrace()[0].getLineNumber());
+//				System.out.println("putSquad " + guerillaSquad.toString() + " "
+//						+ new Exception().getStackTrace()[0].getLineNumber());
 			}
 		}
 		

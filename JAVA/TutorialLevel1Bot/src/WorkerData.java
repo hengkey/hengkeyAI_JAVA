@@ -335,7 +335,8 @@ public class WorkerData {
 	{
 		if (unit == null) { return; }
 
-		//System.out.println("setWorkerJob "+ unit.getID() + " from " + workerJobMap.get(unit.getID()).ordinal() + " to " + job.ordinal());
+		System.out.println("setWorkerJob " + unit.getID() + " from " + workerJobMap.get(unit.getID()).ordinal() + " to "
+				+ job.ordinal() + " " + jobUnitType);
 		
 		clearPreviousJob(unit);
 		workerJobMap.put(unit.getID(), job);

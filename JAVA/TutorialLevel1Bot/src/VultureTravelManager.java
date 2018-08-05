@@ -293,6 +293,8 @@ public class VultureTravelManager {
 //							MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White, false);
 				}
 			}
+			if (bestTravelSite != null)
+				break;
 		}
 
 		if (bestTravelSite != null) {

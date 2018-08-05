@@ -115,7 +115,7 @@ public class Config {
 	/// 화면 표시 여부 - 정찰 상태
 	public static boolean DrawScoutInfo = false;
 	/// 화면 표시 여부 - 일꾼 목록
-	public static boolean DrawWorkerInfo = false;
+	public static boolean DrawWorkerInfo = true;
 	
 	/// 화면 표시 여부 - 마우스 커서	
 	public static boolean DrawMouseCursorInfo = true;

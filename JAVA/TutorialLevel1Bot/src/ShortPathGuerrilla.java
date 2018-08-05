@@ -108,9 +108,9 @@ public class ShortPathGuerrilla {
 	}
 	
 	public void setPathMapValidFlag(boolean flag) {
-		System.out.println(
-				"{" + this.sourcePos.toTilePosition().toString() + "=>" + this.targetPos.toTilePosition().toString()
-						+ "}" + " " + new Exception().getStackTrace()[0].getLineNumber());
+//		System.out.println(
+//				"{" + this.sourcePos.toTilePosition().toString() + "=>" + this.targetPos.toTilePosition().toString()
+//						+ "}" + " " + new Exception().getStackTrace()[0].getLineNumber());
 
 		//양방향에 모두 적용 함.
 		if (pathMap.get("{" + this.sourcePos.toTilePosition().toString() + "=>"

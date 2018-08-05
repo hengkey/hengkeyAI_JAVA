@@ -231,9 +231,9 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 					tmpShortPathGuerrilla.setTargetPos(movePosition);
 //					attackIgnoreFrame = 1000;
 //					preDistanceFromEnemy = vulture.getDistance(enemyInfo.getUnit().getPosition());
-					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
-							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
-							+ movePosition.toTilePosition().toString());
+//					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
+//							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
+//							+ movePosition.toTilePosition().toString());
 					if (Config.DrawHengDebugInfo)
 					MyBotModule.Broodwar.drawCircleMap(enemyInfo.getUnit().getPosition(),
 							UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 100, Color.Red, false);
