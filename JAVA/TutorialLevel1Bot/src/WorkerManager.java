@@ -2,7 +2,6 @@
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import bwapi.Color;
 import bwapi.Position;
@@ -11,6 +10,7 @@ import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import bwta.BWTA;
+import bwta.BaseLocation;
 
 /// 일꾼 유닛들의 상태를 관리하고 컨트롤하는 class
 public class WorkerManager {
@@ -392,31 +392,78 @@ public class WorkerManager {
 	}
 	
 	public void handleRemoveMineWorkers() {	
-		List<Unit> selfUnit = MapGrid.Instance().getUnitsNear(
-				InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer)
-						.getPosition(),
-				MicroSet.Vulture.MULTIGEURILLA_RADIUS / 3, true, false, UnitType.Terran_Vulture_Spider_Mine);
+		int RealCCcnt = MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center);
+		// 앞마당 전
+		if (RealCCcnt == 2) {// TODO 이거 손봐야된다... 만약 위로 띄어서 해야한다면?? 본진에 지어진거 카운트 안되는 상황에서 앞마당에 지어버리겟네
+			List<Unit> selfUnit = MapGrid.Instance().getUnitsNear(
+					InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer)
+							.getPosition(),
+					MicroSet.Vulture.MULTIGEURILLA_RADIUS / 3, true, false, UnitType.Terran_Vulture_Spider_Mine);
 
-		for (Unit unit : selfUnit) {
-//			System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
-//					+ new Exception().getStackTrace()[0].getLineNumber());
-			if (unit.getType() == UnitType.Terran_Vulture_Spider_Mine) {
-//				System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
-//						+ new Exception().getStackTrace()[0].getLineNumber());
-				
-				Unit worker=getRemoveMineWorker();
-				if(worker==null) {
-					worker = WorkerManager.Instance().chooseRepairWorkerClosestTo(unit, 0);
-					if (worker == null)
-						continue;
-					WorkerManager.Instance().setRemoveMineWorker(worker);
+			for (Unit unit : selfUnit) {
+				// System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+				// + new Exception().getStackTrace()[0].getLineNumber());
+				if (unit.getType() == UnitType.Terran_Vulture_Spider_Mine) {
+					// System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+					// + new Exception().getStackTrace()[0].getLineNumber());
+
+					Unit worker = getRemoveMineWorker();
+					if (worker == null) {
+						worker = WorkerManager.Instance().chooseRepairWorkerClosestTo(unit, 0);
+						if (worker == null)
+							continue;
+						WorkerManager.Instance().setRemoveMineWorker(worker);
+					}
+					
+					commandUtil.attackUnit(worker, unit);
+					if (Config.DrawHengDebugInfo)
+					MyBotModule.Broodwar.drawTextMap(worker.getPosition().getX(), worker.getPosition().getY() + 10,
+							"RemoveMine");
+					if (Config.DrawHengDebugInfo)
+					MyBotModule.Broodwar.drawCircleMap(worker.getPosition(), 10, Color.Purple, true);
 				}
+			}
+		}
+		// 앞마당 이후
+		if (RealCCcnt >= 2) {
+			List<BaseLocation> baseLocationList = InformationManager.Instance()
+					.getOtherExpansionLocations(InformationManager.Instance().selfPlayer);
+			List<Unit> selfUnit = null;
+			BaseLocation baseLocation = null;
+			for (BaseLocation tmpBaseLocation : baseLocationList) {
+				selfUnit = MapGrid.Instance().getUnitsNear(tmpBaseLocation.getPosition(),
+						MicroSet.Vulture.MULTIGEURILLA_RADIUS / 3, true, false, UnitType.Terran_Command_Center);
+				if (selfUnit.size() == 0) {
+					baseLocation = tmpBaseLocation;
+					break;
+				}
+			}
 
-				commandUtil.attackUnit(worker, unit);
+			selfUnit = MapGrid.Instance().getUnitsNear(baseLocation.getPosition(),
+					MicroSet.Vulture.MULTIGEURILLA_RADIUS / 3, true, false, UnitType.Terran_Vulture_Spider_Mine);
 
-				MyBotModule.Broodwar.drawTextMap(worker.getPosition().getX(), worker.getPosition().getY() + 10,
-						"RemoveMine");
-				MyBotModule.Broodwar.drawCircleMap(worker.getPosition(), 10, Color.Purple, true);
+			for (Unit unit : selfUnit) {
+				// System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+				// + new Exception().getStackTrace()[0].getLineNumber());
+				if (unit.getType() == UnitType.Terran_Vulture_Spider_Mine) {
+					// System.out.println("handleRemoveMineWorkers!!!!!!!!!" + unit.getType() + " "
+					// + new Exception().getStackTrace()[0].getLineNumber());
+
+					Unit worker = getRemoveMineWorker();
+					if (worker == null) {
+						worker = WorkerManager.Instance().chooseRepairWorkerClosestTo(unit, 0);
+						if (worker == null)
+							continue;
+						WorkerManager.Instance().setRemoveMineWorker(worker);
+					}
+
+					commandUtil.attackUnit(worker, unit);
+					if (Config.DrawHengDebugInfo)
+					MyBotModule.Broodwar.drawTextMap(worker.getPosition().getX(), worker.getPosition().getY() + 10,
+							"RemoveMine");
+					if (Config.DrawHengDebugInfo)
+					MyBotModule.Broodwar.drawCircleMap(worker.getPosition(), 10, Color.Purple, true);
+				}
 			}
 		}
 	}

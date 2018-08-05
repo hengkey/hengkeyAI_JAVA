@@ -367,6 +367,7 @@ public class Squad {
 	private void updateMultiGuerillaSquad() {
 		List<UnitInfo> vultureEnemies = new ArrayList<>();
 
+		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawCircleMap(order.getPosition(), 100, Color.Orange, false);
 		
 		int saveUnitLevel = 0;

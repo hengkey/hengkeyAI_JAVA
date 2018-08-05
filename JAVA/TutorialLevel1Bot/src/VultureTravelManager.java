@@ -297,6 +297,7 @@ public class VultureTravelManager {
 
 		if (bestTravelSite != null) {
 			// System.out.println();
+			if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(bestTravelSite.baseLocation.getPosition(),
 					MicroSet.Vulture.MULTIGEURILLA_RADIUS, Color.White, false);
 			return bestTravelSite.baseLocation;

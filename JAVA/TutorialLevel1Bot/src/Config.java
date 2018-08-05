@@ -120,7 +120,8 @@ public class Config {
 	/// 화면 표시 여부 - 마우스 커서	
 	public static boolean DrawMouseCursorInfo = true;
 	
-	
+	/// heng이 임의로 추가한 정보	
+	public static boolean DrawHengDebugInfo = false;
 
 	public static final Color ColorLineTarget = Color.White;
 	public static final Color ColorLineMineral = Color.Cyan;

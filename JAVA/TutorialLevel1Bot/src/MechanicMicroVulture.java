@@ -60,9 +60,10 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 		if (!CommonUtils.executeUnitRotation(vulture, LagObserver.groupsize())) {
 			return;
 		}
-		
+		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
 				"" + order.getType());
+		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawCircleMap(vulture.getPosition(), 10, Color.Cyan, true);
 		
 		MechanicMicroDecision decision = MechanicMicroDecision.makeDecision(vulture, enemiesInfo, null, saveUnitLevel); // 0: flee, 1: kiting, 2: attack
@@ -233,6 +234,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
 							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
 							+ movePosition.toTilePosition().toString());
+					if (Config.DrawHengDebugInfo)
 					MyBotModule.Broodwar.drawCircleMap(enemyInfo.getUnit().getPosition(),
 							UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 100, Color.Red, false);
 					break;
@@ -252,6 +254,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 			// System.out.println("move to " + movePosition.toTilePosition().toString() + "
 			// "
 			// + new Exception().getStackTrace()[0].getLineNumber());
+			if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 5, Color.Blue,
 					false);
 		} else { // ¸ñÀûÁö µµÂø
@@ -274,13 +277,15 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 //				vulture.holdPosition();
 //				System.out.println("hold to " + workers.get(0).getType() + vulture.getTilePosition().toString() + " "
 //						+ new Exception().getStackTrace()[0].getLineNumber());
+				if (Config.DrawHengDebugInfo)
 				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4,
 						Color.Orange, false);
 			}
 		}
-		
+		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
 				order.getType() + order.getPosition().toTilePosition().toString());
+		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawCircleMap(vulture.getPosition(), 10, Color.Orange, true);
 	}
 	

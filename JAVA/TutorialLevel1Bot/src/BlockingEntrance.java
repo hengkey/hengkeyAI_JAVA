@@ -271,9 +271,9 @@ public class BlockingEntrance {
 			}
 		} else if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) 
 		{
-			int[] fix_supplyXX = { 0, 96, 97, 8 };
+			int[] fix_supplyXX = { 0, 96, 98, 8 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 0, 0, 123, 121 };
+			int[] fix_supplyYY = { 0, 0, 122, 121 };
 			fix_supplyY = fix_supplyYY;
 		 				
 			if (InformationManager.Instance().enemyRace == Race.Protoss 	|| 

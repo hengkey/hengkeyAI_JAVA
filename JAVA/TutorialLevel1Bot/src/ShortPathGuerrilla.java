@@ -177,8 +177,10 @@ public class ShortPathGuerrilla {
 						// + list[i].get(0).y + ")" + " " + new
 						// Exception().getStackTrace()[0].getLineNumber());
 						// System.out.print("(" + i + ")");
+						if (Config.DrawHengDebugInfo)
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Red, true);
 					} else {
+						if (Config.DrawHengDebugInfo)
 						MyBotModule.Broodwar.drawCircleMap(tmpPos, 10, Color.Green, true);
 					}
 				}
@@ -223,7 +225,9 @@ public class ShortPathGuerrilla {
 		
 		//탐색위치 무게값 출력
 		for (String iterator : posMap.keySet()) {
+			if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(posMap.get(iterator).Pos.toPosition(), 10, Color.Green, true);
+			if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawTextMap(posMap.get(iterator).Pos.toPosition(),
 					posMap.get(iterator).Pos.toString() + "(" + posMap.get(iterator).weightValue + ")");
 //			System.out.println(posMap.get(iterator).Pos.toString() + "(" + posMap.get(iterator).weightValue + ")");
@@ -232,9 +236,11 @@ public class ShortPathGuerrilla {
 		//탐색 path 정보 출력
 		for (String iterator : pathMap.keySet()) {
 			if (!pathMap.get(iterator).enemyValidFlag || !pathMap.get(iterator).validFlag) {
+				if (Config.DrawHengDebugInfo)
 				MyBotModule.Broodwar.drawLineMap(pathMap.get(iterator).srcPos.toPosition(),
 						pathMap.get(iterator).targetPos.toPosition(), Color.Yellow);
 			} else {
+				if (Config.DrawHengDebugInfo)
 				MyBotModule.Broodwar.drawLineMap(pathMap.get(iterator).srcPos.toPosition(),
 						pathMap.get(iterator).targetPos.toPosition(), Color.Blue);
 			}
