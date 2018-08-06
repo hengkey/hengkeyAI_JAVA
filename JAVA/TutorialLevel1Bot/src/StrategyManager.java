@@ -882,9 +882,9 @@ public class StrategyManager {
 					}
 				}
 
-				if (WorkerManager.Instance().getWorkerData().getNumAssignedWorkers(unit) > 8) {
+//				if (WorkerManager.Instance().getWorkerData().getNumAssignedWorkers(unit) > 8) {
 					CC++;
-				}
+//				}
 			}
 			// °¡½º end
 		}
