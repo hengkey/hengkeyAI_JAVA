@@ -2848,6 +2848,25 @@ public class StrategyManager {
 
 	private void executeFly() {
 
+		//필요없는 건물은 공간확보를 위해 lift한다.
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+		{
+			if((unit.getType() == UnitType.Terran_Engineering_Bay) && unit.isCompleted())
+			{
+				unit.lift();
+			}
+			
+			if((unit.getType() == UnitType.Terran_Starport) && unit.isCompleted())
+			{
+				unit.lift();
+			}
+			
+			if((unit.getType() == UnitType.Terran_Science_Facility) && unit.isCompleted())
+			{
+				unit.lift();
+			}
+		}
+		
 		if ((MyBotModule.Broodwar.getFrameCount() > 5000) &&
 		    (MyBotModule.Broodwar.getFrameCount() < 11000))
 		{
