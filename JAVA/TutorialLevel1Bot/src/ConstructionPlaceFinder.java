@@ -777,7 +777,8 @@ public class ConstructionPlaceFinder {
 				}
 				
 				//supply 고정 위치(21*6)에 짓지 않도록 check
-				if (b.getType() != UnitType.Terran_Supply_Depot) {
+				if (b.getType() != UnitType.Terran_Supply_Depot
+						&& InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) {
 					if (x >= BlockingEntrance.Instance().fixSuppleX && x <= BlockingEntrance.Instance().fixSuppleX + 21
 							&& y >= BlockingEntrance.Instance().fixSuppleY
 							&& y <= BlockingEntrance.Instance().fixSuppleY + 6) {
