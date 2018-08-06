@@ -34,6 +34,9 @@ public class BlockingEntrance {
 	public int second_suppleX = 0;
 	public int second_suppleY = 0;
 	
+	public int fixSuppleX = 0;
+	public int fixSuppleY = 0;
+	
 	public int barrackX = 0;
 	public int barrackY = 0;
 	
@@ -602,6 +605,9 @@ public class BlockingEntrance {
 		turret1X = turret1X_array[starting_int];
 		turret1Y = turret1Y_array[starting_int];
 
+		fixSuppleX = fix_supplyX[starting_int];
+		fixSuppleY = fix_supplyY[starting_int];
+		
 		ConstructionPlaceFinder.Instance().setTilesToAvoidSupply();
 	}
 	
