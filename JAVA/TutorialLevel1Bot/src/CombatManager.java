@@ -1804,13 +1804,30 @@ public class CombatManager {
 //				MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
 
 				assignableVultures.add(unit);
-				if (assignableVultures.size() >= 4)
+				if (assignableVultures.size() >= 2)
 					break;
 			}
 		}
 		
 		// 1. Travel Site에 대한 처리
 		BaseLocation bestGuerillaSite = VultureTravelManager.Instance().getBestMultiGuerillaSite(assignableVultures);
+		
+		// 없으면 무조건 멀티를 견제한다.
+//		if(bestGuerillaSite == null)
+//		{
+//			BaseLocation tmpBestGuerillaSite = InformationManager.Instance()
+//					.getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
+//			List<UnitInfo> enemiesInfo = InformationManager.Instance().getNearbyForce(tmpBestGuerillaSite.getPosition(),
+//					InformationManager.Instance().enemyPlayer, 100, true);
+//
+//			List<UnitInfo> selfInfo = InformationManager.Instance().getNearbyForce(tmpBestGuerillaSite.getPosition(),
+//					InformationManager.Instance().enemyPlayer, 100, true);
+//
+//			if (enemiesInfo.isEmpty() && selfInfo.isEmpty()) { // 적군,아군이 모두 없으면 마인박으러 감
+//				bestGuerillaSite = tmpBestGuerillaSite;
+//			}
+//		}
+		
 		if (bestGuerillaSite != null) {
 			String squadName = SquadName.MULTIGUERILLA_ + bestGuerillaSite.getPosition().toTilePosition().toString();
 			Squad guerillaSquad = squadData.getSquad(squadName);
