@@ -310,9 +310,9 @@ public class BlockingEntrance {
 			    int[] bunkerYY_array = { 22, 22, 104, 104 };
 			    bunkerY_array = bunkerYY_array;
 
-				int[] engineeringXX_array = { 4, 123, 123, 5 };
+				int[] engineeringXX_array = { 4, 123, 117, 5 };
 			    engineeringX_array = engineeringXX_array;
-			    int[] engineeringYY_array = { 18, 18, 127, 110 };
+			    int[] engineeringYY_array = { 18, 18, 110, 110 };
 			    engineeringY_array = engineeringYY_array;
 			    
 			    int[] turret1XX_array = {7, 116, 116, 10};
