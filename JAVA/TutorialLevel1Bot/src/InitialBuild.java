@@ -28,6 +28,7 @@ public class InitialBuild {
 		TilePosition factoryPos2    = new TilePosition(BlockingEntrance.Instance().factoryX+7,BlockingEntrance.Instance().factoryY);
 		TilePosition factoryPos3    = new TilePosition(BlockingEntrance.Instance().factoryX,BlockingEntrance.Instance().factoryY+3);
 		TilePosition bunkerPos      = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
+		TilePosition turret1Pos     = new TilePosition(BlockingEntrance.Instance().turret1X,BlockingEntrance.Instance().turret1Y);
 		TilePosition engineeringPos = new TilePosition(BlockingEntrance.Instance().build_engineeringX,BlockingEntrance.Instance().build_engineeringY);
 		 
 		if (InformationManager.Instance().enemyRace == Race.Terran) 
@@ -78,6 +79,8 @@ public class InitialBuild {
 			queueBuild(false, UnitType.Terran_Marine);
 			queueBuild(false, UnitType.Terran_Marine);
 			queueBuild(false, UnitType.Terran_Marine);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,turret1Pos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 			queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);

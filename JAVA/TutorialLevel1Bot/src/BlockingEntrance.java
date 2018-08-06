@@ -83,6 +83,9 @@ public class BlockingEntrance {
 	private static int turretX_array[][] = null;
 	private static int turretY_array[][] = null;
 	
+	private static int turret1X_array[] = null;
+	private static int turret1Y_array[] = null;
+	
 	private int starting_int = 0;
 
 	private static BlockingEntrance instance = new BlockingEntrance();
@@ -309,6 +312,11 @@ public class BlockingEntrance {
 			    int[] engineeringYY_array = { 18, 18, 127, 110 };
 			    engineeringY_array = engineeringYY_array;
 			    
+			    int[] turret1XX_array = {7, 116, 116, 10};
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = {22, 23, 103, 103};
+			    turret1Y_array = turret1YY_array;
+			    
 			    int[][] turretXX_array = {
 			    		{ 30, 30,  25,  22,  22,  22,  20,  17,  11,   0},
 			    		{ 96, 96, 100, 104, 104, 104, 108, 115, 125, 125},
@@ -357,6 +365,11 @@ public class BlockingEntrance {
 			    engineeringX_array = engineeringXX_array;
 			    int[] engineeringYY_array = { 18, 18, 110, 110 };
 			    engineeringY_array = engineeringYY_array;
+			    
+			    int[] turret1XX_array = {7, 116, 116, 10};
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = {22, 23, 103, 103};
+			    turret1Y_array = turret1YY_array;
 			    
 			    int[][] turretXX_array = {
 			    		{ 30, 30,  25,  22,  22,  22,  20,  17,  11,   0},
@@ -417,6 +430,11 @@ public class BlockingEntrance {
 			    engineeringX_array = engineeringXX_array;
 			    int[] engineeringYY_array = { 18, 14, 123, 122 };
 			    engineeringY_array = engineeringYY_array;			    
+			    
+			    int[] turret1XX_array = {4, 103, 109, 23};
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = {31, 6, 101, 121};
+			    turret1Y_array = turret1YY_array;
 				
 			    int[][] turretXX_array = {
 			    		{ 22, 21,  21,  23,  25,  25,  26,  22,  16,   0},
@@ -465,7 +483,12 @@ public class BlockingEntrance {
 				int[] engineeringXX_array = { 4, 117, 117, 9 };
 			    engineeringX_array = engineeringXX_array;
 			    int[] engineeringYY_array = { 18, 14, 123, 122 };
-			    engineeringY_array = engineeringYY_array;			    
+			    engineeringY_array = engineeringYY_array;	
+			    
+			    int[] turret1XX_array = {16, 103, 109, 23};
+			    turret1X_array = turret1XX_array;
+			    int[] turret1YY_array = {27, 6, 101, 121};
+			    turret1Y_array = turret1YY_array;
 				
 			    int[][] turretXX_array = {
 			    		{ 22, 21,  21,  23,  25,  25,  26,  22,  16,   0},
@@ -575,6 +598,9 @@ public class BlockingEntrance {
 		
 		turretX = turretX_array[starting_int];
 		turretY = turretY_array[starting_int];
+		
+		turret1X = turret1X_array[starting_int];
+		turret1Y = turret1Y_array[starting_int];
 
 		ConstructionPlaceFinder.Instance().setTilesToAvoidSupply();
 	}
