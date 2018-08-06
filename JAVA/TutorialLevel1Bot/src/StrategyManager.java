@@ -1015,7 +1015,7 @@ public class StrategyManager {
 		// engineering end2
 
 		// scienceVessel start
-		if ((RespondToStrategy.Instance().need_vessel == true && CC >= 1) || CC >= 2) {
+		if ((RespondToStrategy.Instance().need_vessel == true && CC >= 2) || CC >= 3) {
 			if (star == false) {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Starport) == 0
 						&& ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Starport,
@@ -1053,11 +1053,21 @@ public class StrategyManager {
 					}
 				}
 			}
+
+			// armory start1
+			if (armorycnt < 2) {
+				if (CC >= 2 || MyBotModule.Broodwar.getFrameCount() > 15000) {
+					if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Armory) == 0 && ConstructionManager
+							.Instance().getConstructionQueueItemCount(UnitType.Terran_Armory, null) == 0) {
+						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Armory, false);
+					}
+				}
+			}
 		}
 		// scienceVessel end
 
 		// armory start1
-		if (armorycnt < 2) {
+		if (armorycnt < 1) {
 			if (CC >= 2 || MyBotModule.Broodwar.getFrameCount() > 15000) {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Armory) == 0 && ConstructionManager
 						.Instance().getConstructionQueueItemCount(UnitType.Terran_Armory, null) == 0) {
@@ -2949,6 +2959,21 @@ public class StrategyManager {
 		}
 		else 
 		{
+			// 두번째 서플라이 짓고 scv가 울베로 못들어오는 현상 보완
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) == 2
+					&& firstBRLiftPersistantTime < 10) {
+				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+					if (unit.isLifted() == false && unit.getType() == UnitType.Terran_Barracks && unit.isCompleted()) {
+						unit.lift();
+						LiftChecker = true;
+					}
+				}
+				firstBRLiftPersistantTime++;
+				// MyBotModule.Broodwar.sendText("firstBRLiftPersistantTime=" +
+				// firstBRLiftPersistantTime + " "
+				// + new Exception().getStackTrace()[0].getLineNumber());
+			}
+			
 			// 2nd Supply 완성하고 SCV가 밖으로 나가면 못들어 오니까 잠깐 들었다가 놓자
 			if((MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) <= 2) &&
 			   (MyBotModule.Broodwar.getFrameCount() < 2000))
