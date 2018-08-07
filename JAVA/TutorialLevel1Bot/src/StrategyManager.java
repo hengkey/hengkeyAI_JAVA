@@ -2960,18 +2960,21 @@ public class StrategyManager {
 		else 
 		{
 			// 두번째 서플라이 짓고 scv가 울베로 못들어오는 현상 보완
-			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) == 2
-					&& firstBRLiftPersistantTime < 10) {
-				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-					if (unit.isLifted() == false && unit.getType() == UnitType.Terran_Barracks && unit.isCompleted()) {
-						unit.lift();
-						LiftChecker = true;
+			if (InformationManager.Instance().enemyRace == Race.Terran) {
+				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) == 2
+						&& firstBRLiftPersistantTime < 10) {
+					for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+						if (unit.isLifted() == false && unit.getType() == UnitType.Terran_Barracks
+								&& unit.isCompleted()) {
+							unit.lift();
+							LiftChecker = true;
+						}
 					}
+					firstBRLiftPersistantTime++;
+					// MyBotModule.Broodwar.sendText("firstBRLiftPersistantTime=" +
+					// firstBRLiftPersistantTime + " "
+					// + new Exception().getStackTrace()[0].getLineNumber());
 				}
-				firstBRLiftPersistantTime++;
-				// MyBotModule.Broodwar.sendText("firstBRLiftPersistantTime=" +
-				// firstBRLiftPersistantTime + " "
-				// + new Exception().getStackTrace()[0].getLineNumber());
 			}
 			
 			// 2nd Supply 완성하고 SCV가 밖으로 나가면 못들어 오니까 잠깐 들었다가 놓자
