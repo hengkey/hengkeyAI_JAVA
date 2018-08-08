@@ -98,11 +98,14 @@ public class InitialBuild {
 	        queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
 	        BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
 	        queueBuild(false, UnitType.Terran_SCV);
-	        queueBuild(true, UnitType.Terran_Marine);
 	        queueBuild(true, UnitType.Terran_Refinery);
-	        queueBuild(false, UnitType.Terran_Marine);
+	        queueBuild(true, UnitType.Terran_Marine);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
+	        queueBuild(false, UnitType.Terran_Marine);
+	        queueBuild(false, UnitType.Terran_Marine);
+	        queueBuild(false, UnitType.Terran_Marine);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,turret1Pos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 			
@@ -119,12 +122,16 @@ public class InitialBuild {
 			queueBuild(false, UnitType.Terran_Vulture);
 			
 			
-			for(int i=9; i>=2 ; i--) 
+			for(int i=3; i<10 ; i++) 
 			{
-				TilePosition turretPos = new TilePosition(BlockingEntrance.Instance().turretX[i],BlockingEntrance.Instance().turretY[i]);
-				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret, turretPos,true,true);
+				if ((i == 3) || (i == 5))
+				{
+					TilePosition turretPos = new TilePosition(BlockingEntrance.Instance().turretX[i],BlockingEntrance.Instance().turretY[i]);
+					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret, turretPos,true,true);
+				}
 			}
-			queueBuild(true, UnitType.Terran_Armory);
+			
+			//queueBuild(true, UnitType.Terran_Armory);
 		}
 	}
 	

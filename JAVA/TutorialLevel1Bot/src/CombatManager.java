@@ -1433,8 +1433,16 @@ public class CombatManager {
 	}
 	
 	void makeTurretNearUnit(Unit unit) {
-	
-		if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+        
+		// 앞마당에 Tank 있을 때 turret 지어져서 CC 못 짓는경우 예방 
+		BaseLocation firstEx = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
+		if (unit.getDistance(firstEx.getPosition()) > 100)
+		{
+			return;
+		}
+		
+		if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) 
+		{
 			// System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() +
 			// ","
 			// + unit.getTilePosition().getY() + ") "
@@ -1442,32 +1450,35 @@ public class CombatManager {
 			int build_turret_cnt = 0;
 			List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 150);
 
-			build_turret_cnt = 0;
-			for (Unit unit2 : turretInRegion) {
-				if (unit2.getType() == UnitType.Terran_Missile_Turret) {
+			//build_turret_cnt = 0;
+			for (Unit unit2 : turretInRegion) 
+			{
+				if (unit2.getType() == UnitType.Terran_Missile_Turret) 
+				{
 					build_turret_cnt++;
 				}
 			}
 
-			if (build_turret_cnt < 1) {
+			if (build_turret_cnt < 1) 
+			{
 				// System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() +
 				// ","
 				// + unit.getTilePosition().getY() + ") "
 				// + new Exception().getStackTrace()[0].getLineNumber());
 
-				if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
-						unit.getPosition().toTilePosition(), 20) < 1
-						&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
-								UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) == 0) {
+				if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) < 1 && 
+					ConstructionManager.Instance().getConstructionQueueItemCountNear(UnitType.Terran_Missile_Turret, unit.getPosition().toTilePosition(), 20) == 0) 
+				{
 					TilePosition nearTilePosition = new TilePosition(unit.getTilePosition().getX() + 3,
-							unit.getTilePosition().getY());
+																	 unit.getTilePosition().getY());
 					ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret, nearTilePosition, false);
-					if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+					if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) 
+					{
 						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
 								nearTilePosition, false, true);// 강제건설
 						System.out.println("updateAttackSquads=(" + unit.getTilePosition().getX() + ","
-								+ unit.getTilePosition().getY() + ") "
-								+ new Exception().getStackTrace()[0].getLineNumber());
+								                                  + unit.getTilePosition().getY() + ") "
+								                                  + new Exception().getStackTrace()[0].getLineNumber());
 					}
 				}
 

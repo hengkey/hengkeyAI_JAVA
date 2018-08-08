@@ -2866,10 +2866,12 @@ public class StrategyManager {
 				unit.lift();
 			}
 			
+			/* 베슬만들어야지
 			if((unit.getType() == UnitType.Terran_Starport) && unit.isCompleted())
 			{
 				unit.lift();
 			}
+			*/
 			
 			if((unit.getType() == UnitType.Terran_Science_Facility) && unit.isCompleted())
 			{
@@ -2877,6 +2879,7 @@ public class StrategyManager {
 			}
 		}
 		
+		// 마린4마리 만들고 배럭올리기 5000 적당할듯
 		if ((MyBotModule.Broodwar.getFrameCount() > 5000) &&
 		    (MyBotModule.Broodwar.getFrameCount() < 11000))
 		{
@@ -2960,12 +2963,17 @@ public class StrategyManager {
 		else 
 		{
 			// 두번째 서플라이 짓고 scv가 울베로 못들어오는 현상 보완
-			if (InformationManager.Instance().enemyRace == Race.Terran) {
-				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) == 2
-						&& firstBRLiftPersistantTime < 10) {
-					for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-						if (unit.isLifted() == false && unit.getType() == UnitType.Terran_Barracks
-								&& unit.isCompleted()) {
+			if (InformationManager.Instance().enemyRace == Race.Terran) 
+			{
+				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Supply_Depot) == 2 && 
+					firstBRLiftPersistantTime < 10) 
+				{
+					for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+					{
+						if (unit.isLifted() == false && 
+							unit.getType() == UnitType.Terran_Barracks && 
+							unit.isCompleted()) 
+						{
 							unit.lift();
 							LiftChecker = true;
 						}
@@ -2993,6 +3001,7 @@ public class StrategyManager {
 				}
 			}
 		
+			/*
 			if (MyBotModule.Broodwar.getFrameCount() > 2000) 
 			{
 				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
@@ -3007,6 +3016,7 @@ public class StrategyManager {
 					}
 				}
 			}
+			*/
 		}
 	}
 }
