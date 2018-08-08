@@ -201,94 +201,123 @@ public class StrategyManager {
 	/// 경기 진행 중 매 프레임마다 경기 전략 관련 로직을 실행합니다
 	public void update() {
 
-		if (EXOK == false && MyBotModule.Broodwar.getFrameCount() % 2 == 0) {
+		int frameCount = MyBotModule.Broodwar.getFrameCount();
+		
+		if (EXOK == false && frameCount % 2 == 0) 
+		{
 			executeFirstex();
 		}
 
 		// lag.estimate("1");
 
 		// TODO 전략은 자주 확인할 필요 없다, 1초에 한번 하지만@@!@!@ 초반에는 자주 확인해야된다 아래
-		if ((MyBotModule.Broodwar.getFrameCount() < 13000 && MyBotModule.Broodwar.getFrameCount() % 5 == 0)
-				|| (MyBotModule.Broodwar.getFrameCount() >= 13000 && MyBotModule.Broodwar.getFrameCount() % 23 == 0)) {
+		if ((frameCount  < 13000 && frameCount %  5 == 0) ||
+			(frameCount >= 13000 && frameCount % 23 == 0)) 
+		{
 			AnalyzeStrategy.Instance().AnalyzeEnemyStrategy();
 		}
 
 		// lag.estimate("2");
 		if (Config.DrawHengDebugInfo)
-		MyBotModule.Broodwar.drawTextScreen(350, 100, "isInit=" + isInitialBuildOrderFinished);
+			MyBotModule.Broodwar.drawTextScreen(350, 100, "isInit=" + isInitialBuildOrderFinished);
 
-		if (!isInitialBuildOrderFinished && BuildManager.Instance().buildQueue.isEmpty()) {
-			if (isInitialBuildOrderFinished == false) {
+		if (!isInitialBuildOrderFinished && BuildManager.Instance().buildQueue.isEmpty()) 
+		{
+			/*
+			if (isInitialBuildOrderFinished == false) 
+			{
 			}
+			*/
 			isInitialBuildOrderFinished = true;
 		}
 
 		// lag.estimate("3");
 
 		// 1초에 한번만 실행
-		if (MyBotModule.Broodwar.getFrameCount() % 29 == 0 && MyBotModule.Broodwar.getFrameCount() > 4500) {
+		if (frameCount % 29 == 0 && frameCount > 4500) 
+		{
 			executeSupplyManagement();
 		}
-		if (MyBotModule.Broodwar.getFrameCount() % 43 == 0) {
+		
+		if (frameCount % 43 == 0) 
+		{
 			executeExpansion();
 			executeResearch();
 		}
 
 		// lag.estimate("4");
 
-		if (isInitialBuildOrderFinished == true) {
-			if (MyBotModule.Broodwar.getFrameCount() % 53 == 0) {
+		if (isInitialBuildOrderFinished == true) 
+		{
+			if (frameCount % 53 == 0) 
+			{
 				executeUpgrade();
 			}
 		}
 		// lag.estimate("5");
 
-		if (MyBotModule.Broodwar.getFrameCount() % 31 == 0) {// info 의 멀티 체크가 31 에 돈다
+		if (frameCount % 31 == 0) 
+		{
+			// info 의 멀티 체크가 31 에 돈다
 			executeCombat();
 		}
 		// lag.estimate("6");
 
-		if (isInitialBuildOrderFinished == false) {
-			if (MyBotModule.Broodwar.getFrameCount() % 23 == 0) {
+		if (isInitialBuildOrderFinished == false) 
+		{
+			if (frameCount % 23 == 0) 
+			{
 				executeAddBuildingInit();
 			}
-		} else if (MyBotModule.Broodwar.getFrameCount() % 113 == 0) { // 5초에 한번 팩토리 추가 여부 결정
+		} 
+		else if (frameCount % 113 == 0) 
+		{ 
+			// 5초에 한번 팩토리 추가 여부 결정
 			executeAddFactory();
 		}
 
 		// lag.estimate("7");
 
-		if (MyBotModule.Broodwar.getFrameCount() % 5 == 0 && MyBotModule.Broodwar.getFrameCount() > 2500) {
+		if (frameCount % 5 == 0 && frameCount > 2500) 
+		{
 			executeWorkerTraining();
-
 			executeCombatUnitTrainingBlocked();
 
-			if (isInitialBuildOrderFinished == true) {
+			if (isInitialBuildOrderFinished == true) 
+			{
 				executeCombatUnitTraining();
 			}
 
 		}
 		// lag.estimate("8");
-		if (MyBotModule.Broodwar.getFrameCount() % 239 == 0) {
+		if (frameCount % 239 == 0) 
+		{
 			executeSustainUnits();
 		}
-		if (MyBotModule.Broodwar.getFrameCount() < 10000) {
-			if (MyBotModule.Broodwar.getFrameCount() % 29 == 0) {
+		
+		if (frameCount < 10000) 
+		{
+			if (frameCount % 29 == 0) 
+			{
 				executeFly();
 			}
-		} else {
-			if (MyBotModule.Broodwar.getFrameCount() % 281 == 0) {
+		} 
+		else 
+		{
+			if (frameCount % 281 == 0) 
+			{
 				executeFly();
 			}
 		}
 
 		// lag.estimate("9");
 
-		if ((MyBotModule.Broodwar.getFrameCount() < 13000 && MyBotModule.Broodwar.getFrameCount() % 5 == 0)
-				|| (MyBotModule.Broodwar.getFrameCount() >= 13000 && MyBotModule.Broodwar.getFrameCount() % 23 == 0)) { // Analyze
-																														// 와
-																														// 동일하게
-			RespondToStrategy.Instance().update();// 다른 유닛 생성에 비해 제일 마지막에 돌아야 한다. highqueue 이용하면 제일 앞에 있을 것이므로
+		if ((frameCount  < 13000 && frameCount %  5 == 0) ||
+			(frameCount >= 13000 && frameCount % 23 == 0))
+		{ 
+			// Analyze와 동일하게  다른 유닛 생성에 비해 제일 마지막에 돌아야 한다. 
+			// highqueue 이용하면 제일 앞에 있을 것이므로
+			RespondToStrategy.Instance().update();
 			// AnalyzeStrategy.Instance().AnalyzeEnemyStrategy();
 		}
 		// lag.estimate("10");
@@ -365,29 +394,15 @@ public class StrategyManager {
 		}
 	}
 
-	private int GetCurrentTot(UnitType checkunit) {
+	private int GetCurrentTot(UnitType checkunit) 
+	{
 		return BuildManager.Instance().buildQueue.getItemCount(checkunit)
-				+ MyBotModule.Broodwar.self().allUnitCount(checkunit);
-
-		// for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-		// if (unit.getType() == UnitType.Terran_Factory) {
-		// if (unit.isTraining() && unit.get) {
-		// cnt += unit.getTrainingQueue().size();//TODO trainingqueue 에 모가 있는지를 알수가 없다.
-		// }
-		// }
-		// }
+			 + MyBotModule.Broodwar.self().allUnitCount(checkunit);
 	}
 
-	private int GetCurrentTotBlocked(UnitType checkunit) {
+	private int GetCurrentTotBlocked(UnitType checkunit) 
+	{
 		int cnt = MyBotModule.Broodwar.self().allUnitCount(checkunit);
-		// for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-		// if (unit.getType() == UnitType.Terran_Factory && unit.isTraining()) {
-		// if(unit.getTrainingQueue().size() > 0 && unit.getTrainingQueue().get(0) ==
-		// checkunit){
-		// cnt ++;
-		// }
-		// }
-		// }
 		return cnt;
 	}
 
