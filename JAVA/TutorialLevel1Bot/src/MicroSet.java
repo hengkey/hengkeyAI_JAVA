@@ -24,7 +24,7 @@ public class MicroSet {
 		public static final int GEURILLA_EXTRA_POWER = 150;
 		public static final int GEURILLA_INTERVAL_FRAME = 35 * 24; // 35段
 		public static final int GEURILLA_FREE_VULTURE_COUNT = 15; // 15原軒
-		public static final int CHECKER_INTERVAL_FRAME = 30 * 24; // 30段
+		public static final int CHECKER_INTERVAL_FRAME = 40 * 24; // 40段
 
 		public static final int IGNORE_MOVE_FRAME = 5 * 24; // 5段
 

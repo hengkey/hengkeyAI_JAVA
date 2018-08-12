@@ -47,6 +47,7 @@ public class VultureTravelManager {
 		if (!otherBases.isEmpty()) {
 			travelSites.clear();
 			for (BaseLocation base : otherBases) {
+				System.out.println("travelSites="+base.getTilePosition().toString()+" "+ new Exception().getStackTrace()[0].getLineNumber());
 				travelSites.add(new TravelSite(base, 0, 0, 0));
 			}
 			initialized = true;
@@ -156,10 +157,13 @@ public class VultureTravelManager {
 		TravelSite bestTravelSite = null;
 		
 		int currentFrame = MyBotModule.Broodwar.getFrameCount();
+		
 		for (TravelSite travelSite : travelSites) {
 			if (vultureSiteMap.values().contains(travelSite)) {
 				continue;
 			}
+			
+//			System.out.println(travelSite.toString());
 			
 			int visitPassedFrame = currentFrame - travelSite.visitFrame;
 			double distance = currentBase.getGroundDistance(travelSite.baseLocation);
@@ -170,6 +174,28 @@ public class VultureTravelManager {
 				shortestDistance = distance;
 				bestTravelSite = travelSite;
 			}
+		}
+//		System.out.println("====================================================");
+		
+		//앞마당 이후 적군의 다음 확장들에 최우선으로 마인을 박아 견재하기 위해
+		if (MapGrid.Instance().getUnitsNear(travelSites.get(0).baseLocation.getPosition(), 100, true, false,
+				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//			System.out
+//					.println(travelSites.get(0).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			if (!vultureSiteMap.values().contains(travelSites.get(0)))
+				bestTravelSite = travelSites.get(0);
+		} else if (MapGrid.Instance().getUnitsNear(travelSites.get(1).baseLocation.getPosition(), 100, true, false,
+				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//			System.out
+//					.println(travelSites.get(1).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			if (!vultureSiteMap.values().contains(travelSites.get(1)))
+				bestTravelSite = travelSites.get(1);
+		} else if (MapGrid.Instance().getUnitsNear(travelSites.get(2).baseLocation.getPosition(), 100, true, false,
+				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//			System.out
+//					.println(travelSites.get(2).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			if (!vultureSiteMap.values().contains(travelSites.get(2)))
+				bestTravelSite = travelSites.get(2);
 		}
 		
 		if (bestTravelSite != null) {
@@ -330,7 +356,7 @@ class TravelSite {
 
 	@Override
 	public String toString() {
-		return "TravelSite [baseLocation=" + baseLocation.getPosition() + ", visitFrame=" + visitFrame + ", visitAssignedFrame="
+		return "TravelSite [baseLocation=" + baseLocation.getTilePosition() + ", visitFrame=" + visitFrame + ", visitAssignedFrame="
 				+ visitAssignedFrame + ", guerillaExamFrame=" + guerillaExamFrame + "]";
 	}
 }

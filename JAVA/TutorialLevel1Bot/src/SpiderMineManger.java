@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Color;
 import bwapi.Position;
 import bwapi.Race;
 import bwapi.TechType;
@@ -123,7 +124,7 @@ public class SpiderMineManger {
 			init();
 			return;
 		}
-		
+
 		// 만료 매설 만료시간 관리 
 		List<Integer> expiredList = new ArrayList<>();
 		for (Integer unitId : mineReservedMap.keySet()) {
@@ -134,7 +135,9 @@ public class SpiderMineManger {
 			} else if (!CommandUtil.IsValidUnit(MyBotModule.Broodwar.getUnit(unitId))) {
 				expiredList.add(unitId);
 			}
-//			MyBotModule.Broodwar.drawCircleScreen(mineReserved.positionToMine, 100, Color.White);
+//			System.out.println("dddddddddddddddddddd="+mineReserved.positionToMine.toTilePosition().toString());
+			if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(mineReserved.positionToMine, 100, Color.White, false);
 		}
 		for (Integer unitId : expiredList) {
 			mineReservedMap.remove(unitId);
@@ -228,6 +231,7 @@ public class SpiderMineManger {
 	
 	
 	public Position goodPositionToMine(Unit vulture, int mineNumberPerPosition) {
+//		System.out.println("goodPositionToMine " + new Exception().getStackTrace()[0].getLineNumber());
 		if (!initialized || vulture == null || vulture.getSpiderMineCount() <= 0) {
 			return null;
 		}
@@ -236,12 +240,18 @@ public class SpiderMineManger {
 		int nearestDistance = 999999;
 		Position nearestGoodPosition = null;
 		for (Position position : goodPositions) {
+//			System.out.println("goodPositions="+position.toTilePosition().toString());
 			int distance = vulture.getDistance(position);
 			if (distance < nearestDistance && distance < MicroSet.Vulture.MINE_SPREAD_RADIUS && MicroUtils.isSafePlace(position)) {
 				nearestDistance = distance;
 				nearestGoodPosition = position;
+//				System.out.println("nearestGoodPosition="+vulture.getTilePosition().toString()+nearestGoodPosition.toTilePosition().toString());
 			}
+//			else
+//				System.out.println("goodPositions="+vulture.getTilePosition().toString()+position.toTilePosition().toString());
 		}
+		
+//		System.out.println("=================================");
 		
 		// 찾지 못했다..
 		if (nearestGoodPosition == null) {
@@ -253,6 +263,8 @@ public class SpiderMineManger {
 		if (!unitsOnTile.isEmpty()) {
 			exactOneEssential = false;
 		}
+		
+//		System.out.println("nearestGoodPosition"+nearestGoodPosition.toTilePosition().toString());
 		
 		return positionToMine(vulture, nearestGoodPosition, exactOneEssential, mineNumberPerPosition);
 	}
@@ -347,6 +359,9 @@ public class SpiderMineManger {
 		double tempDistance;
 		double sourceDistance;
 		double closestDistance = 100000000;
+		double closestDistance2 = 100000000;
+		double closestDistance3 = 100000000;
+		double closestDistance4 = 100000000;
 		
 		BaseLocation res = null;
 		BaseLocation res2 = null;
@@ -358,6 +373,8 @@ public class SpiderMineManger {
 		
 		for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
 		{
+			System.out.println("targetBaseLocation=" + targetBaseLocation.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			
 			if (targetBaseLocation.getTilePosition().equals(selfmainBaseLocations.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemymainBaseLocations.getTilePosition())) continue;
 			
@@ -370,64 +387,112 @@ public class SpiderMineManger {
 				res = targetBaseLocation;
 			}
 		}
+		
 		if(res!= null){
 			myExpansions.add(res);
+			if (res != null)
+				System.out.println("res=" + res.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+			if (res2 != null)
+				System.out.println("res2=" + res2.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
 		}
-		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters){
-			myExpansions.add(res2);
-		}
+		
+//		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters){
+//			myExpansions.add(res2);
+//		}
 		
 		res=null;
-		res2=null;
-		BaseLocation res3 = null;
-		BaseLocation res4 = null;
 		closestDistance = 100000000;
-		
 		for (BaseLocation targetBaseLocation : BWTA.getBaseLocations()){
-
 			if (targetBaseLocation.isStartLocation()){
 				continue;
 			}
 			if (targetBaseLocation.getTilePosition().equals(sourceBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
 			
-			TilePosition findGeyser = ConstructionPlaceFinder.Instance().getRefineryPositionNear(targetBaseLocation.getTilePosition());
-			if(findGeyser != null){
-				if (findGeyser.getDistance(targetBaseLocation.getTilePosition())*32 > 400){
-					continue;
-				}
-			}
-			
 			sourceDistance = sourceBaseLocation.getGroundDistance(targetBaseLocation);
-			tempDistance = sourceDistance - enemymainBaseLocations.getGroundDistance(targetBaseLocation);
 			
-			if (tempDistance < closestDistance && sourceDistance > 0) {
-				closestDistance = tempDistance;
-				res4 = res3;
-				res3 = res2;
-				res2 = res;
+			//앞마당에 가장 가까운 위치 선정(적위치 고려 안함.)
+			if(sourceDistance < closestDistance)
+			{
+				closestDistance = sourceDistance;
 				res = targetBaseLocation;
 			}
 		}
 		
+		res2=null;
+		BaseLocation res3 = null;
+		BaseLocation res4 = null;
+		closestDistance2 = 100000000;
+		for (BaseLocation targetBaseLocation : BWTA.getBaseLocations()){
+			if (targetBaseLocation.isStartLocation()){
+				continue;
+			}
+			
+			if (targetBaseLocation.getTilePosition().equals(sourceBaseLocation.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().equals(res.getTilePosition())) continue;
+			
+//			TilePosition findGeyser = ConstructionPlaceFinder.Instance().getRefineryPositionNear(targetBaseLocation.getTilePosition());
+//			if(findGeyser != null){
+//				if (findGeyser.getDistance(targetBaseLocation.getTilePosition())*32 > 400){
+//					continue;
+//				}
+//			}
+			
+			sourceDistance = sourceBaseLocation.getGroundDistance(targetBaseLocation);
+			tempDistance = sourceDistance - enemymainBaseLocations.getGroundDistance(targetBaseLocation);
+			
+			System.out.println(targetBaseLocation.getTilePosition().toString() + tempDistance + "=" + sourceDistance
+					+ "-" + enemymainBaseLocations.getGroundDistance(targetBaseLocation));
+
+			//적위치를 고려한 최적의 멀티리스트를 만들기 위해
+			if (tempDistance < closestDistance2 && sourceDistance > 0) {
+				closestDistance4 = closestDistance3;
+				closestDistance3 = closestDistance2;
+				closestDistance2 = tempDistance;
+				res4 = res3;
+				res3 = res2;
+				res2 = targetBaseLocation;
+			}
+			else if (tempDistance < closestDistance3 && sourceDistance > 0) {
+				closestDistance4 = closestDistance3;
+				closestDistance3 = tempDistance;
+				res4 = res3;
+				res3 = targetBaseLocation;
+			}
+			else if (tempDistance < closestDistance4 && sourceDistance > 0) {
+				closestDistance4 = tempDistance;
+				res4 = targetBaseLocation;
+			}
+		}
+		
+		if (res != null)
+			System.out.println("res=" + res.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+		if (res2 != null)
+			System.out.println("res2=" + res2.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+		if (res3 != null)
+			System.out.println("res3=" + res3.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+		if (res4 != null)
+			System.out.println("res4=" + res4.getTilePosition().toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
 		
 		if(res!= null){
 			myExpansions.add(res);
 		}
-		if(InformationManager.Instance().getMapSpecificInformation().getMap() != MAP.LostTemple){
+		
+//		if(InformationManager.Instance().getMapSpecificInformation().getMap() != MAP.LostTemple){
 			if(res2!= null){
 				myExpansions.add(res2);
 			}
-		}
+//		}
 			
-		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters){
+//		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters){
 			if(res3!= null){
 				myExpansions.add(res3);
 			}
 			if(res4!= null){
 				myExpansions.add(res4);
 			}
-		}
+//		}
 		
 		
 		return myExpansions;

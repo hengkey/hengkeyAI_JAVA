@@ -86,6 +86,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 			if (useReservedSpiderMine(vulture) || reserveSpiderMine(vulture) || removeSpiderMine(vulture)) {
 				break;
 			}
+			
 			if (order.getType() == SquadOrderType.WATCH) {
 				BaseLocation myBase = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
 				if (myBase != null) {
@@ -153,7 +154,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 				}
 			}
 			
-			if (MicroSet.Common.versusMechanicSet() && order.getType() != SquadOrderType.GUERILLA) {
+			if (MicroSet.Common.versusMechanicSet() && order.getType() != SquadOrderType.GUERILLA && order.getType() != SquadOrderType.CHECK) {
 				// 테란전용 go
 				int distToOrder = vulture.getDistance(movePosition);
 				if (distToOrder <= MicroSet.Tank.SIEGE_MODE_MAX_RANGE + 50) { // orderPosition의 둘러싼 대형을 만든다.
@@ -178,6 +179,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 					
 				} else { // 목적지 도착
 					if (vulture.isIdle() || vulture.isBraking()) {
+//						System.out.println("reach target" + " " + new Exception().getStackTrace()[0].getLineNumber());
 						Position randomPosition = MicroUtils.randomPosition(vulture.getPosition(), 100);
 						CommandUtil.attackMove(vulture, randomPosition);
 					}
@@ -303,7 +305,7 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 		
 		Position minePosition = null;
 		
-		if (CombatManager.Instance().getDetailStrategyFrame(CombatStrategyDetail.MINE_STRATEGY_FOR_TERRAN) > 0) {
+		if (CombatManager.Instance().getDetailStrategyFrame(CombatStrategyDetail.MINE_STRATEGY_FOR_TERRAN) > 0 && order.getType() != SquadOrderType.CHECK) {
 			BaseLocation enemyFirstExpansion = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
 			if (enemyFirstExpansion != null) {
 				int distance = vulture.getDistance(enemyFirstExpansion.getPosition());

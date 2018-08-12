@@ -1654,21 +1654,31 @@ public class CombatManager {
 		}
 		
 		Squad checkerSquad = squadData.getSquad(SquadName.CHECKER);
-
 		// 모든 정찰벌처가 하나의 스파이더 마인도 가지고 있지 않다면 정찰 스쿼드를 교체한다.
 		// 단, 이미 경로에서 벗어나 안정적으로 정찰을 하고 있는 벌처가 돌아오거나 전투중인 벌처를 갑자기 정찰로 빼는건 좋지 않은 영향이 있을 수 있다.
 		// 그러므로 VultureTravelManager에서 교체가 가능한 타이밍을 관리한다.(정찰이 마쳐진 상황)
-		if (!checkerSquad.getUnitSet().isEmpty() && VultureTravelManager.timeToShiftDuty()) {
+		if (!checkerSquad.getUnitSet().isEmpty()) {
+//		if (!checkerSquad.getUnitSet().isEmpty() && VultureTravelManager.timeToShiftDuty()) {
 			boolean clearSquad = true;
 			for (Unit vulture : checkerSquad.getUnitSet()) {
 				if (vulture.getSpiderMineCount() > 0) {
+//					System.out.println("checker=" + vulture.getID() + " mine=" + vulture.getSpiderMineCount());
 					clearSquad = false;
 					break;
 				}
 			}
+			
 			if (clearSquad) {
+//				System.out.println("change checker " + new Exception().getStackTrace()[0].getLineNumber());
 				checkerSquad.clear();
 				return;
+			}
+			
+			for (Unit vulture : checkerSquad.getUnitSet()) {
+				if (vulture.getSpiderMineCount() == 0) {
+					checkerSquad.removeUnit(vulture);
+					break;
+				}
 			}
 		}
 

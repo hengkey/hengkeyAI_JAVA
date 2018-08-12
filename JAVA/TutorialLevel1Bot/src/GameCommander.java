@@ -169,7 +169,7 @@ public class GameCommander {
 
 			if (InformationManager.Instance().enemyRace == Race.Protoss
 					|| InformationManager.Instance().enemyRace == Race.Terran) {
-				unit.lift();
+//				unit.lift();
 				// for (Unit myUnit : MyBotModule.Broodwar.self().getUnits())
 				// {
 

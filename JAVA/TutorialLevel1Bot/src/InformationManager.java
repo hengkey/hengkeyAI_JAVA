@@ -850,32 +850,48 @@ public class InformationManager {
 			double sourceDistance;
 			double closestDistance = 1000000000;
 			
-			if(MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Command_Center)%2 == 0){
-			
-//				for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
-				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations())
-				{
-					if (targetBaseLocation.getTilePosition().equals(mainBaseLocations.get(selfPlayer).getTilePosition())) continue;
-					if (targetBaseLocation.getTilePosition().equals(mainBaseLocations.get(enemyPlayer).getTilePosition())) continue;
-					if (hasBuildingAroundBaseLocation(targetBaseLocation,selfPlayer,6) == true) continue;
-					if (hasBuildingAroundBaseLocation(targetBaseLocation,enemyPlayer,6) == true) continue;
-					
-//					TilePosition findGeyser = ConstructionPlaceFinder.Instance().getRefineryPositionNear(targetBaseLocation.getTilePosition());
-//					if(findGeyser != null){
-//						if (findGeyser.getDistance(targetBaseLocation.getTilePosition())*32 > 300){
-//							continue;
-//						}
-//					}
-//					
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Command_Center) == 2) {
+				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations()) {
+					if (targetBaseLocation.getTilePosition()
+							.equals(mainBaseLocations.get(selfPlayer).getTilePosition()))
+						continue;
+					if (targetBaseLocation.getTilePosition()
+							.equals(mainBaseLocations.get(enemyPlayer).getTilePosition()))
+						continue;
+					if (hasBuildingAroundBaseLocation(targetBaseLocation, selfPlayer, 6) == true)
+						continue;
+					if (hasBuildingAroundBaseLocation(targetBaseLocation, enemyPlayer, 6) == true)
+						continue;
+
+					sourceDistance = sourceBaseLocation.getGroundDistance(targetBaseLocation);
+
+					if (sourceDistance < closestDistance && sourceDistance > 0) {
+						closestDistance = sourceDistance;
+						res = targetBaseLocation;
+					}
+				}
+			} else if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Command_Center) % 2 == 0) {
+				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations()) {
+					if (targetBaseLocation.getTilePosition()
+							.equals(mainBaseLocations.get(selfPlayer).getTilePosition()))
+						continue;
+					if (targetBaseLocation.getTilePosition()
+							.equals(mainBaseLocations.get(enemyPlayer).getTilePosition()))
+						continue;
+					if (hasBuildingAroundBaseLocation(targetBaseLocation, selfPlayer, 6) == true)
+						continue;
+					if (hasBuildingAroundBaseLocation(targetBaseLocation, enemyPlayer, 6) == true)
+						continue;
+
 					sourceDistance = sourceBaseLocation.getGroundDistance(targetBaseLocation);
 					tempDistance = sourceDistance - enemyBaseLocation.getGroundDistance(targetBaseLocation);
-					
+
 					if (tempDistance < closestDistance && sourceDistance > 0) {
 						closestDistance = tempDistance;
 						res = targetBaseLocation;
 					}
 				}
-			}else{
+			} else {
 				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations())
 				{
 					if (targetBaseLocation.getTilePosition().equals(mainBaseLocations.get(selfPlayer).getTilePosition())) continue;
@@ -903,6 +919,7 @@ public class InformationManager {
 					}
 				}
 			}
+			
 			if(res ==null){
 				for (BaseLocation targetBaseLocation : BWTA.getBaseLocations())
 				{
@@ -924,7 +941,6 @@ public class InformationManager {
 					}
 				}
 			}
-			
 		}
 		if(res ==null){
 			if (mainBaseLocations.get(selfPlayer) != null && firstExpansionLocation.get(selfPlayer) != null) {

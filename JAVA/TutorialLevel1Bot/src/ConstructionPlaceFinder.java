@@ -794,6 +794,22 @@ public class ConstructionPlaceFinder {
 						return false;
 					}
 				}
+				
+				//Terran_Starport일경우 입막bunker주위에 짓지 않도록 check 왜냐하면 입구가 막힘.
+				if (b.getType() == UnitType.Terran_Starport) {
+					// bunker 고정 위치(오른쪽6, 위로2)에 짓지 않도록 check
+					if (x >= BlockingEntrance.Instance().bunkerX && x <= BlockingEntrance.Instance().bunkerX + 6
+							&& y >= BlockingEntrance.Instance().bunkerY - 2
+							&& y <= BlockingEntrance.Instance().bunkerY) {
+						return false;
+					}
+					// bunker 고정 위치(왼쪽3, 위로2)에 짓지 않도록 check
+					if (x >= BlockingEntrance.Instance().bunkerX - 3 && x <= BlockingEntrance.Instance().bunkerX
+							&& y >= BlockingEntrance.Instance().bunkerY - 2
+							&& y <= BlockingEntrance.Instance().bunkerY) {
+						return false;
+					}
+				}
 			}
 		}
 
