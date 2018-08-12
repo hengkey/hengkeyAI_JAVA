@@ -38,9 +38,10 @@ public class InitialBuild {
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
 			queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
-			queueBuild(true, UnitType.Terran_SCV);
 			queueBuild(true, UnitType.Terran_Refinery);
+//			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
+			queueBuild(true, UnitType.Terran_SCV);
+//			queueBuild(true, UnitType.Terran_Refinery);
 			queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			queueBuild(false, UnitType.Terran_SCV);
 			queueBuild(true, UnitType.Terran_Marine);
@@ -52,6 +53,7 @@ public class InitialBuild {
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 			queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			queueBuild(true, UnitType.Terran_Vulture);
+//			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, factoryPos,false, false);
 			queueBuild(false, UnitType.Terran_SCV);
 			queueBuild(false, UnitType.Terran_SCV);
 			queueBuild(false, UnitType.Terran_Machine_Shop);
@@ -59,7 +61,7 @@ public class InitialBuild {
 			queueBuild(false, UnitType.Terran_Vulture);
 			queueBuild(false, UnitType.Terran_Vulture);
 			queueBuild(true, UnitType.Terran_Siege_Tank_Tank_Mode);
-			queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
+//			queueBuildSeed(true, UnitType.Terran_Starport, BuildOrderItem.SeedPositionStrategy.MainBaseLocation);
 		}
 		else if (InformationManager.Instance().enemyRace == Race.Protoss) 
 		{

@@ -1005,8 +1005,8 @@ public class InformationManager {
 		
 		for (BaseLocation targetBaseLocation : BWTA.getStartLocations())
 		{
-			if (targetBaseLocation != null)
-				System.out.println("targetBaseLocation=" + targetBaseLocation.getTilePosition().getX() + " " + targetBaseLocation.getTilePosition().getY());
+//			if (targetBaseLocation != null)
+//				System.out.println("targetBaseLocation=" + targetBaseLocation.getTilePosition().getX() + " " + targetBaseLocation.getTilePosition().getY());
 			
 			if (targetBaseLocation.getTilePosition().equals(mainBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemyBaseLocation.getTilePosition())) continue;

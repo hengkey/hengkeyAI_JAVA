@@ -64,9 +64,9 @@ public class ShortPathGuerrilla {
 					new GuerillaPath(targetPos, srcPos, true, true));
 		}
 
-		for (String iterator : pathMap.keySet()) {
-			System.out.println(iterator);
-		}
+//		for (String iterator : pathMap.keySet()) {
+//			System.out.println(iterator);
+//		}
 	}
 
 	public Position getSourcePos() {

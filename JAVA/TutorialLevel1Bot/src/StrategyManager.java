@@ -1055,7 +1055,9 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Science_Facility) == 0
 						&& ConstructionManager.Instance()
 								.getConstructionQueueItemCount(UnitType.Terran_Science_Facility, null) == 0) {
-					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Science_Facility, false);
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Science_Facility, false);
+					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Science_Facility,
+							true);
 				}
 			}
 			if (starComplete && scienceComplete && controltower) {
@@ -2419,7 +2421,7 @@ public class StrategyManager {
 							}
 						}
 						if (terranBio && i == 2 && Current[2].getTechType() == TechType.Spider_Mines) {
-							if ((getFacUnits() > 48 && MyBotModule.Broodwar.self().minerals() > 200
+							if ((getFacUnits() > 24 && MyBotModule.Broodwar.self().minerals() > 200
 									&& MyBotModule.Broodwar.self().gas() > 150) || getFacUnits() > 100) {
 
 							} else {

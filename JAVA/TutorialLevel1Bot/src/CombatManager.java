@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Color;
 import bwapi.Order;
 import bwapi.Pair;
 import bwapi.Player;
@@ -1436,7 +1437,7 @@ public class CombatManager {
         
 		// 앞마당에 Tank 있을 때 turret 지어져서 CC 못 짓는경우 예방 
 		BaseLocation firstEx = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
-		if (unit.getDistance(firstEx.getPosition()) > 100)
+		if (unit.getDistance(firstEx.getPosition()) < 250)
 		{
 			return;
 		}
@@ -1447,9 +1448,11 @@ public class CombatManager {
 			// ","
 			// + unit.getTilePosition().getY() + ") "
 			// + new Exception().getStackTrace()[0].getLineNumber());
+			if (Config.DrawHengDebugInfo)
+				MyBotModule.Broodwar.drawCircleMap(unit.getPosition(), 250, Color.Blue, false);
+			
 			int build_turret_cnt = 0;
-			List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 150);
-
+			List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(unit.getPosition(), 250);
 			//build_turret_cnt = 0;
 			for (Unit unit2 : turretInRegion) 
 			{
