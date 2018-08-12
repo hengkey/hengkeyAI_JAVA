@@ -302,7 +302,7 @@ public class BlockingEntrance {
 
 				int[] factoryXX_array = { 8, 104, 104, 12 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 10, 109, 109 };
+				int[] factoryYY_array = { 12, 10, 109, 110 };
 				factoryY_array = factoryYY_array;
 
 				int[] bunkerXX_array = { 4, 123, 123, 5 };
