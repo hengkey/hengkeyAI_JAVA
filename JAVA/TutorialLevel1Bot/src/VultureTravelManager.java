@@ -178,24 +178,26 @@ public class VultureTravelManager {
 //		System.out.println("====================================================");
 		
 		//앞마당 이후 적군의 다음 확장들에 최우선으로 마인을 박아 견재하기 위해
-		if (MapGrid.Instance().getUnitsNear(travelSites.get(0).baseLocation.getPosition(), 100, true, false,
-				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
-//			System.out
-//					.println(travelSites.get(0).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
-			if (!vultureSiteMap.values().contains(travelSites.get(0)))
-				bestTravelSite = travelSites.get(0);
-		} else if (MapGrid.Instance().getUnitsNear(travelSites.get(1).baseLocation.getPosition(), 100, true, false,
-				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
-//			System.out
-//					.println(travelSites.get(1).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
-			if (!vultureSiteMap.values().contains(travelSites.get(1)))
-				bestTravelSite = travelSites.get(1);
-		} else if (MapGrid.Instance().getUnitsNear(travelSites.get(2).baseLocation.getPosition(), 100, true, false,
-				UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
-//			System.out
-//					.println(travelSites.get(2).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
-			if (!vultureSiteMap.values().contains(travelSites.get(2)))
-				bestTravelSite = travelSites.get(2);
+		if (MyBotModule.Broodwar.getFrameCount() < 12000) {
+			if (MapGrid.Instance().getUnitsNear(travelSites.get(0).baseLocation.getPosition(), 100, true, false,
+					UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//				System.out
+//						.println(travelSites.get(0).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+				if (!vultureSiteMap.values().contains(travelSites.get(0)))
+					bestTravelSite = travelSites.get(0);
+			} else if (MapGrid.Instance().getUnitsNear(travelSites.get(1).baseLocation.getPosition(), 100, true, false,
+					UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//				System.out
+//						.println(travelSites.get(1).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+				if (!vultureSiteMap.values().contains(travelSites.get(1)))
+					bestTravelSite = travelSites.get(1);
+			} else if (MapGrid.Instance().getUnitsNear(travelSites.get(2).baseLocation.getPosition(), 100, true, false,
+					UnitType.Terran_Vulture_Spider_Mine).isEmpty()) {
+//				System.out
+//						.println(travelSites.get(2).toString() + " " + new Exception().getStackTrace()[0].getLineNumber());
+				if (!vultureSiteMap.values().contains(travelSites.get(2)))
+					bestTravelSite = travelSites.get(2);
+			}
 		}
 		
 		if (bestTravelSite != null) {

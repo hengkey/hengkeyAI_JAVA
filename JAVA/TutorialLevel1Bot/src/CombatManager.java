@@ -257,7 +257,7 @@ public class CombatManager {
 			updateBuildingSquad();
 			updateCheckerSquad();
 //			updateGuerillaSquad(); 
-			updateMultiGuerillaSquad(); 
+//			updateMultiGuerillaSquad(); 
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
