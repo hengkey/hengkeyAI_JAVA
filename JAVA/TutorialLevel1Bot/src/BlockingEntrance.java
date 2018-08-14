@@ -396,9 +396,9 @@ public class BlockingEntrance {
 		{
             System.out.println("FightingSpririts "+ InformationManager.Instance().enemyRace);
             
-			int[] fix_supplyXX = { 0, 112, 102, 0 };
+			int[] fix_supplyXX = { 10, 98, 104, 13 };
 			fix_supplyX = fix_supplyXX;
-			int[] fix_supplyYY = { 15, 17, 118, 95 };
+			int[] fix_supplyYY = { 0, 0, 118, 103 };
 			fix_supplyY = fix_supplyYY;
 			
 			if (InformationManager.Instance().enemyRace == Race.Protoss ||
@@ -419,9 +419,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
 				
-				int[] factoryXX_array = { 11, 105, 100, 12 };
+				int[] factoryXX_array = { 11, 114, 102, 0 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 0, 107, 105 };
+				int[] factoryYY_array = { 12, 15, 107, 99 };
 				factoryY_array = factoryYY_array;
 				
 				int[] bunkerXX_array = { 13, 100, 111, 25 };
@@ -473,9 +473,9 @@ public class BlockingEntrance {
 				int[] barrackYY_array = { 28, 9, 101, 118 };
 				barrackY_array = barrackYY_array;
 				
-				int[] factoryXX_array = { 11, 105, 100, 12 };
+				int[] factoryXX_array = { 11, 114, 102, 0 };
 				factoryX_array = factoryXX_array;
-				int[] factoryYY_array = { 12, 0, 107, 105 };
+				int[] factoryYY_array = { 12, 15, 107, 99 };
 				factoryY_array = factoryYY_array;
 				
 				int[] bunkerXX_array = { 13, 100, 111, 25 };
@@ -496,14 +496,14 @@ public class BlockingEntrance {
 			    int[][] turretXX_array = {
 			    		{ 22, 21,  21,  23,  25,  25,  26,  22,  16,   0}, //11시 X
 			    		{114,110, 102, 102, 106,  93,  96, 116, 119, 125}, // 1시 X
-			    		{103,102, 102, 100, 100, 100, 103, 107, 124, 125}, // 5시 X
+			    		{102,102, 102, 100, 100, 100, 103, 107, 124, 125}, // 5시 X
 			    		{ 32, 32,  19,  22,  23,  16,  11,   7,    3,  0}  // 7시 x
 			    };
 			    
 			    int[][] turretYY_array = {
 			    		{  0,   3,   5,   8,  10,  15,  18,  23, 26,  28},
 			    		{ 25,  21,  19,  17,  12,   3,   0,  27, 28,  28},
-			    		{126, 122, 118, 115, 110, 107, 102, 100, 98, 104},
+			    		{124, 122, 118, 115, 110, 107, 102, 100, 98, 104},
 			    		{125, 122, 115, 109, 105, 104,  98,  98, 98, 105}
 			    };
 			    

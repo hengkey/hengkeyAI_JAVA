@@ -2472,6 +2472,173 @@ public class StrategyManager {
 		return mineralsNearDepot;
 	}
 
+	//저그일때 저글링이 앞마당 위치에 버로우하는것때문에 기능추가 함.
+	public void makeTurretNearbyFirstExp() {
+		if (MyBotModule.Broodwar.getFrameCount() > 8000 && InformationManager.Instance().enemyRace == Race.Zerg) {
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
+				BaseLocation firstExBase = InformationManager.Instance()
+						.getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
+
+				// 멀티전 앞마당 근처에 일정양의 미사일터렛을 건설한다.
+				int radiusValue = 8 * 32;
+				int build_turret_cnt = 0;
+				List<Unit> turretInRegion = MyBotModule.Broodwar.getUnitsInRadius(firstExBase.getPosition(),
+						radiusValue);
+				build_turret_cnt = 0;
+				for (Unit unit2 : turretInRegion) {
+					if (unit2.getType() == UnitType.Terran_Missile_Turret) {
+						build_turret_cnt++;
+					}
+				}
+
+				// 멀티이후 Command_Center 반지름 radiusValue안에 maxTurret개 이하로 turret이 있는경우.
+				int maxTurret = 1;
+				if (build_turret_cnt < maxTurret) {
+					// System.out.println("executeExpansion=(" + depotUnit.getTilePosition().getX()
+					// + ","
+					// + depotUnit.getTilePosition().getY() + ") "
+					// + new Exception().getStackTrace()[0].getLineNumber());
+
+					for (Unit mineralUnit : MyBotModule.Broodwar.getAllUnits()) {
+						// depotUnit 근처 mineral을 찾기위해
+						if ((mineralUnit.getType() == UnitType.Resource_Mineral_Field)
+								&& mineralUnit.getDistance(firstExBase.getPosition()) < 320) {
+
+							int tileRange = 10, shiftValue = 2;
+
+							// 오른쪽
+							// build queue, construction queue 모두에 turret 관련 비어 있을때만 시도한다. 왜냐하면 이조건이 없으면
+							// 해당건설이 완료될때까지 같은작업을 큐에 계속 등록한다.
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									mineralUnit.getPosition().toTilePosition(), tileRange) == 0
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, mineralUnit.getPosition().toTilePosition(),
+											tileRange) == 0) {
+
+								// 해당 미네랄 주위에 turret 건설 시도
+								TilePosition nearTilePosition = new TilePosition(
+										mineralUnit.getTilePosition().getX() + shiftValue,
+										mineralUnit.getTilePosition().getY());
+
+								// 해당 위치에 turret을 건설할수 있는지 체크. 왜냥하면 강제건설이기때문에
+								ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret,
+										nearTilePosition, false);
+								if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+									BuildManager.Instance().buildQueue.queueAsLowestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+									System.out.println("executeExpansion=(" + mineralUnit.getTilePosition().getX() + ","
+											+ mineralUnit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+							}
+
+							// 왼쪽
+							// build queue, construction queue 모두에 turret 관련 비어 있을때만 시도한다. 왜냐하면 이조건이 없으면
+							// 해당건설이 완료될때까지 같은작업을 큐에 계속 등록한다.
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									mineralUnit.getPosition().toTilePosition(), tileRange) == 0
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, mineralUnit.getPosition().toTilePosition(),
+											tileRange) == 0) {
+
+								// 해당 미네랄 주위에 turret 건설 시도
+								TilePosition nearTilePosition = new TilePosition(
+										mineralUnit.getTilePosition().getX() - shiftValue,
+										mineralUnit.getTilePosition().getY());
+
+								// 해당 위치에 turret을 건설할수 있는지 체크. 왜냥하면 강제건설이기때문에
+								ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret,
+										nearTilePosition, false);
+								if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+									BuildManager.Instance().buildQueue.queueAsLowestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+									System.out.println("executeExpansion=(" + mineralUnit.getTilePosition().getX() + ","
+											+ mineralUnit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+							}
+
+							// 위
+							// build queue, construction queue 모두에 turret 관련 비어 있을때만 시도한다. 왜냐하면 이조건이 없으면
+							// 해당건설이 완료될때까지 같은작업을 큐에 계속 등록한다.
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									mineralUnit.getPosition().toTilePosition(), tileRange) == 0
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, mineralUnit.getPosition().toTilePosition(),
+											tileRange) == 0) {
+
+								// 해당 미네랄 주위에 turret 건설 시도
+								TilePosition nearTilePosition = new TilePosition(mineralUnit.getTilePosition().getX(),
+										mineralUnit.getTilePosition().getY() - shiftValue);
+
+								// 해당 위치에 turret을 건설할수 있는지 체크. 왜냥하면 강제건설이기때문에
+								ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret,
+										nearTilePosition, false);
+								if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+									BuildManager.Instance().buildQueue.queueAsLowestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+									System.out.println("executeExpansion=(" + mineralUnit.getTilePosition().getX() + ","
+											+ mineralUnit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+							}
+
+							// 한칸아래
+							// build queue, construction queue 모두에 turret 관련 비어 있을때만 시도한다. 왜냐하면 이조건이 없으면
+							// 해당건설이 완료될때까지 같은작업을 큐에 계속 등록한다.
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									mineralUnit.getPosition().toTilePosition(), tileRange) == 0
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, mineralUnit.getPosition().toTilePosition(),
+											tileRange) == 0) {
+
+								// 해당 미네랄 주위에 turret 건설 시도
+								TilePosition nearTilePosition = new TilePosition(mineralUnit.getTilePosition().getX(),
+										mineralUnit.getTilePosition().getY() + (shiftValue - 1));
+
+								// 해당 위치에 turret을 건설할수 있는지 체크. 왜냥하면 강제건설이기때문에
+								ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret,
+										nearTilePosition, false);
+								if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+									BuildManager.Instance().buildQueue.queueAsLowestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+									System.out.println("executeExpansion=(" + mineralUnit.getTilePosition().getX() + ","
+											+ mineralUnit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+							}
+
+							// 두칸아래
+							// build queue, construction queue 모두에 turret 관련 비어 있을때만 시도한다. 왜냐하면 이조건이 없으면
+							// 해당건설이 완료될때까지 같은작업을 큐에 계속 등록한다.
+							if (BuildManager.Instance().buildQueue.getItemCountNear(UnitType.Terran_Missile_Turret,
+									mineralUnit.getPosition().toTilePosition(), tileRange) == 0
+									&& ConstructionManager.Instance().getConstructionQueueItemCountNear(
+											UnitType.Terran_Missile_Turret, mineralUnit.getPosition().toTilePosition(),
+											tileRange) == 0) {
+
+								// 해당 미네랄 주위에 turret 건설 시도
+								TilePosition nearTilePosition = new TilePosition(mineralUnit.getTilePosition().getX(),
+										mineralUnit.getTilePosition().getY() + shiftValue);
+
+								// 해당 위치에 turret을 건설할수 있는지 체크. 왜냥하면 강제건설이기때문에
+								ConstructionTask b = new ConstructionTask(UnitType.Terran_Missile_Turret,
+										nearTilePosition, false);
+								if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b)) {
+									BuildManager.Instance().buildQueue.queueAsLowestPriority(
+											UnitType.Terran_Missile_Turret, nearTilePosition, false, true);// 강제건설
+									System.out.println("executeExpansion=(" + mineralUnit.getTilePosition().getX() + ","
+											+ mineralUnit.getTilePosition().getY() + ") "
+											+ new Exception().getStackTrace()[0].getLineNumber());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public void makeTurretNearbyDepot() {
 		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Command_Center) >= 2) {
 			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Engineering_Bay) > 0) {
@@ -2657,6 +2824,9 @@ public class StrategyManager {
 
 	public void executeExpansion() {
 
+		//저그일때 저글링이 앞마당 위치에 버로우하는것때문에 기능추가 함.
+		makeTurretNearbyFirstExp();
+		
 		// Command Center 근처에 일정양의 turret을 건설 함.
 		makeTurretNearbyDepot();
 
