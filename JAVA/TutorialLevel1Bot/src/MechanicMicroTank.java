@@ -170,7 +170,7 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 					}
 				}
 				
-				if (shouldSiege && tank.canSiege()) {
+				if (shouldSiege && tank.canSiege() && !MicroUtils.isExpansionPosition(tank.getPosition())) {
 					tank.siege();
 				} else {
 					Position kitingGoalPosition = order.getPosition();
@@ -206,7 +206,8 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 				if (tank.getDistance(order.getPosition()) <= siegeModeSpreadRadius && tank.canSiege()) {
 					Position positionToSiege = findPositionToSiege(tank, siegeModeSpreadRadius); // orderPosition의 중심으로 펼쳐진 시즈 대형을 만든다.
 					if (positionToSiege != null) {
-						if (tank.getDistance(positionToSiege) < 30) {
+						if (tank.getDistance(positionToSiege) < 30
+								&& !MicroUtils.isExpansionPosition(tank.getPosition())) {
 							tank.siege();
 						} else {
 							CommandUtil.attackMove(tank, positionToSiege);

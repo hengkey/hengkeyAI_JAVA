@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import bwapi.Color;
 import bwapi.DamageType;
 import bwapi.Pair;
 import bwapi.Player;
@@ -715,11 +716,19 @@ public class MicroUtils {
 	
 	public static boolean isExpansionPosition(Position position) {
 		BaseLocation expansionBase = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
-    	if (position.getDistance(expansionBase.getPosition()) < 100) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+		if (position.getDistance(expansionBase.getPosition()) < 100) {
+			return true;
+		} else {
+			// Comsat 위치도 고려
+			if (position.getDistance(new Position(expansionBase.getPosition().getX() + 3 * 32,
+					expansionBase.getPosition().getY())) < 60) {
+//				MyBotModule.Broodwar.drawCircleMap(new Position(expansionBase.getPosition().getX() + 3 * 32,
+//						expansionBase.getPosition().getY()), 60, Color.Blue);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	public static boolean isConnectedPosition(Position pos1, Position pos2) {
