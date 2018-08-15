@@ -8,6 +8,8 @@ import bwapi.Position;
 import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
+import bwta.BWTA;
+import bwta.BaseLocation;
 
 public class ShortPathGuerrilla {
 	public ShortPathGuerrilla(String name) {
@@ -249,68 +251,122 @@ public class ShortPathGuerrilla {
 
 	public Position getNextPos(Position curPos, Position targetPos, boolean weightFlag) {
 		Position nextPos = curPos;
-		TilePosition nearNode = null;
-		double preCurDoubleDistance = 9999;
-		double preTargetDoubleDistance = 9999;
-		int bestLowWeight=0xffff;
+		
+		BaseLocation sourceBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
+		BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
+		BaseLocation selfmainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
+		BaseLocation enemymainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
 
-		// System.out.println("getNextPos Oh!! My God!!!" + " " + new
-		// Exception().getStackTrace()[0].getLineNumber());
-		TilePosition curTilePos = curPos.toTilePosition();
-		TilePosition targetTilePos = targetPos.toTilePosition();
-		for (String iterator : posMap.keySet()) {
-//			System.out.println(curPos.toTilePosition().getDistance(posMap.get(iterator).Pos) + " "
-//					+ targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos) + " " + preCurDoubleDistance
-//					+ " " + preTargetDoubleDistance);
-			if (curPos.toTilePosition().getDistance(posMap.get(iterator).Pos) < preCurDoubleDistance) {
-//				System.out.println("current"+posMap.get(iterator).Pos.toString());
-				curTilePos = posMap.get(iterator).Pos;
-				preCurDoubleDistance = curPos.toTilePosition().getDistance(posMap.get(iterator).Pos);
+		if (this.sourcePos == null) {
+			curPos = sourceBaseLocation.getPosition();
+			this.sourcePos = curPos;
+		}
+		
+		double sourceDistance;
+		double closestDistance = 100000000;	
+		
+		for (BaseLocation targetBaseLocation : BWTA.getBaseLocations()){
+			if (targetBaseLocation.getTilePosition().equals(selfmainBaseLocations.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().equals(enemymainBaseLocations.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().equals(sourceBaseLocation.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
+			if (targetBaseLocation.getTilePosition().getX() > 60 && targetBaseLocation.getTilePosition().getX() < 70
+					&& targetBaseLocation.getTilePosition().getY() > 60
+					&& targetBaseLocation.getTilePosition().getY() < 70) {
+				continue;
 			}
 			
-			if (targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos) < preTargetDoubleDistance) {
-//				System.out.println("target"+posMap.get(iterator).Pos.toString());				
-				targetTilePos = posMap.get(iterator).Pos;
-				preTargetDoubleDistance = targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos);
+			//현재위치와 같으면 pass
+			if (curPos.equals(targetBaseLocation.getPosition()))
+				continue;
+			
+			//전 source위치와 같으면 pass
+			if (this.sourcePos.equals(targetBaseLocation.getPosition()))
+				continue;
+			
+			sourceDistance = curPos.getDistance(targetBaseLocation.getPosition());
+			
+			if(sourceDistance <= closestDistance)
+			{
+				closestDistance = sourceDistance;
+				nextPos = targetBaseLocation.getPosition();
 			}
 		}
 		
-//		System.out.println(curTilePos.toString()+targetTilePos.toString());
-		
-		if (weightFlag)
-			updateWeightValue(curTilePos, targetTilePos);
-
-		for (String iterator : pathMap.keySet()) {
-			if (!iterator.contains("{" + curTilePos.toString()))
-				continue;
-
-			nearNode = pathMap.get(iterator).targetPos;
-
-//			if (posMap.get(nearNode.toString()).validFlag == false || posMap.get(nearNode.toString()).enemyValidFlag == false)
-//				continue;
-			
-			if (pathMap.get(iterator).validFlag == false)
-				continue;
-
-			if (posMap.get(nearNode.toString()).weightValue < bestLowWeight) {
-				nextPos = nearNode.toPosition();
-				bestLowWeight = posMap.get(nearNode.toString()).weightValue;
-			}
-		}
-
-		if (nextPos == curPos) {
-			resetValidFlag();
-			System.out.println("Oh!! My God!!!");
-		}
 		// System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" +
 		// nextTilePos.toString() + " " + new
 		// Exception().getStackTrace()[0].getLineNumber());
 
-		this.sourcePos = curTilePos.toPosition();
+		this.sourcePos = curPos;
 		this.targetPos = nextPos;
 		return nextPos;
 	}
 }
+	
+//	public Position getNextPos(Position curPos, Position targetPos, boolean weightFlag) {
+//		Position nextPos = curPos;
+//		TilePosition nearNode = null;
+//		double preCurDoubleDistance = 9999;
+//		double preTargetDoubleDistance = 9999;
+//		int bestLowWeight=0xffff;
+//
+//		// System.out.println("getNextPos Oh!! My God!!!" + " " + new
+//		// Exception().getStackTrace()[0].getLineNumber());
+//		TilePosition curTilePos = curPos.toTilePosition();
+//		TilePosition targetTilePos = targetPos.toTilePosition();
+//		for (String iterator : posMap.keySet()) {
+////			System.out.println(curPos.toTilePosition().getDistance(posMap.get(iterator).Pos) + " "
+////					+ targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos) + " " + preCurDoubleDistance
+////					+ " " + preTargetDoubleDistance);
+//			if (curPos.toTilePosition().getDistance(posMap.get(iterator).Pos) < preCurDoubleDistance) {
+////				System.out.println("current"+posMap.get(iterator).Pos.toString());
+//				curTilePos = posMap.get(iterator).Pos;
+//				preCurDoubleDistance = curPos.toTilePosition().getDistance(posMap.get(iterator).Pos);
+//			}
+//			
+//			if (targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos) < preTargetDoubleDistance) {
+////				System.out.println("target"+posMap.get(iterator).Pos.toString());				
+//				targetTilePos = posMap.get(iterator).Pos;
+//				preTargetDoubleDistance = targetPos.toTilePosition().getDistance(posMap.get(iterator).Pos);
+//			}
+//		}
+//		
+////		System.out.println(curTilePos.toString()+targetTilePos.toString());
+//		
+//		if (weightFlag)
+//			updateWeightValue(curTilePos, targetTilePos);
+//
+//		for (String iterator : pathMap.keySet()) {
+//			if (!iterator.contains("{" + curTilePos.toString()))
+//				continue;
+//
+//			nearNode = pathMap.get(iterator).targetPos;
+//
+////			if (posMap.get(nearNode.toString()).validFlag == false || posMap.get(nearNode.toString()).enemyValidFlag == false)
+////				continue;
+//			
+//			if (pathMap.get(iterator).validFlag == false)
+//				continue;
+//
+//			if (posMap.get(nearNode.toString()).weightValue < bestLowWeight) {
+//				nextPos = nearNode.toPosition();
+//				bestLowWeight = posMap.get(nearNode.toString()).weightValue;
+//			}
+//		}
+//
+//		if (nextPos == curPos) {
+//			resetValidFlag();
+//			System.out.println("Oh!! My God!!!");
+//		}
+//		// System.out.println("curTilePos="+curTilePos.toString()+",=>"+"nextTilePos=" +
+//		// nextTilePos.toString() + " " + new
+//		// Exception().getStackTrace()[0].getLineNumber());
+//
+//		this.sourcePos = curTilePos.toPosition();
+//		this.targetPos = nextPos;
+//		return nextPos;
+//	}
+//}
 
 class GuerillaPath {
 	TilePosition srcPos;

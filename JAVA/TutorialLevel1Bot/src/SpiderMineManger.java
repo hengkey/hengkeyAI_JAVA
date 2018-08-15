@@ -428,6 +428,12 @@ public class SpiderMineManger {
 				continue;
 			}
 			
+			if (targetBaseLocation.getTilePosition().getX() > 60 && targetBaseLocation.getTilePosition().getX() < 70
+					&& targetBaseLocation.getTilePosition().getY() > 60
+					&& targetBaseLocation.getTilePosition().getY() < 70) {
+				continue;
+			}
+			
 			if (targetBaseLocation.getTilePosition().equals(sourceBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(res.getTilePosition())) continue;

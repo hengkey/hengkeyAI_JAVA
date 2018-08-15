@@ -47,6 +47,12 @@ public class VultureTravelManager {
 		if (!otherBases.isEmpty()) {
 			travelSites.clear();
 			for (BaseLocation base : otherBases) {
+				if (base.getTilePosition().getX() > 60 && base.getTilePosition().getX() < 70
+						&& base.getTilePosition().getY() > 60
+						&& base.getTilePosition().getY() < 70) {
+					continue;
+				}
+				
 				System.out.println("travelSites="+base.getTilePosition().toString()+" "+ new Exception().getStackTrace()[0].getLineNumber());
 				travelSites.add(new TravelSite(base, 0, 0, 0));
 			}
