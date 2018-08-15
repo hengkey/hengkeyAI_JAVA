@@ -723,7 +723,9 @@ public class CombatManager {
 		} else { //if (combatStrategy == CombatStrategy.ATTACK_ENEMY) {
 			mainAttackLocation = getAttackPosition(squad);
 		}
-		
+//		BaseLocation enemyBaseLocation = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
+//		if (enemyBaseLocation != null)
+//			mainAttackLocation = enemyBaseLocation.getPosition();
 		return mainAttackLocation;
 	}
 	

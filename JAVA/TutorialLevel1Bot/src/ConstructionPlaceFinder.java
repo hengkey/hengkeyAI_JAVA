@@ -810,6 +810,16 @@ public class ConstructionPlaceFinder {
 						return false;
 					}
 				}
+				
+				//입막 배럭위치에 건물 짓지 않도록
+				if (b.getType() != UnitType.Terran_Barracks) {
+					// barraack 고정 위치에 짓지 않도록 check
+					if (x >= BlockingEntrance.Instance().barrackX && x <= BlockingEntrance.Instance().barrackX + 4
+							&& y >= BlockingEntrance.Instance().barrackY
+							&& y <= BlockingEntrance.Instance().barrackY + 3) {
+						return false;
+					}
+				}
 			}
 		}
 
