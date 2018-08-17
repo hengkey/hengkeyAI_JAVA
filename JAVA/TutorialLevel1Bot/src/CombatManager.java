@@ -1852,11 +1852,12 @@ public class CombatManager {
 			if (!guerillaSquad.getUnitSet().isEmpty()) {
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			} else {
-				for (Unit assignableVulture : assignableVultures) {
+				if(assignableVultures.size()>0)
+//				for (Unit assignableVulture : assignableVultures) {
 					// System.out.println("putSquad " + assignableVulture.getType().toString() + " "
 					// + new Exception().getStackTrace()[0].getLineNumber());
-					squadData.assignUnitToSquad(assignableVulture, guerillaSquad);
-				}
+					squadData.assignUnitToSquad(assignableVultures.get(0), guerillaSquad);
+//				}
 
 				VultureTravelManager.Instance().guerillaStart(squadName);
 				// System.out.println("putSquad " + guerillaSquad.toString() + " "
@@ -1883,11 +1884,12 @@ public class CombatManager {
 			if (!guerillaSquad.getUnitSet().isEmpty()) {
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			} else {
-				for (Unit assignableVulture : assignableVultures) {
+				if(assignableVultures.size()>1)
+//				for (Unit assignableVulture : assignableVultures) {
 					// System.out.println("putSquad " + assignableVulture.getType().toString() + " "
 					// + new Exception().getStackTrace()[0].getLineNumber());
-					squadData.assignUnitToSquad(assignableVulture, guerillaSquad);
-				}
+					squadData.assignUnitToSquad(assignableVultures.get(1), guerillaSquad);
+//				}
 
 				VultureTravelManager.Instance().guerillaStart(squadName);
 				// System.out.println("putSquad " + guerillaSquad.toString() + " "
