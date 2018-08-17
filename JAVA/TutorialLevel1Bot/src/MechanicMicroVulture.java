@@ -206,86 +206,32 @@ public class MechanicMicroVulture extends MechanicMicroAbstract {
 //			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
 //					+ new Exception().getStackTrace()[0].getLineNumber());
 		}
-//		else
-//		{
-//			// source -> target 으로 이동중간에 적을 만나면 target을 변경하여 다른경로로 이동
-//			for(UnitInfo enemyInfo:enemiesInfo)
-//			{
-//				if(enemyInfo.getUnit().getType().isWorker() || !CommandUtil.IsCombatUnit(enemyInfo.getUnit()) )
-//					continue;
-//				
-////				if (attackIgnoreFrame > 0)
-////					attackIgnoreFrame--;
-//				
-//				// 공격할수 있는 unit을 만났을경우
-//				if (vulture.getDistance(enemyInfo.getUnit().getPosition()) <= UnitType.Terran_Siege_Tank_Siege_Mode
-//						.groundWeapon().maxRange() + 100) {
-//					tmpShortPathGuerrilla.setPathMapValidFlag(false);
-//					// movePosition =
-//					// tmpShortPathGuerrilla.getNextPos(tmpShortPathGuerrilla.getSourcePos(),
-//					// order.getPosition(), true);
-//
-//					// movePosition = tmpShortPathGuerrilla.getSourcePos();
-//					// Position tmpPos=new Position(294, 329);
-//					movePosition = tmpShortPathGuerrilla.getPosOutOfEnemy(vulture, enemyInfo);
-//
-//					tmpShortPathGuerrilla.setSourcetPos(movePosition);
-//					tmpShortPathGuerrilla.setTargetPos(movePosition);
-////					attackIgnoreFrame = 1000;
-////					preDistanceFromEnemy = vulture.getDistance(enemyInfo.getUnit().getPosition());
-////					System.out.println(enemyInfo.getUnit().getType() + vulture.getPosition().toTilePosition().toString()
-////							+ "^^^^^^^^^^^" + tmpShortPathGuerrilla.getSourcePos().toTilePosition().toString() + "=>"
-////							+ movePosition.toTilePosition().toString());
-//					if (Config.DrawHengDebugInfo)
-//					MyBotModule.Broodwar.drawCircleMap(enemyInfo.getUnit().getPosition(),
-//							UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 100, Color.Red, false);
-//					break;
-//				}
-////				else
-////				{
-////					attackIgnoreFrame = 0;
-////					preDistanceFromEnemy = 0xffff;
-////				}
-//			}			
-//		}
 				
-		// 이동지역까지 attackMove로 간다.
-		if (vulture.getDistance(order.getPosition()) > order.getRadius()) {
-				CommandUtil.attackMove(vulture, movePosition);
-//				vulture.move(movePosition);
-			// CommandUtil.move(vulture, movePosition);
-			// System.out.println("move to " + movePosition.toTilePosition().toString() + "
-			// "
-			// + new Exception().getStackTrace()[0].getLineNumber());
-			if (Config.DrawHengDebugInfo)
-			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 5, Color.Blue,
-					false);
-		} else { // 목적지 도착
-			if (vulture.isIdle() || vulture.isBraking()) {
-//				Position randomPosition = MicroUtils.randomPosition(order.getPosition(), 200);
-				
-				List<Unit> workers = MapGrid.Instance().getUnitsNear(order.getPosition(),
-						MicroSet.Vulture.MULTIGEURILLA_RADIUS+10, false, true,
-						InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
-				
-				// 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격
-				if (workers.isEmpty()) {
-//					randomPosition = MicroUtils.randomPosition(order.getPosition(), MicroSet.Vulture.MULTIGEURILLA_RADIUS);
-//						CommandUtil.attackMove(vulture, randomPosition);
+		List<Unit> enemies = MapGrid.Instance().getUnitsNear(vulture.getPosition(),
+				MicroSet.Vulture.MULTIGEURILLA_RADIUS + 100, false, true,
+				InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
+
+		// 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격
+		if (enemies.isEmpty()) {
+			CommandUtil.attackMove(vulture, movePosition);
+		} else {
+			for (Unit worker : enemies) {
+				if (worker.getType() == UnitType.Terran_SCV) {
+					CommandUtil.rightClick(vulture, worker);
+					if (Config.DrawHengDebugInfo)
+						MyBotModule.Broodwar.drawCircleMap(worker.getPosition(),
+								MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4, Color.Yellow, false);
+					break;
 				} else {
-					CommandUtil.rightClick(vulture, workers.get(0));
-//						vulture.rightClick(workers.get(0));
+					CommandUtil.attackMove(vulture, movePosition);
 				}
-				
-//				CommandUtil.attackMove(vulture, randomPosition);
-//				vulture.holdPosition();
-//				System.out.println("hold to " + workers.get(0).getType() + vulture.getTilePosition().toString() + " "
-//						+ new Exception().getStackTrace()[0].getLineNumber());
-				if (Config.DrawHengDebugInfo)
-				MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4,
-						Color.Orange, false);
 			}
 		}
+
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 5, Color.Blue,
+					false);
+
 		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawTextMap(vulture.getPosition().getX(), vulture.getPosition().getY() + 10,
 				order.getType() + order.getPosition().toTilePosition().toString());

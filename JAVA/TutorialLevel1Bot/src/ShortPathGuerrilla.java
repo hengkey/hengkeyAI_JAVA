@@ -15,12 +15,14 @@ import bwta.BaseLocation;
 public class ShortPathGuerrilla {
 	public ShortPathGuerrilla(String name) {
 		this.name = name;
+		preSourcePos = null;
 		sourcePos = null;
 		targetPos = null;
 		init();
 	}
 
 	private String name;
+	private Position preSourcePos;
 	private Position sourcePos;
 	private Position targetPos;
 
@@ -251,6 +253,10 @@ public class ShortPathGuerrilla {
 	}
 
 	public Position getNextPos(Position curPos, Position targetPos, boolean weightFlag) {
+
+		if(curPos.equals(targetPos))
+			return curPos;
+		
 		Position nextPos = curPos;
 		
 		BaseLocation sourceBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
@@ -268,6 +274,7 @@ public class ShortPathGuerrilla {
 			}
 
 			this.sourcePos = curPos;
+			this.preSourcePos = this.sourcePos;
 		}
 		
 		double sourceDistance;
@@ -277,7 +284,7 @@ public class ShortPathGuerrilla {
 			if (targetBaseLocation.getTilePosition().equals(selfmainBaseLocations.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(enemymainBaseLocations.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().equals(sourceBaseLocation.getTilePosition())) continue;
-			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
+//			if (targetBaseLocation.getTilePosition().equals(enemyfirstBaseLocation.getTilePosition())) continue;
 			if (targetBaseLocation.getTilePosition().getX() > 60 && targetBaseLocation.getTilePosition().getX() < 70
 					&& targetBaseLocation.getTilePosition().getY() > 60
 					&& targetBaseLocation.getTilePosition().getY() < 70) {
@@ -286,6 +293,10 @@ public class ShortPathGuerrilla {
 			
 			//현재위치와 같으면 pass
 			if (curPos.equals(targetBaseLocation.getPosition()))
+				continue;
+			
+			//전전 source위치와 같으면 pass
+			if (this.preSourcePos.equals(targetBaseLocation.getPosition()))
 				continue;
 			
 			//전 source위치와 같으면 pass
@@ -305,6 +316,7 @@ public class ShortPathGuerrilla {
 		// nextTilePos.toString() + " " + new
 		// Exception().getStackTrace()[0].getLineNumber());
 
+		this.preSourcePos = this.sourcePos;
 		this.sourcePos = curPos;
 		this.targetPos = nextPos;
 		return nextPos;

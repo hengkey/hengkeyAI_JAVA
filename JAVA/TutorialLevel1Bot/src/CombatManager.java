@@ -257,7 +257,10 @@ public class CombatManager {
 			updateBuildingSquad();
 			updateCheckerSquad();
 //			updateGuerillaSquad(); 
-//			updateMultiGuerillaSquad(); 
+			
+			if (MyBotModule.Broodwar.getFrameCount() > 14000) {
+				updateMultiGuerillaSquad();
+			}
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();

@@ -307,14 +307,35 @@ public class Squad {
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
 
+		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
+		int groupNum = 0, maxGroupNum=2;
 		for (Unit vulture : microVulture.getUnits()) {
-			mechanicVulture.executeMechanicMicro(vulture);
+			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+				mechanicVulture.executeMechanicMicro(vulture);
+
+			groupNum++;
+			if (groupNum >= maxGroupNum)
+				groupNum = 0;
 		}
+
+		groupNum = 0;
 		for (Unit tank : microTank.getUnits()) {
-			mechanicTank.executeMechanicMicro(tank);
+			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+				mechanicTank.executeMechanicMicro(tank);
+			
+			groupNum++;
+			if (groupNum >= maxGroupNum)
+				groupNum = 0;
 		}
+
+		groupNum = 0;
 		for (Unit goliath : microGoliath.getUnits()) {
-			mechanicGoliath.executeMechanicMicro(goliath);
+			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+				mechanicGoliath.executeMechanicMicro(goliath);
+
+			groupNum++;
+			if (groupNum >= maxGroupNum)
+				groupNum = 0;
 		}
 	}
 	

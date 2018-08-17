@@ -108,14 +108,14 @@ public class Config {
 	public static boolean DrawProductionInfo = false;
 
 	/// 화면 표시 여부 - 건물 Construction 상황
-	public static boolean DrawBuildingInfo = true;
+	public static boolean DrawBuildingInfo = false;
 	/// 화면 표시 여부 - 건물 ConstructionPlace 예약 상황
 	public static boolean DrawReservedBuildingTiles = false;
 	
 	/// 화면 표시 여부 - 정찰 상태
 	public static boolean DrawScoutInfo = false;
 	/// 화면 표시 여부 - 일꾼 목록
-	public static boolean DrawWorkerInfo = true;
+	public static boolean DrawWorkerInfo = false;
 	
 	/// 화면 표시 여부 - 마우스 커서	
 	public static boolean DrawMouseCursorInfo = true;
