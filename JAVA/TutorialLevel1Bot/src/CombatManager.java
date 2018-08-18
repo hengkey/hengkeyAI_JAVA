@@ -255,11 +255,12 @@ public class CombatManager {
 			updateWraithSquad();
 			updateVesselSquad(); //AttackSquads µÚ¿¡
 			updateBuildingSquad();
-			updateCheckerSquad();
 //			updateGuerillaSquad(); 
 			
 			if (MyBotModule.Broodwar.getFrameCount() > 14000) {
 				updateMultiGuerillaSquad();
+			} else {
+				updateCheckerSquad();
 			}
 			
 			SpiderMineManger.Instance().update();

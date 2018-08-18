@@ -308,7 +308,7 @@ public class Squad {
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
 
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
-		int groupNum = 0, maxGroupNum=2;
+		int groupNum = 0, maxGroupNum=1;
 		for (Unit vulture : microVulture.getUnits()) {
 			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
 				mechanicVulture.executeMechanicMicro(vulture);
