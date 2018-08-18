@@ -1829,6 +1829,7 @@ public class CombatManager {
 
 		List<Unit> assignableVultures = new ArrayList<>();
 		List<Unit> assignableGoliathes = new ArrayList<>();
+		int combatGoliathCnt = 0;
 		for (Unit unit : combatUnits) {
 			if (unit.getType() == UnitType.Terran_Vulture) {
 				// MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
@@ -1837,6 +1838,12 @@ public class CombatManager {
 			}
 
 			if (unit.getType() == UnitType.Terran_Goliath) {
+				combatGoliathCnt++;
+				
+				//게릴라로 골리앗이 계속해서 죽는걸 막기 위해
+				if (combatGoliathCnt <= 4)
+					continue;
+
 				// MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
 				if (assignableGoliathes.size() < 2)
 					assignableGoliathes.add(unit);

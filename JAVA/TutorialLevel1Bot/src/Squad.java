@@ -310,7 +310,8 @@ public class Squad {
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
 
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
-		if (frameNum == 65500)
+		//제공해주는 frame값이 튀는 현상이 있는것 같아 자체 frame값 사용
+		if (frameNum == 655000)
 			frameNum = 0;
 		else
 			frameNum++;
