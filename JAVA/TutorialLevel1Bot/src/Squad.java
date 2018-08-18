@@ -16,12 +16,14 @@ public class Squad {
 		this.name = name;
 		this.order = order;
 		this.priority = priority;
+		this.frameNum = 0;
 	}
 	
 	private String name;
 	private SquadOrder order;
 	private int priority;
 	private boolean pushLine;
+	private int frameNum;
 	
 //	public MicroScv microScv = new MicroScv();
 	public MicroMarine microMarine = new MicroMarine();
@@ -308,9 +310,14 @@ public class Squad {
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
 
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
-		int groupNum = 0, maxGroupNum=1;
+		if (frameNum == 65500)
+			frameNum = 0;
+		else
+			frameNum++;
+		
+		int groupNum = 0, maxGroupNum=3;
 		for (Unit vulture : microVulture.getUnits()) {
-			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+			if(frameNum % maxGroupNum == groupNum)
 				mechanicVulture.executeMechanicMicro(vulture);
 
 			groupNum++;
@@ -320,7 +327,7 @@ public class Squad {
 
 		groupNum = 0;
 		for (Unit tank : microTank.getUnits()) {
-			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+			if(frameNum % maxGroupNum == groupNum)
 				mechanicTank.executeMechanicMicro(tank);
 			
 			groupNum++;
@@ -330,7 +337,7 @@ public class Squad {
 
 		groupNum = 0;
 		for (Unit goliath : microGoliath.getUnits()) {
-			if(CommonUtils.executeRotation(groupNum, maxGroupNum))
+			if(frameNum % maxGroupNum == groupNum)
 				mechanicGoliath.executeMechanicMicro(goliath);
 
 			groupNum++;
@@ -387,14 +394,17 @@ public class Squad {
 	
 	private void updateMultiGuerillaSquad() {
 		List<UnitInfo> vultureEnemies = new ArrayList<>();
+		List<UnitInfo> goliathEnemies = new ArrayList<>();
 
 		if (Config.DrawHengDebugInfo)
 		MyBotModule.Broodwar.drawCircleMap(order.getPosition(), 100, Color.Orange, false);
 		
+		//vulture
 		int saveUnitLevel = 0;
 		for (Unit vulture : microVulture.getUnits()) {
 			InformationManager.Instance().getNearbyForce(vultureEnemies, vulture.getPosition(),
-					InformationManager.Instance().enemyPlayer, UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange()+50);
+					InformationManager.Instance().enemyPlayer,
+					UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 50);
 		}
 		
 		InformationManager.Instance().getNearbyForce(vultureEnemies, order.getPosition(),
@@ -413,6 +423,32 @@ public class Squad {
 			}
 			
 			mechanicVulture.executeMechanicMultiGuerillaMicro(vulture, tmpShortPath);
+		}
+		
+		//Goliath
+		saveUnitLevel = 0;
+		for (Unit goliath : microGoliath.getUnits()) {
+			InformationManager.Instance().getNearbyForce(goliathEnemies, goliath.getPosition(),
+					InformationManager.Instance().enemyPlayer,
+					UnitType.Terran_Siege_Tank_Siege_Mode.groundWeapon().maxRange() + 50);
+		}
+		
+		InformationManager.Instance().getNearbyForce(goliathEnemies, order.getPosition(),
+				InformationManager.Instance().enemyPlayer, order.getRadius());
+	
+		mechanicGoliath.prepareMechanic(order, goliathEnemies);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevel);
+		
+		for (Unit goliath : microGoliath.getUnits()) {
+			String shortPathName = SquadName.MULTIGUERILLA_ + goliath.getType() + goliath.getID();
+			ShortPathGuerrilla tmpShortPath = mechanicGoliath.getShortPath(shortPathName);
+			if(tmpShortPath==null)
+			{
+				tmpShortPath = new ShortPathGuerrilla(shortPathName);
+				mechanicGoliath.putShortPath(shortPathName, tmpShortPath);
+			}
+			
+			mechanicGoliath.executeMechanicMultiGuerillaMicro(goliath, tmpShortPath);
 		}
 	}
 	

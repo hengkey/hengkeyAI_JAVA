@@ -1,8 +1,11 @@
 //# Prebot (피뿌리는컴파일러 / 알고리즘 경진대회 2017)
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import bwapi.Color;
 import bwapi.Position;
 import bwapi.Unit;
 import bwapi.UnitType;
@@ -18,8 +21,17 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 	
 	private int saveUnitLevel = 1;
 	
+	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
 	private boolean attackWithTank = false;
 	private int stickToTankRadius = 0;
+	
+	public ShortPathGuerrilla getShortPath(String squadName) {
+		return shortPathInfo.get(squadName);
+	}
+	
+	public void putShortPath(String shortPathName, ShortPathGuerrilla tmpShortPath) {
+		shortPathInfo.put(shortPathName, tmpShortPath);
+	}
 	
 	public void prepareMechanic(SquadOrder order, List<UnitInfo> enemiesInfo) {
 		this.order = order;
@@ -128,5 +140,54 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 			break;
 		}
 	}
+	
+	public void executeMechanicMultiGuerillaMicro(Unit goliath, ShortPathGuerrilla tmpShortPathGuerrilla) {
+		// checker : 각각의 목표지역(travelBase)으로 이동. (order position은 null이다.)
+		// watcher : 목표지역(적base)으로 이동. 앞에 보이지 않는 적이 있으면 본진base로 후퇴.
+		Position movePosition = tmpShortPathGuerrilla.getTargetPos();
 
+		//squad 할당되고 맨처음
+		if (movePosition==null) {
+			movePosition = tmpShortPathGuerrilla.getNextPos(goliath.getPosition(), order.getPosition(), true);
+//			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
+//					+ new Exception().getStackTrace()[0].getLineNumber());
+		}
+		//sub target에 도착함.
+		else if (goliath.getDistance(movePosition) < MicroSet.Vulture.MULTIGEURILLA_RADIUS / 2) {
+			movePosition = tmpShortPathGuerrilla.getNextPos(movePosition, order.getPosition(), true);
+//			System.out.println("move to " + movePosition.toTilePosition().toString() + " "
+//					+ new Exception().getStackTrace()[0].getLineNumber());
+		}
+				
+		List<Unit> enemies = MapGrid.Instance().getUnitsNear(goliath.getPosition(),
+				MicroSet.Vulture.MULTIGEURILLA_RADIUS + 200, false, true,
+				InformationManager.Instance().getWorkerType(InformationManager.Instance().enemyRace));
+
+		// 워커가 없을때만 범위내 랜덤공격 워커가 있으면 해당 워커 하나씩 공격
+		if (enemies.isEmpty()) {
+			CommandUtil.attackMove(goliath, movePosition);
+		} else {
+			for (Unit worker : enemies) {
+				if (worker.getType() == UnitType.Terran_SCV) {
+					CommandUtil.rightClick(goliath, worker);
+					if (Config.DrawHengDebugInfo)
+						MyBotModule.Broodwar.drawCircleMap(worker.getPosition(),
+								MicroSet.Vulture.MULTIGEURILLA_RADIUS / 4, Color.Yellow, false);
+					break;
+				} else {
+					CommandUtil.attackMove(goliath, movePosition);
+				}
+			}
+		}
+
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(movePosition, MicroSet.Vulture.MULTIGEURILLA_RADIUS / 5, Color.Blue,
+					false);
+
+		if (Config.DrawHengDebugInfo)
+		MyBotModule.Broodwar.drawTextMap(goliath.getPosition().getX(), goliath.getPosition().getY() + 10,
+				order.getType() + order.getPosition().toTilePosition().toString());
+		if (Config.DrawHengDebugInfo)
+		MyBotModule.Broodwar.drawCircleMap(goliath.getPosition(), 10, Color.Orange, true);
+	}
 }

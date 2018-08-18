@@ -1828,12 +1828,18 @@ public class CombatManager {
 	private void updateMultiGuerillaSquad() {
 
 		List<Unit> assignableVultures = new ArrayList<>();
+		List<Unit> assignableGoliathes = new ArrayList<>();
 		for (Unit unit : combatUnits) {
 			if (unit.getType() == UnitType.Terran_Vulture) {
 				// MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
-				assignableVultures.add(unit);
-				if (assignableVultures.size() >= 2)
-					break;
+				if (assignableVultures.size() < 2)
+					assignableVultures.add(unit);
+			}
+
+			if (unit.getType() == UnitType.Terran_Goliath) {
+				// MyBotModule.Broodwar.sendText(unit.getType().toString()+"_"+unit.getID());
+				if (assignableGoliathes.size() < 2)
+					assignableGoliathes.add(unit);
 			}
 		}
 		
@@ -1857,15 +1863,11 @@ public class CombatManager {
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			} else {
 				if(assignableVultures.size()>0)
-//				for (Unit assignableVulture : assignableVultures) {
-					// System.out.println("putSquad " + assignableVulture.getType().toString() + " "
-					// + new Exception().getStackTrace()[0].getLineNumber());
 					squadData.assignUnitToSquad(assignableVultures.get(0), guerillaSquad);
-//				}
-
+				if(assignableGoliathes.size()>0)
+					squadData.assignUnitToSquad(assignableGoliathes.get(0), guerillaSquad);
+				
 				VultureTravelManager.Instance().guerillaStart(squadName);
-				// System.out.println("putSquad " + guerillaSquad.toString() + " "
-				// + new Exception().getStackTrace()[0].getLineNumber());
 			}
 		}
 		
@@ -1889,12 +1891,10 @@ public class CombatManager {
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			} else {
 				if(assignableVultures.size()>1)
-//				for (Unit assignableVulture : assignableVultures) {
-					// System.out.println("putSquad " + assignableVulture.getType().toString() + " "
-					// + new Exception().getStackTrace()[0].getLineNumber());
 					squadData.assignUnitToSquad(assignableVultures.get(1), guerillaSquad);
-//				}
-
+				if(assignableGoliathes.size()>1)
+					squadData.assignUnitToSquad(assignableGoliathes.get(1), guerillaSquad);
+				
 				VultureTravelManager.Instance().guerillaStart(squadName);
 				// System.out.println("putSquad " + guerillaSquad.toString() + " "
 				// + new Exception().getStackTrace()[0].getLineNumber());
