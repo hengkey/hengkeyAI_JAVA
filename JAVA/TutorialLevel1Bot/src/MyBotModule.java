@@ -24,7 +24,6 @@
 +----------------------------------------------------------------------+
 */
 
-//# Prebot (피뿌리는컴파일러 / 알고리즘 경진대회 2017)
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

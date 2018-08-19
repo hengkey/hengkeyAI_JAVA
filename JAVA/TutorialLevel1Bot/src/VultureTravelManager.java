@@ -1,3 +1,4 @@
+//# Steamhammer (version 1.3.1 for AIIDE 2017)
 //# Prebot (피뿌리는컴파일러 / 알고리즘 경진대회 2017)
 
 import java.util.ArrayList;

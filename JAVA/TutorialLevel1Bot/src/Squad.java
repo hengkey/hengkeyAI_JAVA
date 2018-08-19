@@ -1,4 +1,5 @@
-/* Base Code 출처 : 2017년 알고리즘 경진대회 "피뿌리는 컴파일러" 팀 코드 */
+//# Steamhammer (version 1.3.1 for AIIDE 2017)
+//# Prebot (피뿌리는컴파일러 / 알고리즘 경진대회 2017)
 
 import java.util.ArrayList;
 import java.util.List;
