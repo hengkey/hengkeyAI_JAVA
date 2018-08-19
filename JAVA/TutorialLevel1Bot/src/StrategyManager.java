@@ -131,7 +131,9 @@ public class StrategyManager {
 	public int UnitPoint = 0;
 	public int CombatStartCase = 0;
 	public int WraithTime = 0;
+	public int dropShipTime = 0;
 	public int nomorewraithcnt = 0;
+	public int nomoreDropShipCnt = 0;
 	public int CombatTime = 0;
 
 	public StrategyManager() {
@@ -762,6 +764,7 @@ public class StrategyManager {
 		int marinecnt = 0;
 		int vulturecnt = 0;
 		int wraithcnt = 0;
+		int dropShipCnt = 0;
 		// int valkyriecnt = 0;
 		// int battlecnt =0;
 		int engineeringcnt = 0;
@@ -835,6 +838,10 @@ public class StrategyManager {
 			// wraith for TvT start
 			if (unit.getType() == UnitType.Terran_Wraith && unit.isCompleted()) {
 				wraithcnt++;
+			}
+
+			if (unit.getType() == UnitType.Terran_Dropship && unit.isCompleted()) {
+				dropShipCnt++;
 			}
 			// wraith for TvT end
 
@@ -1030,6 +1037,20 @@ public class StrategyManager {
 		}
 		// engineering end2
 
+		if (starComplete) {
+			// 컨트롤 타워가 없다면
+			if (starportUnit != null && starportUnit.canBuildAddon()) {
+				if (MyBotModule.Broodwar.self().minerals() > 50 && MyBotModule.Broodwar.self().gas() > 50) {
+					if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Control_Tower, null)
+							+ ConstructionManager.Instance()
+									.getConstructionQueueItemCount(UnitType.Terran_Control_Tower, null) == 0) {
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Control_Tower,
+								true);
+					}
+				}
+			}
+		}
+		
 		// scienceVessel start
 		if ((RespondToStrategy.Instance().need_vessel == true && CC >= 2) || CC >= 3) {
 			if (star == false) {
@@ -1039,19 +1060,19 @@ public class StrategyManager {
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, false);
 				}
 			}
-			if (starComplete) {
-				// 컨트롤 타워가 없다면
-				if (starportUnit != null && starportUnit.canBuildAddon()) {
-					if (MyBotModule.Broodwar.self().minerals() > 50 && MyBotModule.Broodwar.self().gas() > 50) {
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Control_Tower, null)
-								+ ConstructionManager.Instance()
-										.getConstructionQueueItemCount(UnitType.Terran_Control_Tower, null) == 0) {
-							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Control_Tower,
-									true);
-						}
-					}
-				}
-			}
+//			if (starComplete) {
+//				// 컨트롤 타워가 없다면
+//				if (starportUnit != null && starportUnit.canBuildAddon()) {
+//					if (MyBotModule.Broodwar.self().minerals() > 50 && MyBotModule.Broodwar.self().gas() > 50) {
+//						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Control_Tower, null)
+//								+ ConstructionManager.Instance()
+//										.getConstructionQueueItemCount(UnitType.Terran_Control_Tower, null) == 0) {
+//							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Control_Tower,
+//									true);
+//						}
+//					}
+//				}
+//			}
 			if (science == false && starComplete) {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Science_Facility) == 0
 						&& ConstructionManager.Instance()
@@ -1202,20 +1223,49 @@ public class StrategyManager {
 					}
 				}
 			}
-			if (starComplete) {
-				if (starportUnit.isTraining() == false
-						&& (MyBotModule.Broodwar.getFrameCount() - WraithTime > 2400 || wraithcnt < 1)) { // TODO &&
-																											// wraithcnt
-																											// <=
-																											// needwraith){
-					if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Wraith, null) == 0) {
-						WraithTime = MyBotModule.Broodwar.getFrameCount();
-						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Wraith, false);
-						nomorewraithcnt++;
+//			if (starComplete) {
+//				if (starportUnit.isTraining() == false
+//						&& (MyBotModule.Broodwar.getFrameCount() - WraithTime > 2400 || wraithcnt < 1)) { // TODO &&
+//																											// wraithcnt
+//																											// <=
+//																											// needwraith){
+//					if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Wraith, null) == 0) {
+//						WraithTime = MyBotModule.Broodwar.getFrameCount();
+//						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Wraith, false);
+//						nomorewraithcnt++;
+//					}
+//				}
+//			}
+		}
+		
+		// dropShip for TvT start
+		if (InformationManager.Instance().enemyRace == Race.Terran) {
+			if (RespondToStrategy.Instance().max_dropShip > dropShipCnt
+					&& nomoreDropShipCnt <= RespondToStrategy.Instance().max_dropShip) {
+
+				if (CC >= 2) {
+					if (star == false) {
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Starport) == 0
+								&& ConstructionManager.Instance()
+										.getConstructionQueueItemCount(UnitType.Terran_Starport, null) == 0) {
+							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, false);
+						}
+					}
+				}
+
+				if (starComplete) {
+					if (starportUnit.isTraining() == false
+							&& (MyBotModule.Broodwar.getFrameCount() - dropShipTime > 1000 || dropShipCnt < 2)) {
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Dropship, null) == 0) {
+							dropShipTime = MyBotModule.Broodwar.getFrameCount();
+							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Dropship, false);
+							nomoreDropShipCnt++;
+						}
 					}
 				}
 			}
 		}
+		
 		// wraith for TvT end
 
 		// //valkyrie for TvT start

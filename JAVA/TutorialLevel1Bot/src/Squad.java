@@ -31,6 +31,7 @@ public class Squad {
 	public MicroVulture microVulture = new MicroVulture();
 	public MicroTank microTank = new MicroTank();
 	public MicroGoliath microGoliath = new MicroGoliath();
+	public MicroDropShip microDropShip = new MicroDropShip();
 	public MicroWraith microWraith = new MicroWraith();
 	public MicroVessel microVessel = new MicroVessel();
 	public MicroBuilding microBuilding = new MicroBuilding();
@@ -80,6 +81,9 @@ public class Squad {
 		} else if (name.startsWith(SquadName.MULTIGUERILLA_)) {
 			updateMultiGuerillaSquad();
 			return;
+		} else if (name.startsWith(SquadName.DROPSHIP)) {
+			updateDropShipSquad();
+			return;
 		} else if (name.startsWith(SquadName.BASE_DEFENSE_)) {
 			updateDefenseSquad();
 			return;
@@ -108,6 +112,7 @@ public class Squad {
 		microVulture.setMicroInformation(order, nearbyEnemies);
 		microTank.setMicroInformation(order, nearbyEnemies);
 		microGoliath.setMicroInformation(order, nearbyEnemies);
+		microDropShip.setMicroInformation(order, nearbyEnemies);
 		microWraith.setMicroInformation(order, nearbyEnemies);
 		microVessel.setMicroInformation(order, nearbyEnemies);
 		microBuilding.setMicroInformation(order, nearbyEnemies);
@@ -117,6 +122,7 @@ public class Squad {
 		microVulture.execute();
 		microTank.execute();
 		microGoliath.execute();
+		microDropShip.execute();
 		microWraith.execute();
 		microVessel.execute();
 		microBuilding.execute();
@@ -306,7 +312,7 @@ public class Squad {
 		mechanicVulture.prepareMechanic(watchOrder, vultureEnemies);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelVulture, attackWithMechanic);
 		mechanicTank.prepareMechanic(attackerOrder, attackerEnemies);
-		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelTank, initFrame);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelTank, initFrame);
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
 
@@ -454,6 +460,39 @@ public class Squad {
 		}
 	}
 	
+	private void updateDropShipSquad() {
+		List<UnitInfo> nearbyEnemiesInfo = new ArrayList<>();
+		if (MicroSet.Common.versusMechanicSet()) {
+//			for (Unit vulture : microVulture.getUnits()) {
+//				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, vulture.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Vulture.sightRange());
+//			}
+			for (Unit tank : microTank.getUnits()) {
+				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, tank.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Siege_Tank_Tank_Mode.sightRange());
+			}
+//			for (Unit goliath : microGoliath.getUnits()) {
+//				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, goliath.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Goliath.sightRange());
+//			}
+			
+		}
+		InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, order.getPosition(), InformationManager.Instance().enemyPlayer, order.getRadius());
+		
+//		mechanicVulture.prepareMechanic(order, nearbyEnemiesInfo);
+//		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
+		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
+//		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
+		
+//		for (Unit vulture : microVulture.getUnits()) {
+//			mechanicVulture.executeMechanicMicro(vulture);
+//		}
+		for (Unit tank : microTank.getUnits()) {
+			mechanicTank.executeMechanicMicro(tank);
+		}
+//		for (Unit goliath : microGoliath.getUnits()) {
+//			mechanicGoliath.executeMechanicMicro(goliath);
+//		}
+	}
+	
 	private void updateDefenseSquad() {
 		List<UnitInfo> nearbyEnemiesInfo = new ArrayList<>();
 		if (MicroSet.Common.versusMechanicSet()) {
@@ -473,7 +512,7 @@ public class Squad {
 		mechanicVulture.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, 0);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
 		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
 		
 //		LagTest lagTest = LagTest.startTest(true);
@@ -550,6 +589,7 @@ public class Squad {
 		List<Unit> vultureUnits = new ArrayList<>();
 		List<Unit> tankUnits = new ArrayList<>();
 		List<Unit> goliathUnits = new ArrayList<>();
+		List<Unit> dropShipUnits = new ArrayList<>();
 		List<Unit> wraithUnits = new ArrayList<>();
 		List<Unit> vesselUnits = new ArrayList<>();
 		List<Unit> buildingUnits = new ArrayList<>();
@@ -569,6 +609,8 @@ public class Squad {
 				tankUnits.add(unit);
 			} else if (unit.getType() == UnitType.Terran_Goliath) {
 				goliathUnits.add(unit);
+			} else if (unit.getType() == UnitType.Terran_Dropship) {
+				dropShipUnits.add(unit);
 			} else if (unit.getType() == UnitType.Terran_Wraith) {
 				wraithUnits.add(unit);
 			} else if (unit.getType() == UnitType.Terran_Science_Vessel) {
@@ -583,6 +625,7 @@ public class Squad {
 		microVulture.setUnits(vultureUnits);
 		microTank.setUnits(tankUnits);
 		microGoliath.setUnits(goliathUnits);
+		microDropShip.setUnits(dropShipUnits);
 		microWraith.setUnits(wraithUnits);
 		microVessel.setUnits(vesselUnits);
 		microBuilding.setUnits(buildingUnits);

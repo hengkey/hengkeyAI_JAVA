@@ -31,6 +31,7 @@ class SquadName {
 	public static final String MULTIGUERILLA_ = "MultiGuerilla_";
 	public static final String MARINE = "Marine";
 	public static final String WRAITH = "Wraith";
+	public static final String DROPSHIP = "DropShip";
 	public static final String VESSEL = "Vessel";
 	public static final String BUILDING = "Building";
 }
@@ -48,6 +49,7 @@ class Combat {
 
 	public static final int WRAITH_PRIORITY = 100;
 	public static final int VESSEL_PRIORITY = 101;
+	public static final int DROPSHIP_PRIORITY = 103;
 	
 	public static final int IDLE_RADIUS = 100;
 	public static final int ATTACK_RADIUS = 300;
@@ -58,6 +60,7 @@ class Combat {
 	public static final int SCOUT_DEFENSE_RADIUS = 1500;
 	public static final int MARINE_RADIUS = 300;
 	public static final int WRAITH_RADIUS = 300;
+	public static final int DROPSHIP_RADIUS = 300;
 	public static final int VESSEL_RADIUS = 600;
 }
 
@@ -181,6 +184,9 @@ public class CombatManager {
 		SquadOrder wraithOrder = new SquadOrder(SquadOrderType.ATTACK, getAttackPosition(null), Combat.WRAITH_RADIUS, "Wraith");
 		squadData.putSquad(new Squad(SquadName.WRAITH, wraithOrder, Combat.WRAITH_PRIORITY));
 		
+		SquadOrder dropShipOrder = new SquadOrder(SquadOrderType.ATTACK, getAttackPosition(null), Combat.DROPSHIP_RADIUS, "DropShip");
+		squadData.putSquad(new Squad(SquadName.DROPSHIP, dropShipOrder, Combat.DROPSHIP_PRIORITY));
+		
 		SquadOrder vesselOrder = new SquadOrder(SquadOrderType.DEFEND, getAttackPosition(null), Combat.VESSEL_RADIUS, "Vessel");
 		squadData.putSquad(new Squad(SquadName.VESSEL, vesselOrder, Combat.VESSEL_PRIORITY));
 		
@@ -263,6 +269,7 @@ public class CombatManager {
 			} else {
 				updateCheckerSquad();
 			}
+//			updateDropShipSquad();
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
@@ -1579,6 +1586,34 @@ public class CombatManager {
 			SquadOrder wraithOrder = new SquadOrder(SquadOrderType.ATTACK, InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer).getPoint()
 					, UnitType.Terran_Wraith.sightRange(), SquadName.WRAITH);
 			wraithSquad.setOrder(wraithOrder);
+		}
+	}
+	
+	private void updateDropShipSquad() {
+		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
+
+		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Dropship) < 1)
+			return;
+		
+		for (Unit unit : combatUnits) {
+			if ((unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode
+					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode)
+					&& squadData.canAssignUnitToSquad(unit, dropShipSquad)) {
+				if (dropShipSquad.getUnitSet().size() < 2)
+					squadData.assignUnitToSquad(unit, dropShipSquad);
+			}
+			
+			if ((unit.getType() == UnitType.Terran_Dropship)) {
+				squadData.assignUnitToSquad(unit, dropShipSquad);
+			}
+		}
+
+		if (InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer) != null) {
+			SquadOrder dropShipOrder = new SquadOrder(
+					SquadOrderType.DROPSHIP, InformationManager.Instance()
+							.getMainBaseLocation(InformationManager.Instance().enemyPlayer).getPoint(),
+					UnitType.Terran_Dropship.sightRange(), SquadName.DROPSHIP);
+			dropShipSquad.setOrder(dropShipOrder);
 		}
 	}
 	

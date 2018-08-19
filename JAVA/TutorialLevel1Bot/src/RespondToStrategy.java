@@ -46,6 +46,7 @@ public class RespondToStrategy {
 	public int max_vessel;
 	public int max_valkyrie;
 	public int max_wraith;
+	public int max_dropShip;
 	public int max_battlecruiser;
 
 	
@@ -109,6 +110,7 @@ public class RespondToStrategy {
 		max_vessel = 0;
 		max_valkyrie = 0;
 		max_wraith = 0;
+		max_dropShip = 0;
 		max_battlecruiser = 0;
 		max_turret_to_mutal = 0;
 		
@@ -454,8 +456,10 @@ public class RespondToStrategy {
 	public void RespondVsTerran() {
 		
 		max_wraith = 5;
+		max_dropShip = 2;
 		if(StrategyManager.Instance().getCurrentStrategyBasic() == StrategyManager.Strategys.terranBasic_Bionic){
 			max_wraith = 0;
+			max_dropShip = 0;
 			
 			//스타포트 지우기
 			BuildOrderQueue tempbuildQueue = BuildManager.Instance().getBuildQueue();

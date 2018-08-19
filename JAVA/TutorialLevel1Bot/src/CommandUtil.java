@@ -270,6 +270,7 @@ public class CommandUtil {
 		// check for various types of combat units
 		if (unit.getType().canAttack() ||
 			unit.getType() == UnitType.Terran_Medic ||
+			unit.getType() == UnitType.Terran_Dropship ||
 			unit.getType() == UnitType.Protoss_High_Templar ||
 			unit.getType() == UnitType.Protoss_Observer ||
 			unit.isFlying() && unit.getType().spaceProvided() > 0)
