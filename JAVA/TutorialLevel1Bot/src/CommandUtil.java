@@ -117,6 +117,32 @@ public class CommandUtil {
 		// if nothing prevents it, attack the target
 		attacker.move(targetPosition);
 	}
+	
+	public static void unLoadAll(Unit attacker, final Position targetPosition)
+	{
+		if (attacker == null || !targetPosition.isValid())
+		{
+			return;
+		}
+
+		// if we have issued a command to this unit already this frame, ignore this one
+		if (attacker.getLastCommandFrame() >= MyBotModule.Broodwar.getFrameCount() || attacker.isAttackFrame())
+		{
+			return;
+		}
+
+		// get the unit's current command
+		UnitCommand currentCommand = attacker.getLastCommand();
+
+		// if we've already told this unit to move to this position, ignore this command
+		if ((currentCommand.getUnitCommandType() == UnitCommandType.Unload_All_Position) && (currentCommand.getTargetPosition().equals(targetPosition)) && attacker.isMoving())
+		{
+			return;
+		}
+
+		// if nothing prevents it, attack the target
+		attacker.unloadAll(targetPosition);
+	}
 
 	public static void rightClick(Unit unit, Unit target)
 	{

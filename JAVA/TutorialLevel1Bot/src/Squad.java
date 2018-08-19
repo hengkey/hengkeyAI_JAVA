@@ -41,6 +41,7 @@ public class Squad {
 	private MechanicMicroVulture mechanicVulture = new MechanicMicroVulture();
 	private MechanicMicroTank mechanicTank = new MechanicMicroTank();
 	private MechanicMicroGoliath mechanicGoliath = new MechanicMicroGoliath();
+	private MechanicMicroDropShip mechanicDropShip = new MechanicMicroDropShip();
 
 	private List<Unit> unitSet = new ArrayList<>();
 //	private Map<Integer, Boolean> nearEnemy = new HashMap<>();
@@ -480,6 +481,8 @@ public class Squad {
 //		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
+		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
+		mechanicDropShip.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1);
 //		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
 		
 //		for (Unit vulture : microVulture.getUnits()) {
@@ -491,6 +494,9 @@ public class Squad {
 //		for (Unit goliath : microGoliath.getUnits()) {
 //			mechanicGoliath.executeMechanicMicro(goliath);
 //		}
+		for (Unit dropShip : microDropShip.getUnits()) {
+			mechanicDropShip.executeMechanicMicro(dropShip);
+		}
 	}
 	
 	private void updateDefenseSquad() {

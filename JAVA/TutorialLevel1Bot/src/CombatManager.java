@@ -1590,24 +1590,39 @@ public class CombatManager {
 	}
 	
 	private void updateDropShipSquad() {
-		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
-
 		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Dropship) < 1)
 			return;
+
+		List<Unit> assignableTanks = new ArrayList<>();
+		List<Unit> assignableDropShips = new ArrayList<>();
 		
 		for (Unit unit : combatUnits) {
-			if ((unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode
-					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode)
-					&& squadData.canAssignUnitToSquad(unit, dropShipSquad)) {
-				if (dropShipSquad.getUnitSet().size() < 2)
-					squadData.assignUnitToSquad(unit, dropShipSquad);
+			if ((unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
+					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode)) {
+				if (assignableTanks.size() < 4) {
+					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
+					// Exception().getStackTrace()[0].getLineNumber());
+					assignableTanks.add(unit);
+				}
 			}
-			
+
 			if ((unit.getType() == UnitType.Terran_Dropship)) {
-				squadData.assignUnitToSquad(unit, dropShipSquad);
+				if (assignableDropShips.size() < 2) {
+					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
+					// Exception().getStackTrace()[0].getLineNumber());
+					assignableDropShips.add(unit);
+				}
 			}
 		}
 
+		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
+		for (Unit assignableTank : assignableTanks) {
+			squadData.assignUnitToSquad(assignableTank, dropShipSquad);
+		}
+		for (Unit assignableDropShip : assignableDropShips) {
+			squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);
+		}
+					
 		if (InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer) != null) {
 			SquadOrder dropShipOrder = new SquadOrder(
 					SquadOrderType.DROPSHIP, InformationManager.Instance()
