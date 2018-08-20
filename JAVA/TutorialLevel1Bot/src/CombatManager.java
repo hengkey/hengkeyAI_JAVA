@@ -262,7 +262,7 @@ public class CombatManager {
 			updateWraithSquad();
 			updateVesselSquad(); //AttackSquads µÚ¿¡
 			updateBuildingSquad();
-			updateGuerillaSquad(); 
+//			updateGuerillaSquad(); 
 			
 			if (MyBotModule.Broodwar.getFrameCount() > 14000) {
 				updateMultiGuerillaSquad();
