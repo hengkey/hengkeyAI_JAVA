@@ -79,6 +79,11 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 					return;
 			}
 			
+			for (Unit goliath : goliathList) {
+				if (!goliath.isLoaded())
+					return;
+			}
+			
 			// 벽타고 움직이기 위해
 			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
 			if (diffX > 32)

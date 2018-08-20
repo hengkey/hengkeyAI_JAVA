@@ -262,7 +262,7 @@ public class CombatManager {
 			updateWraithSquad();
 			updateVesselSquad(); //AttackSquads µÚ¿¡
 			updateBuildingSquad();
-//			updateGuerillaSquad(); 
+			updateGuerillaSquad(); 
 			
 			if (MyBotModule.Broodwar.getFrameCount() > 14000) {
 				updateMultiGuerillaSquad();
@@ -1594,20 +1594,26 @@ public class CombatManager {
 			return;
 
 		List<Unit> assignableTanks = new ArrayList<>();
+		List<Unit> assignableGoliathes = new ArrayList<>();
 		List<Unit> assignableDropShips = new ArrayList<>();
 		
 		for (Unit unit : combatUnits) {
-			if ((unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
-					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode)) {
-				if (assignableTanks.size() < 4) {
+			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode) {
+				if (assignableTanks.size() < 5) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableTanks.add(unit);
 				}
 			}
-
-			if ((unit.getType() == UnitType.Terran_Dropship)) {
-				if (assignableDropShips.size() < 2) {
+			else if (unit.getType() == UnitType.Terran_Goliath) {
+				if (assignableGoliathes.size() < 6) {
+					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
+					// Exception().getStackTrace()[0].getLineNumber());
+					assignableGoliathes.add(unit);
+				}
+			}
+			else if ((unit.getType() == UnitType.Terran_Dropship)) {
+				if (assignableDropShips.size() < 4) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableDropShips.add(unit);
@@ -1618,6 +1624,9 @@ public class CombatManager {
 		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
 		for (Unit assignableTank : assignableTanks) {
 			squadData.assignUnitToSquad(assignableTank, dropShipSquad);
+		}
+		for (Unit assignableGoliath : assignableGoliathes) {
+			squadData.assignUnitToSquad(assignableGoliath, dropShipSquad);
 		}
 		for (Unit assignableDropShip : assignableDropShips) {
 			squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);

@@ -265,6 +265,10 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 					CommandUtil.rightClick(tank, dropShip);
 			}
 		}
+		else
+		{
+        	CommandUtil.attackMove(tank, order.getPosition());
+		}
 	}
 	
 	private Position findPositionToSiege(Unit tank, int siegeAreaDist) {

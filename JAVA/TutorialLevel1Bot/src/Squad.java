@@ -315,7 +315,7 @@ public class Squad {
 		mechanicTank.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelTank, initFrame);
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
-		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelGoliath);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelGoliath);
 
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
 		//제공해주는 frame값이 튀는 현상이 있는것 같아 자체 frame값 사용
@@ -446,7 +446,7 @@ public class Squad {
 				InformationManager.Instance().enemyPlayer, order.getRadius());
 	
 		mechanicGoliath.prepareMechanic(order, goliathEnemies);
-		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), saveUnitLevel);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevel);
 		
 		for (Unit goliath : microGoliath.getUnits()) {
 			String shortPathName = SquadName.MULTIGUERILLA_ + goliath.getType() + goliath.getID();
@@ -470,10 +470,12 @@ public class Squad {
 			for (Unit tank : microTank.getUnits()) {
 				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, tank.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Siege_Tank_Tank_Mode.sightRange());
 			}
-//			for (Unit goliath : microGoliath.getUnits()) {
-//				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, goliath.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Goliath.sightRange());
-//			}
-			
+			for (Unit goliath : microGoliath.getUnits()) {
+				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, goliath.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Goliath.sightRange());
+			}
+			for (Unit dropShip : microDropShip.getUnits()) {
+				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, dropShip.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Dropship.sightRange());
+			}
 		}
 		InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, order.getPosition(), InformationManager.Instance().enemyPlayer, order.getRadius());
 		
@@ -483,7 +485,8 @@ public class Squad {
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
 		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicDropShip.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1);
-//		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
+		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
 		
 //		for (Unit vulture : microVulture.getUnits()) {
 //			mechanicVulture.executeMechanicMicro(vulture);
@@ -491,9 +494,9 @@ public class Squad {
 		for (Unit tank : microTank.getUnits()) {
 			mechanicTank.executeMechanicMicro(tank);
 		}
-//		for (Unit goliath : microGoliath.getUnits()) {
-//			mechanicGoliath.executeMechanicMicro(goliath);
-//		}
+		for (Unit goliath : microGoliath.getUnits()) {
+			mechanicGoliath.executeMechanicMicroForDR(goliath);
+		}
 		for (Unit dropShip : microDropShip.getUnits()) {
 			mechanicDropShip.executeMechanicMicro(dropShip);
 		}

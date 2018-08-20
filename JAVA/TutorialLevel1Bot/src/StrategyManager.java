@@ -1239,32 +1239,32 @@ public class StrategyManager {
 		}
 		
 		// dropShip for TvT start
-		if (InformationManager.Instance().enemyRace == Race.Terran) {
-			if (RespondToStrategy.Instance().max_dropShip > dropShipCnt
-					&& nomoreDropShipCnt <= RespondToStrategy.Instance().max_dropShip) {
-
-				if (CC >= 2) {
-					if (star == false) {
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Starport) == 0
-								&& ConstructionManager.Instance()
-										.getConstructionQueueItemCount(UnitType.Terran_Starport, null) == 0) {
-							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, false);
-						}
-					}
-				}
-
-				if (starComplete) {
-					if (starportUnit.isTraining() == false
-							&& (MyBotModule.Broodwar.getFrameCount() - dropShipTime > 1000 || dropShipCnt < 2)) {
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Dropship, null) == 0) {
-							dropShipTime = MyBotModule.Broodwar.getFrameCount();
-							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Dropship, false);
-							nomoreDropShipCnt++;
-						}
-					}
-				}
-			}
-		}
+//		if (InformationManager.Instance().enemyRace == Race.Terran) {
+//			if (RespondToStrategy.Instance().max_dropShip > dropShipCnt
+//					&& nomoreDropShipCnt <= RespondToStrategy.Instance().max_dropShip) {
+//
+//				if (CC >= 2) {
+//					if (star == false) {
+//						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Starport) == 0
+//								&& ConstructionManager.Instance()
+//										.getConstructionQueueItemCount(UnitType.Terran_Starport, null) == 0) {
+//							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, false);
+//						}
+//					}
+//				}
+//
+//				if (starComplete) {
+//					if (starportUnit.isTraining() == false
+//							&& (MyBotModule.Broodwar.getFrameCount() - dropShipTime > 1000 || dropShipCnt < 2)) {
+//						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Dropship, null) == 0) {
+//							dropShipTime = MyBotModule.Broodwar.getFrameCount();
+//							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Dropship, false);
+//							nomoreDropShipCnt++;
+//						}
+//					}
+//				}
+//			}
+//		}
 		
 		// wraith for TvT end
 

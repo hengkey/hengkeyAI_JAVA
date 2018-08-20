@@ -19,6 +19,7 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 	
 	private List<Unit> tankList = new ArrayList<>();
 	private List<Unit> goliathList = new ArrayList<>();
+	private List<Unit> dropShipList = new ArrayList<>();
 	
 	private int saveUnitLevel = 1;
 	
@@ -39,9 +40,10 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 		this.enemiesInfo = enemiesInfo;
 	}
 	
-	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, int saveUnitLevel) {
+	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel) {
 		this.tankList = tankList;
 		this.goliathList = goliathList;
+		this.dropShipList = dropShipList;
 		this.saveUnitLevel = saveUnitLevel;
 		
 		this.attackWithTank = tankList.size() * 6 >= goliathList.size();
@@ -139,6 +141,23 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 				}
 			}
 			break;
+		}
+	}
+	
+	public void executeMechanicMicroForDR(Unit goliath) {
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawTextMap(goliath.getPosition().getX(), goliath.getPosition().getY() + 10,
+					"" + order.getType());
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(goliath.getPosition(), 10, Color.Purple, true);
+		
+		if (goliath.getDistance(order.getPosition()) > 300) {
+			for (Unit dropShip : dropShipList) {
+				if (dropShip.canLoad(goliath))
+					CommandUtil.rightClick(goliath, dropShip);
+			}
+		} else {
+			CommandUtil.attackMove(goliath, order.getPosition());
 		}
 	}
 	
