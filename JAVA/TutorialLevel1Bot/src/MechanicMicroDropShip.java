@@ -25,7 +25,12 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 	
 	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
 	private boolean attackWithTank = false;
+	private boolean nearestFlag = false;
 	private int stickToTankRadius = 0;
+	
+    public static int MaxDropShip=4;
+    public static int MaxDropTank=5;
+    public static int MaxDropGoliath=6;
 	
 	public ShortPathGuerrilla getShortPath(String squadName) {
 		return shortPathInfo.get(squadName);
@@ -43,7 +48,7 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel) {
 		this.tankList = tankList;
 		this.goliathList = goliathList;
-		this.dropShipList = goliathList;
+		this.dropShipList = dropShipList;
 		this.saveUnitLevel = saveUnitLevel;
 		
 		this.attackWithTank = tankList.size() * 6 >= goliathList.size();
@@ -73,20 +78,18 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 		// 목적지까지 move
 		movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
 		if (dropShip.getDistance(movePosition) > order.getRadius()) {
-			// 모든 unit이 탈때가지 기다린다.
-			for (Unit tank : tankList) {
-				if (!tank.isLoaded())
-					return;
-			}
 			
-			for (Unit goliath : goliathList) {
-				if (!goliath.isLoaded())
-					return;
-			}
+			//모두 실으면 unit이 안보이므로 size가 0이다
+			if (tankList.size() > 0)
+				return;
+
+			//모두 실으면 unit이 안보이므로 size가 0이다
+			if (goliathList.size() > 0)
+				return;
 			
 			// 벽타고 움직이기 위해
 			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
-			if (diffX > 32)
+			if (diffX > 36)
 				movePosition = new Position(movePosition.getX(), dropShip.getY());
 			else
 				movePosition = new Position(dropShip.getX(), movePosition.getY());
@@ -98,8 +101,28 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			Position tmpPosition = selfmainBaseLocations.getPosition();
 			tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
 			int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
-			if (diffY > 32)
+			if (diffY > 36*2)
 				movePosition = new Position(dropShip.getX(), tmpPosition.getY());
+			
+			//모든 dropShip을 모으기 위해(그래야 터렛피해를 덜 받는다)
+			if (nearestFlag == false) {
+				int nearCnt = 0;
+				for (Unit otherdropShip : dropShipList) {
+					if (dropShip.equals(otherdropShip))
+						continue;
+
+					System.out.println("dropShip.getDistance(otherdropShip)=" + dropShip.getDistance(otherdropShip));
+					if (dropShip.getDistance(otherdropShip) < 36) {
+						nearCnt++;
+					}
+				}
+				
+				if (nearCnt < 3) {
+					movePosition = dropShipList.get(0).getPosition();
+				} else {
+					nearestFlag = true;
+				}
+			}
 			
 			if (dropShip.isIdle())
 				CommandUtil.move(dropShip, movePosition);

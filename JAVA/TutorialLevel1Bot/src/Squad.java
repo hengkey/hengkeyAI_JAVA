@@ -483,10 +483,10 @@ public class Squad {
 //		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
-		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicDropShip.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1);
 		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
+		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
+		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
 		
 //		for (Unit vulture : microVulture.getUnits()) {
 //			mechanicVulture.executeMechanicMicro(vulture);

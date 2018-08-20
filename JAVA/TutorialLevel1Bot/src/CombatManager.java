@@ -1599,21 +1599,21 @@ public class CombatManager {
 		
 		for (Unit unit : combatUnits) {
 			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode) {
-				if (assignableTanks.size() < 5) {
+				if (assignableTanks.size() < MechanicMicroDropShip.MaxDropTank) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableTanks.add(unit);
 				}
 			}
 			else if (unit.getType() == UnitType.Terran_Goliath) {
-				if (assignableGoliathes.size() < 6) {
+				if (assignableGoliathes.size() < MechanicMicroDropShip.MaxDropGoliath) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableGoliathes.add(unit);
 				}
 			}
 			else if ((unit.getType() == UnitType.Terran_Dropship)) {
-				if (assignableDropShips.size() < 4) {
+				if (assignableDropShips.size() < MechanicMicroDropShip.MaxDropShip) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableDropShips.add(unit);
