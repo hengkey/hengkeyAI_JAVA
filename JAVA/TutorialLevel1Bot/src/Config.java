@@ -122,7 +122,7 @@ public class Config {
 	public static boolean DrawMouseCursorInfo = true;
 	
 	/// heng이 임의로 추가한 정보	
-	public static boolean DrawHengDebugInfo = false;
+	public static boolean DrawHengDebugInfo = true;
 
 	public static final Color ColorLineTarget = Color.White;
 	public static final Color ColorLineMineral = Color.Cyan;

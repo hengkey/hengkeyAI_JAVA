@@ -131,7 +131,7 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 		} else { // 목적지 도착
 			if (dropShip.isIdle() || dropShip.isBraking()) {
 				Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
-				CommandUtil.unLoadAll(dropShip, randomPosition);
+				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
 			}
 		}
 	}

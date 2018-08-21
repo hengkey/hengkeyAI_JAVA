@@ -271,7 +271,7 @@ public class CombatManager {
 			} else {
 				updateCheckerSquad();
 			}
-//			updateDropShipSquad();
+			updateDropShipSquad();
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
@@ -1618,18 +1618,21 @@ public class CombatManager {
 	private void updateDropShipSquad() {
 		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Dropship) < 1)
 			return;
-
+		
+		//이미 할당되어 있으면 return
+		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
+		if (!dropShipSquad.getUnitSet().isEmpty())
+			return;
+		
 		List<Unit> assignableTanks = new ArrayList<>();
 		List<Unit> assignableGoliathes = new ArrayList<>();
 		List<Unit> assignableDropShips = new ArrayList<>();
 		
 		for (Unit unit : combatUnits) {
-			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode) {
-				if (assignableTanks.size() < MechanicMicroDropShip.MaxDropTank) {
+			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode || unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
 					assignableTanks.add(unit);
-				}
 			}
 			else if (unit.getType() == UnitType.Terran_Goliath) {
 				if (assignableGoliathes.size() < MechanicMicroDropShip.MaxDropGoliath) {
@@ -1646,14 +1649,32 @@ public class CombatManager {
 				}
 			}
 		}
+		
+		if (assignableTanks.size() >= MechanicMicroDropShip.MaxDropTank
+				&& assignableGoliathes.size() >= MechanicMicroDropShip.MaxDropGoliath) {
 
-		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
-		for (Unit assignableTank : assignableTanks) {
-			squadData.assignUnitToSquad(assignableTank, dropShipSquad);
+			// 탱크
+			int assignableTanksCnt = 0;
+			for (Unit assignableTank : assignableTanks) {
+				squadData.assignUnitToSquad(assignableTank, dropShipSquad);
+				assignableTanksCnt++;
+				if (assignableTanksCnt >= assignableDropShips.size() * 2
+						|| assignableTanksCnt >= MechanicMicroDropShip.MaxDropTank)
+					break;
+			}
+
+			// 골리앗
+			int assignableGoliathesCnt = 0;
+			for (Unit assignableGoliath : assignableGoliathes) {
+				squadData.assignUnitToSquad(assignableGoliath, dropShipSquad);
+				assignableGoliathesCnt++;
+				if (assignableGoliathesCnt >= assignableDropShips.size() * 4
+						|| assignableGoliathesCnt >= MechanicMicroDropShip.MaxDropGoliath)
+					break;
+			}
 		}
-		for (Unit assignableGoliath : assignableGoliathes) {
-			squadData.assignUnitToSquad(assignableGoliath, dropShipSquad);
-		}
+
+		// 드랍쉽
 		for (Unit assignableDropShip : assignableDropShips) {
 			squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);
 		}
