@@ -8,6 +8,7 @@ import bwapi.Race;
 import bwapi.Unit;
 import bwapi.UnitType;
 import bwta.BWTA;
+import bwta.Chokepoint;
 
 public class MicroMarine extends MicroManager {
 
@@ -85,12 +86,6 @@ public class MicroMarine extends MicroManager {
 			//kitingOption.setGoalPosition(bunkerpos);
 			for (Unit marine : marines) 
 			{
-				/* koba
-				if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) 
-				{
-					continue;
-				}
-				*/
 				
 				bunker.load(marine);
 				

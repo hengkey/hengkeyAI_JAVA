@@ -68,27 +68,38 @@ public class Squad {
 	}
 	
 	public void update() {
+		
 		updateUnits();
 		if (unitSet.isEmpty()) {
 			return;
 		}
 		
-		if (name.equals(SquadName.MAIN_ATTACK)) {
+		if (name.equals(SquadName.MAIN_ATTACK)) 
+		{
 			updateMainAttackSquad();
 			return;
-		} else if (name.equals(SquadName.CHECKER) || name.startsWith(SquadName.GUERILLA_)) {
+		} 
+		else if (name.equals(SquadName.CHECKER) || name.startsWith(SquadName.GUERILLA_)) 
+		{
 			updateVultureSquad();
 			return;
-		} else if (name.startsWith(SquadName.MULTIGUERILLA_)) {
+		} 
+		else if (name.startsWith(SquadName.MULTIGUERILLA_)) 
+		{
 			updateMultiGuerillaSquad();
 			return;
-		} else if (name.startsWith(SquadName.DROPSHIP)) {
+		} 
+		else if (name.startsWith(SquadName.DROPSHIP)) 
+		{
 			updateDropShipSquad();
 			return;
-		} else if (name.startsWith(SquadName.BASE_DEFENSE_)) {
+		} 
+		else if (name.startsWith(SquadName.BASE_DEFENSE_)) {
 			updateDefenseSquad();
 			return;
-		} else if (name.equals(SquadName.IDLE)) {
+		} 
+		else if (name.equals(SquadName.IDLE)) 
+		{
 			return;
 		}
 		

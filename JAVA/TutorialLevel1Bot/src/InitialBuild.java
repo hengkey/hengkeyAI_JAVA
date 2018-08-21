@@ -103,8 +103,8 @@ public class InitialBuild {
 	        queueBuild(false, UnitType.Terran_SCV);
 	        queueBuild(true, UnitType.Terran_Refinery);
 	        queueBuild(true, UnitType.Terran_Marine);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
 	        queueBuild(false, UnitType.Terran_Marine);
+	        BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
 	        queueBuild(false, UnitType.Terran_Marine);
 	        queueBuild(false, UnitType.Terran_Marine);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);

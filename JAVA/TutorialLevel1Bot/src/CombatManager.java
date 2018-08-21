@@ -283,6 +283,8 @@ public class CombatManager {
 		squadData.update();
 	}
 	
+	int marineAttackCount=0;
+	
 	private void updateBunker() {
 		
         /*
@@ -309,12 +311,38 @@ public class CombatManager {
 			{
 				//myMarines.add(unit);
 				marine = unit;
+				/*
+				if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				{
+					if (this.marineAttackCount < 2) 
+					{
+						if (InformationManager.Instance().enemyPlayer.getStartLocation() != null) 
+						{
+							BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
+							if (enemyfirstBaseLocation != null) 
+							{
+								CommandUtil.attackMove(marine, InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer).getPosition());
+								this.marineAttackCount++;
+								System.out.println("Attack Marine GOGO1 : " + this.marineAttackCount);
+								continue;
+							}
+						}
+					}
+				}
+				*/
 			}
-			
+						
 			if(unit.getType() == UnitType.Terran_Bunker && unit.isCompleted()){
 				//bunkers.add(unit);
 				bunker = unit;
 			}
+			
+			/* koba
+			if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) 
+			{
+				continue;
+			}
+			*/
 			
 			if ((bunker != null) && (marine != null))
 			{

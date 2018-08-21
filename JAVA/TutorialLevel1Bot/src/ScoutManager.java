@@ -70,14 +70,18 @@ public class ScoutManager{
 	public void update()
 	{
 		// 1초에 6번만 실행합니다
-		if (MyBotModule.Broodwar.getFrameCount() % 4 == 0){
-		
+		if (MyBotModule.Broodwar.getFrameCount() % 4 == 0)
+		{
 			// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
 			if(scoutFlag == false)
 				assignScoutIfNeeded();
-			if(fleeFlag == false){
+			
+			if(fleeFlag == false)
+			{
 				moveScoutUnit();
-			}else{
+			}
+			else
+			{
 				if(fleeLongEnemyFlag == false){
 					updateFleeUnit();
 				}else{

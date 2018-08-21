@@ -3118,7 +3118,7 @@ public class StrategyManager {
 		}
 		
 		// 마린4마리 만들고 배럭올리기 5000 적당할듯
-		if ((MyBotModule.Broodwar.getFrameCount() > 5000) &&
+		if ((MyBotModule.Broodwar.getFrameCount() > 4300) &&
 		    (MyBotModule.Broodwar.getFrameCount() < 11000))
 		{
 			//if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) >= 1) 
@@ -3131,7 +3131,7 @@ public class StrategyManager {
 					if((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted())
 					{
 						List <Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 500, false, true, null);
-						if(enemy.size() > 0)
+						if(enemy.size() > 3)
 						{
 							if(unit.isLifted() == true)
 							{
