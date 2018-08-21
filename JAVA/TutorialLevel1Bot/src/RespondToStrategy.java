@@ -75,6 +75,7 @@ public class RespondToStrategy {
 	public boolean chk_machine_shop;
 	public boolean chk_armory;
 	public boolean chk_starport;
+	public boolean chk_dropship;
 	public boolean chk_control_tower;
 	public boolean chk_comsat_station;
 	public boolean chk_science_facility;
@@ -139,6 +140,7 @@ public class RespondToStrategy {
 		chk_machine_shop = false;
 		chk_armory = false;
 		chk_starport = false;
+		chk_dropship = false;
 		chk_control_tower = false;
 		chk_comsat_station = false;
 		chk_science_facility = false;
@@ -232,6 +234,9 @@ public class RespondToStrategy {
 			}
 			if (unit.getType() == UnitType.Terran_Starport) {
 				chk_starport = true;
+			}
+			if (unit.getType() == UnitType.Terran_Dropship) {
+				chk_dropship = true;
 			}
 			if (unit.getType() == UnitType.Terran_Control_Tower) {
 				chk_control_tower = true;

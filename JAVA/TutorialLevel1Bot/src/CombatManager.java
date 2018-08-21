@@ -123,7 +123,9 @@ public class CombatManager {
 	}
 	/// 특수상황 처리 함수 ex) 벌처 본진 귀환 setDetailStrategy(CombatStrategyDetail.VULTURE_JOIN_SQUAD);
 	public void setDetailStrategy(CombatStrategyDetail detailStrategy, int frameDuration) {
-//		MyBotModule.Broodwar.sendText("detailStrategy enabled : " + detailStrategy.toString());
+		if (Config.DrawHengDebugInfo == true)
+			MyBotModule.Broodwar.sendText("detailStrategy enabled : " + detailStrategy.toString());
+		System.out.println("detailStrategy enabled : " + detailStrategy.toString());
 		detailStrategyExFrame[detailStrategy.ordinal()] = MyBotModule.Broodwar.getFrameCount() + frameDuration;
 	}
 	public void updateDetailStrategy() {
@@ -133,7 +135,8 @@ public class CombatManager {
 				continue;
 			
 			if((MyBotModule.Broodwar.getFrameCount() > expireFrame)) {
-//				MyBotModule.Broodwar.sendText("detailStrategy disabled : " + CombatStrategyDetail.values()[i].toString());
+				MyBotModule.Broodwar.sendText("detailStrategy disabled : " + CombatStrategyDetail.values()[i].toString());
+				System.out.println("detailStrategy disabled : " + CombatStrategyDetail.values()[i].toString());
 				detailStrategyExFrame[i] = 0;
 			}
 		}
@@ -271,7 +274,9 @@ public class CombatManager {
 			} else {
 				updateCheckerSquad();
 			}
-			updateDropShipSquad();
+			
+			if (InformationManager.Instance().enemyRace == Race.Terran)
+				updateDropShipSquad();
 			
 			SpiderMineManger.Instance().update();
 			VultureTravelManager.Instance().update();
@@ -1650,8 +1655,13 @@ public class CombatManager {
 			}
 		}
 		
-		if (assignableTanks.size() >= MechanicMicroDropShip.MaxDropTank
+		if (assignableDropShips.size() >= MechanicMicroDropShip.MaxDropShip
+				&& assignableTanks.size() >= MechanicMicroDropShip.MaxDropTank
 				&& assignableGoliathes.size() >= MechanicMicroDropShip.MaxDropGoliath) {
+			// 드랍쉽
+			for (Unit assignableDropShip : assignableDropShips) {
+				squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);
+			}
 
 			// 탱크
 			int assignableTanksCnt = 0;
@@ -1672,11 +1682,6 @@ public class CombatManager {
 						|| assignableGoliathesCnt >= MechanicMicroDropShip.MaxDropGoliath)
 					break;
 			}
-		}
-
-		// 드랍쉽
-		for (Unit assignableDropShip : assignableDropShips) {
-			squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);
 		}
 					
 		if (InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer) != null) {

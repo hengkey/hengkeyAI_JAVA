@@ -571,6 +571,10 @@ public class AnalyzeStrategy {
 				selectedSE = StrategyManager.StrategysException.Init;
 			}
 		}
+		
+		if (RespondToStrategy.Instance().chk_dropship == true) {
+			selectedSE = StrategyManager.StrategysException.terranException_OurDropShip;
+		}
 
 		if (selectedSE != null) {
 			StrategyManager.Instance().setCurrentStrategyException(selectedSE);

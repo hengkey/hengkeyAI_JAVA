@@ -139,8 +139,8 @@ public class Config {
 
 															  // 0 1  2  3 4 5 6 7 8 9 0 1 2  3 4 5 6 7 8 9 0 1 2 3 
 	public static final int[] vultureratioexception = new int[] {1,0 ,0 ,7,0,1,0,9,9,8,7,7,10,6,6,1,1,0,0,0,0,0,0,0}; //예외전략 벌쳐 비, 예 vultureratio[0] 은 
-	public static final int[] tankratioexception    = new int[] {4,2 ,2 ,3,0,3,0,3,3,3,3,3,2 ,1,1,3,4,0,0,0,0,0,0,0}; //예외전략 탱크 비
-	public static final int[] goliathratioexception = new int[] {1,10,10,2,0,3,0,0,0,1,2,2,0 ,0,0,0,0,0,0,0,0,0,0,0}; //예외전략 골리앗 비
+	public static final int[] tankratioexception    = new int[] {4,2 ,2 ,3,0,3,0,3,3,3,3,3,2 ,1,1,3,4,0,0,0,0,0,0,5}; //예외전략 탱크 비
+	public static final int[] goliathratioexception = new int[] {1,10,10,2,0,3,0,0,0,1,2,2,0 ,0,0,0,0,0,0,0,0,0,0,5}; //예외전략 골리앗 비
 	public static final int[] wgtexception          = new int[] {2,1 ,1 ,1,1,2,1,1,1,1,1,1,1 ,1,1,2,2,0,0,0,0,0,0,0}; //예외전략 우선순위 1벌쳐, 2탱크, 3골리앗	
 	
 //	public static final int[] vultureratioexception = new int[] {6,0 ,0 ,7,0 ,6,2,9,9,8,7,7,10,8,3,1,0,0,0,0,0,0,0,0}; //예외전략 벌쳐 비, 예 vultureratio[0] 은 
@@ -194,5 +194,6 @@ public class Config {
 //20	,terranException_CheeseRush
 //	,terranException_NuClear
 //	,terranException_Wraith
+//	,terranException_OurDropShip
 //	,Init
 }

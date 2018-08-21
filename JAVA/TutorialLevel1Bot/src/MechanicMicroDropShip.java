@@ -87,16 +87,18 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			if (goliathList.size() > 0)
 				return;
 
-			// 벽타고 움직이기 위해
-			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
-			if (diffX > 36)
-				movePosition = new Position(movePosition.getX(), dropShip.getY());
-			else
-				movePosition = new Position(dropShip.getX(), movePosition.getY());
+//			if (dropShip.getDistance(movePosition) > 500) {
+				// 벽타고 움직이기 위해
+				int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
+				if (diffX > 36)
+					movePosition = new Position(movePosition.getX(), dropShip.getY());
+				else
+					movePosition = new Position(dropShip.getX(), movePosition.getY());
 
-			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
-			// System.out.println("movePosition"+movePosition.toTilePosition().toString());
-
+				movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
+				// System.out.println("movePosition"+movePosition.toTilePosition().toString());
+//			}
+			
 			// 일단 울베애 가까운 y축 벽에 붙는다
 			Position tmpPosition = selfmainBaseLocations.getPosition();
 			tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
@@ -131,7 +133,8 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 		} else { // 목적지 도착
 			if (dropShip.isIdle() || dropShip.isBraking()) {
 				Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
-				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
+//				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
+				CommandUtil.unLoadAll(dropShip, randomPosition);
 			}
 		}
 	}

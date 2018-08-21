@@ -93,25 +93,30 @@ public class StrategyManager {
 		zergException_Guardian, 
 		zergException_NongBong, 
 		zergException_OnLyLing, 
-		zergException_PrepareLurker, 
+		zergException_PrepareLurker,
+		
 		zergException_ReverseRush, 
 		zergException_HighTech, 
 		protossException_CarrierMany, 
 		protossException_Dark, 
 		protossException_Reaver, 
+		
 		protossException_Scout, 
 		protossException_Shuttle, 
 		protossException_ShuttleMix, 
 		protossException_ReadyToZealot, 
 		protossException_ZealotPush, 
+		
 		protossException_ReadyToDragoon, 
 		protossException_DragoonPush, 
 		protossException_PhotonRush, 
 		protossException_DoubleNexus, 
 		protossException_Arbiter, 
+		
 		terranException_CheeseRush, 
 		terranException_NuClear, 
-		terranException_WraithCloak, 
+		terranException_WraithCloak,
+		terranException_OurDropShip,
 		Init
 	} // 예외 전략 나열, 예외가 아닐때는 무조건 Init 으로
 
@@ -153,6 +158,9 @@ public class StrategyManager {
 
 	public void setCurrentStrategyException(StrategysException strategy) {
 		if (CurrentStrategyException != strategy) {
+			if (Config.DrawHengDebugInfo == true)
+				MyBotModule.Broodwar.sendText("StrategysException" + strategy.toString());
+			System.out.println("StrategysException" + strategy.toString());
 			LastStrategyException = CurrentStrategyException;
 			CurrentStrategyException = strategy;
 			setCombatUnitRatio();
@@ -1867,8 +1875,8 @@ public class StrategyManager {
 	}
 
 	// TODO 상대방 신규 멀티를 찾았을때 공격 여부 한번더 돌려야함(상대 멀티 진행 여부 판단해야되므로
-	public void executeCombat() {
 
+	public void executeCombat() {
 		int unitPoint = 0;
 		int expansionPoint = 0;
 		int totPoint = 0;
