@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.rmi.CORBA.Util;
+
 import bwapi.Color;
 import bwapi.Order;
 import bwapi.Pair;
@@ -283,7 +285,6 @@ public class CombatManager {
 		squadData.update();
 	}
 	
-	int marineAttackCount=0;
 	
 	private void updateBunker() {
 		
@@ -307,50 +308,47 @@ public class CombatManager {
 		Unit marine=null;
 		for(Unit unit : myUnits)
 		{
+					
+			if(unit.getType() == UnitType.Terran_Bunker && unit.isCompleted())
+			{
+				bunker = unit;
+				break;
+			}
+		}
+				
+		for(Unit unit : myUnits)
+		{
 			if(unit.getType() == UnitType.Terran_Marine && unit.isCompleted())
 			{
-				//myMarines.add(unit);
 				marine = unit;
-				/*
-				if (InformationManager.Instance().enemyRace == Race.Zerg) 
-				{
-					if (this.marineAttackCount < 2) 
-					{
-						if (InformationManager.Instance().enemyPlayer.getStartLocation() != null) 
-						{
-							BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
-							if (enemyfirstBaseLocation != null) 
-							{
-								CommandUtil.attackMove(marine, InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer).getPosition());
-								this.marineAttackCount++;
-								System.out.println("Attack Marine GOGO1 : " + this.marineAttackCount);
-								continue;
-							}
-						}
-					}
-				}
-				*/
 			}
-						
-			if(unit.getType() == UnitType.Terran_Bunker && unit.isCompleted()){
-				//bunkers.add(unit);
-				bunker = unit;
-			}
-			
-			/* koba
-			if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) 
-			{
-				continue;
-			}
-			*/
 			
 			if ((bunker != null) && (marine != null))
 			{
 				//System.out.println("MicroMarine : in to the bunker");
+				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
+				{
+					CommandUtil.rightClick(marine, bunker);
+				}
+				/*
 				bunker.load(marine);
 				
 				marine = null;
+				*/
 			}
+			else
+			{
+				Position center = new Position(64*32, 64*32);
+				if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				{
+				// if we're not near the order position, go there
+					CommandUtil.move(marine, center);
+				}
+			}
+			
+			Chokepoint enemy_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
+			if(enemy_first_choke != null)
+				MyBotModule.Broodwar.drawCircleMap(enemy_first_choke.getPoint(), 10, Color.Red, true);
 		}
 		
 		//if(bunkers.size() == 0){

@@ -28,9 +28,9 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 	private boolean nearestFlag = false;
 	private int stickToTankRadius = 0;
 	
-    public static int MaxDropShip=4;
-    public static int MaxDropTank=5;
-    public static int MaxDropGoliath=6;
+    public static int MaxDropShip=2;
+    public static int MaxDropTank=2;
+    public static int MaxDropGoliath=4;
 	
 	public ShortPathGuerrilla getShortPath(String squadName) {
 		return shortPathInfo.get(squadName);
@@ -86,7 +86,7 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			//모두 실으면 unit이 안보이므로 size가 0이다
 			if (goliathList.size() > 0)
 				return;
-			
+
 			// 벽타고 움직이기 위해
 			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
 			if (diffX > 36)
@@ -103,7 +103,8 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
 			if (diffY > 36*2)
 				movePosition = new Position(dropShip.getX(), tmpPosition.getY());
-			
+			// System.out.println("movePosition"+movePosition.toTilePosition().toString()+
+			// new Exception().getStackTrace()[0].getLineNumber());		
 			//모든 dropShip을 모으기 위해(그래야 터렛피해를 덜 받는다)
 			if (nearestFlag == false) {
 				int nearCnt = 0;
@@ -111,13 +112,14 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 					if (dropShip.equals(otherdropShip))
 						continue;
 
-					System.out.println("dropShip.getDistance(otherdropShip)=" + dropShip.getDistance(otherdropShip));
+					// System.out.println("dropShip.getDistance(otherdropShip)=" +
+					// dropShip.getDistance(otherdropShip));
 					if (dropShip.getDistance(otherdropShip) < 36) {
 						nearCnt++;
 					}
 				}
 				
-				if (nearCnt < 3) {
+				if (nearCnt < (MaxDropShip-1)) {
 					movePosition = dropShipList.get(0).getPosition();
 				} else {
 					nearestFlag = true;

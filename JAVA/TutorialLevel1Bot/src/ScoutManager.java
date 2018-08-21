@@ -53,7 +53,8 @@ public class ScoutManager{
 	private boolean cyberFlag = false;  //프로토스 드라군 건물 완성됐는지 판별 변수. 
 	private boolean scoutFlag = false;  //스카웃 한번만 보내기 위한 변수 
 	private boolean gasExpscoutFlag = false;  //적 본진 가스 발견했는지 판별 변수 
-	private boolean twoBarrack = false;  //적 본진 가스 발견했는지 판별 변수 
+	private boolean twoBarrack = false;  //적 본진 가스 발견했는지 판별 변수
+	private boolean bunkerFlag = false;  //적 앞마당 bunker 
 	
 	
 	private List<Unit> units = new ArrayList<>();
@@ -72,44 +73,63 @@ public class ScoutManager{
 		// 1초에 6번만 실행합니다
 		if (MyBotModule.Broodwar.getFrameCount() % 4 == 0)
 		{
-			// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
-			if(scoutFlag == false)
-				assignScoutIfNeeded();
-			
-			if(fleeFlag == false)
+			BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
+			if (enemyfirstBaseLocation == null)
 			{
-				moveScoutUnit();
-			}
-			else
-			{
-				if(fleeLongEnemyFlag == false){
-					updateFleeUnit();
-				}else{
-					updateSecondFleeUnit();
+				// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
+				if (scoutFlag == false)
+					assignScoutIfNeeded();
+
+				if (fleeFlag == false) {
+					moveScoutUnit();
+				} else {
+					if (fleeLongEnemyFlag == false) {
+						updateFleeUnit();
+					} else {
+						updateSecondFleeUnit();
+					}
+
+					if (idleFlag) {
+						WorkerManager.Instance().setIdleWorker(currentScoutUnit);
+						currentScoutUnit = null;
+						return;
+					} else {
+						followPerimeter();
+					}
+
+					// distrubMineral();
+					// if (distrubMineral && MyBotModule.Broodwar.getFrameCount() % 20 == 0)
+					// updateScoutUnit();
+
 				}
-				if(idleFlag){
+			} 
+			else 
+			{
+				if (bunkerFlag == false)
+				{
 					WorkerManager.Instance().setIdleWorker(currentScoutUnit);
 					currentScoutUnit = null;
-					return;
-				}else{
-					followPerimeter();
+
+					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker,
+							enemyfirstBaseLocation.getTilePosition(), true);
+					bunkerFlag = true;
 				}
-//				distrubMineral();
-//				if (distrubMineral && MyBotModule.Broodwar.getFrameCount() % 20 == 0) updateScoutUnit();
-				
 			}
 		}
-
 		// 참고로, scoutUnit 의 이동에 의해 발견된 정보를 처리하는 것은 InformationManager.update() 에서 수행함
 	}
 
 	//적 본진에서 앞멀티 도망갈지 안갈지 정하는 함수
 	private void updateFleeUnit() {
+
 		// TODO Auto-generated method stub
-		if(currentScoutUnit == null){
+		if(currentScoutUnit == null)
+		{
 			return;
 		}
-		if(currentScoutUnit != null){
+		
+		if(currentScoutUnit != null)
+		{
 			enemyLongInRadius();
 		}
 	}
@@ -117,19 +137,26 @@ public class ScoutManager{
 	//적 앞마당에서 본진으로 복귀할지 안할지 정하는 함수 
 	private void updateSecondFleeUnit() {
 		// TODO Auto-generated method stub
-		if(currentScoutUnit == null){
+		if(currentScoutUnit == null)
+		{
 			return;
 		}
+		
 		Position enemyFirstExpansionLocation = InformationManager.Instance().getFirstExpansionLocation(MyBotModule.Broodwar.enemy()).getPosition();
-		if(enemyFirstExpansionLocation == null){
+		if(enemyFirstExpansionLocation == null)
+		{
 			return;
 		}
-		if(currentScoutUnit.getDistance(enemyFirstExpansionLocation) > 300){
+		
+		if(currentScoutUnit.getDistance(enemyFirstExpansionLocation) > 300)
+		{
 			return;
 		}
 			
-		if(currentScoutUnit != null){
-			if(enemySecondLongInRadius()){
+		if(currentScoutUnit != null)
+		{
+			if(enemySecondLongInRadius())
+			{
 				idleFlag = true;
 			}
 		}
@@ -179,7 +206,9 @@ public class ScoutManager{
 
 		if (enemyBaseLocation == null)
 		{
-			if (currentScoutUnit == null || currentScoutUnit.exists() == false || currentScoutUnit.getHitPoints() <= 0)
+			if (currentScoutUnit == null || 
+				currentScoutUnit.exists() == false || 
+				currentScoutUnit.getHitPoints() <= 0)
 			{
 				currentScoutUnit = null;
 				currentScoutStatus = ScoutStatus.NoScout.ordinal();
@@ -189,14 +218,20 @@ public class ScoutManager{
 
 				for (Unit unit : MyBotModule.Broodwar.self().getUnits())
 				{
-					if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters) {
-						if (unit.getType().isBuilding() == true && unit.getType() == UnitType.Terran_Supply_Depot)
+					if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters) 
+					{
+						if (unit.getType().isBuilding() == true && 
+							unit.getType() == UnitType.Terran_Supply_Depot)
 						{
 							firstBuilding = unit;
 							break;
 						}
-					}else{
-						if (unit.getType().isBuilding() == true && unit.getType() == UnitType.Terran_Barracks)
+					}
+					else
+					{
+						if (unit.getType().isBuilding() == true && 
+							//unit.getType() == UnitType.Terran_Barracks)
+							unit.getType() == UnitType.Terran_Supply_Depot)
 						{
 							firstBuilding = unit;
 							break;
@@ -206,11 +241,16 @@ public class ScoutManager{
 
 				if (firstBuilding != null)
 				{
-					if(InformationManager.Instance().enemyRace == Race.Zerg){
-						if(MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_SCV) < 14){
+					/* 저그일때 정찰시간이 너무 느리다.
+					if(InformationManager.Instance().enemyRace == Race.Zerg)
+					{
+						if(MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_SCV) < 14)
+						{
 							return;
 						}
 					}
+					*/
+					
 					// grab the closest worker to the first building to send to scout
 					//Unit unit = WorkerManager.Instance().getClosestMineralWorkerTo(firstBuilding.getPosition());
 					/*	se-min.park 추가
@@ -237,6 +277,12 @@ public class ScoutManager{
 				}
 			}
 		}
+		else
+		{
+	        idleFlag = true;
+	        fleeFlag = true;
+	        scoutFlag = true;
+		}
 	}
 
 
@@ -245,12 +291,15 @@ public class ScoutManager{
 	// 상대방 MainBaseLocation 위치를 아는 상황이면, 해당 BaseLocation 이 있는 Region의 가장자리를 따라 계속 이동함 (정찰 유닛이 죽을때까지) 
 	public void moveScoutUnit()
 	{
-		if (currentScoutUnit == null || currentScoutUnit.exists() == false || currentScoutUnit.getHitPoints() <= 0 )
+		if (currentScoutUnit == null || 
+			currentScoutUnit.exists() == false || 
+			currentScoutUnit.getHitPoints() <= 0 )
 		{
 			currentScoutUnit = null;
 			currentScoutStatus = ScoutStatus.NoScout.ordinal();
 			return;
 		}
+		
 		int scoutHP = currentScoutUnit.getHitPoints() + currentScoutUnit.getShields();
 		BaseLocation myBaseLocation = InformationManager.Instance().getMainBaseLocation(MyBotModule.Broodwar.self());
 		//본진일때는 무조건 false
@@ -266,12 +315,10 @@ public class ScoutManager{
 		//적 위치 못찾으면
 		if (enemyBaseLocation == null)
 		{
-			
-			
-			
 			// currentScoutTargetBaseLocation 가 null 이거나 정찰 유닛이 currentScoutTargetBaseLocation 에 도착했으면 
 			// 아군 MainBaseLocation 으로부터 가장 가까운 미정찰 BaseLocation 을 새로운 정찰 대상 currentScoutTargetBaseLocation 으로 잡아서 이동
-			if (currentScoutTargetBaseLocation == null || currentScoutUnit.getDistance(currentScoutTargetBaseLocation.getPosition()) < 5 * Config.TILE_SIZE) 
+			if (currentScoutTargetBaseLocation == null || 
+				currentScoutUnit.getDistance(currentScoutTargetBaseLocation.getPosition()) < 5 * Config.TILE_SIZE) 
 			{
 				currentScoutStatus = ScoutStatus.MovingToAnotherBaseLocation.ordinal();
  
@@ -286,31 +333,44 @@ public class ScoutManager{
 						// GroundDistance 를 기준으로 가장 가까운 곳으로 선정
 						tempDistance = (double)(InformationManager.Instance().getMainBaseLocation(MyBotModule.Broodwar.self()).getGroundDistance(startLocation) + 0.5);
 
-						if (tempDistance > 0 && tempDistance < closestDistance) {
+						if (tempDistance > 0 && tempDistance < closestDistance) 
+						{
 							closestBaseLocation = startLocation;
 							closestDistance = tempDistance;
 						}
 					}
 				}
 				
-				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false){
+				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false)
+				{
 				    CommandUtil.move(currentScoutUnit, new TilePosition(64,64).toPosition());
 				    currentScoutTargetBaseLocation = closestBaseLocation;
-				}else
-					
-				if (closestBaseLocation != null) {
-					// assign a scout to go scout it
-					CommandUtil.move(currentScoutUnit, closestBaseLocation.getPosition());
-					currentScoutTargetBaseLocation = closestBaseLocation;
-				}else{
-					//TF 에서 정찰 일꾼 안나가는 버그 해결법 추가 -> 확인 필요
-					if (currentScoutTargetBaseLocation != null)
-						CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
 				}
-			}else{//BasicBot1.2
-				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false){
+				else 
+				{
+					if (closestBaseLocation != null) 
+					{
+						// assign a scout to go scout it
+						CommandUtil.move(currentScoutUnit, closestBaseLocation.getPosition());
+						currentScoutTargetBaseLocation = closestBaseLocation;
+					} 
+					else 
+					{
+						// TF 에서 정찰 일꾼 안나가는 버그 해결법 추가 -> 확인 필요
+						if (currentScoutTargetBaseLocation != null)
+							CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
+					}
+				}
+			}
+			else
+			{
+				//BasicBot1.2
+				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false)
+				{
 				    CommandUtil.move(currentScoutUnit, new TilePosition(64,64).toPosition());
-				}else{
+				}
+				else
+				{
 					CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
 				}
 			}
@@ -320,19 +380,24 @@ public class ScoutManager{
 		{
 			int scoutDistanceToEnemy = mapTools.getGroundDistance(currentScoutUnit.getPosition(), enemyBaseLocation.getPosition());
 	        boolean scoutInRangeOfenemy = scoutDistanceToEnemy <= scoutDistanceThreshold;
-			// if scout is exist, move scout into enemy region
-			if (currentScoutUnit != null) {
+	
+	        // if scout is exist, move scout into enemy region
+			if (currentScoutUnit != null) 
+			{
 				currentScoutTargetBaseLocation = enemyBaseLocation;
 				
-				if (MyBotModule.Broodwar.isExplored(currentScoutTargetBaseLocation.getTilePosition()) == false) {
+				if (MyBotModule.Broodwar.isExplored(currentScoutTargetBaseLocation.getTilePosition()) == false) 
+				{
 					currentScoutStatus = ScoutStatus.MovingToAnotherBaseLocation.ordinal();
 					currentScoutTargetPosition = currentScoutTargetBaseLocation.getPosition();
 					CommandUtil.move(currentScoutUnit, currentScoutTargetPosition);
 					
 				}
-				else {
+				else 
+				{
 					//정찰 유닛이 공격받고 있으면
-					if(scoutHP < preScoutHP){
+					if(scoutHP < preScoutHP)
+					{
 						scoutUnderAttack = true;
 						fleeFlag = true;
 //						distrubFlag = true;
@@ -341,10 +406,13 @@ public class ScoutManager{
 //						fleeFlag = true;
 //						return;
 //					}
+					
 					enemyLongInRadius();
-					if(fleeLongEnemyFlag == true || fleeFlag == true){
+					if(fleeLongEnemyFlag == true || fleeFlag == true)
+					{
 						return;
 					}
+					
 					//정찰 유닛이 공격받지 않고 있고 범위안에 적이 없으면.
 					if (!currentScoutUnit.isUnderAttack() && !enemyWorkerInRadius())
 			        {
@@ -535,7 +603,8 @@ public class ScoutManager{
 		//배럭 2개면 빠지기 위한 변수
 		int barrackCnt = 0;
 		
-		if(gasExpscoutFlag == false){
+		if(gasExpscoutFlag == false)
+		{
 			for (Unit unit : MyBotModule.Broodwar.enemy().getUnits())
 			{
 				if(unit.getType().isRefinery()){
@@ -546,17 +615,24 @@ public class ScoutManager{
 				}
 			}
 		}
+		
 		Iterator<Integer> it = InformationManager.Instance().getUnitData(InformationManager.Instance().enemyPlayer).getUnitAndUnitInfoMap().keySet().iterator();
 //		for (Unit unit : MyBotModule.Broodwar.enemy().getUnits())
-		while (it.hasNext()) {
+		while (it.hasNext()) 
+		{
 			UnitInfo ui= InformationManager.Instance().getUnitData(InformationManager.Instance().enemyPlayer).getUnitAndUnitInfoMap().get(it.next());
-			if(ui.getType() == UnitType.Protoss_Cybernetics_Core && ui.isCompleted()){
+			if(ui.getType() == UnitType.Protoss_Cybernetics_Core && ui.isCompleted())
+			{
 				cyberFlag = true;
 			}
-			if (!ui.getType().isWorker() && ui.getType().canAttack() && (ui.getUnit().getDistance(currentScoutUnit) < 300))
+			
+			if (!ui.getType().isWorker() && 
+				 ui.getType().canAttack() && 
+				(ui.getUnit().getDistance(currentScoutUnit) < 300))
 			{
 				fleeFlag = true;
 			}
+			
 			if (!ui.getType().isWorker() && 
 				((ui.getType() == UnitType.Terran_Barracks && ui.getUnit().isTraining())
 				|| (cyberFlag = true && ui.getType() == UnitType.Protoss_Gateway &&  ui.getUnit().isTraining())
@@ -579,16 +655,19 @@ public class ScoutManager{
 			
 		}
 		//가스를 못봤으면 앞마당으로 가는 로직 취소
-		if(gasExpscoutFlag == false){
+		if(gasExpscoutFlag == false)
+		{
 			fleeLongEnemyFlag = false;
 		}
 		
 		//가스 못봐도 투배럭이면 빠져 나오는걸로 변경
-		if(twoBarrack == true){
+		if(twoBarrack == true)
+		{
 			fleeLongEnemyFlag = true;
 		}
 		
-		if(fleeLongEnemyFlag == true){
+		if(fleeLongEnemyFlag == true)
+		{
 			enemyBaseRegionVertices = new Vector<Position>();;
 			currentScoutFreeToVertexIndex = -1;
 		}
@@ -619,15 +698,20 @@ public class ScoutManager{
 	public Position getScoutFleePositionFromEnemyRegionVertices()
 	{
 		// calculate enemy region vertices if we haven't yet
-		if (enemyBaseRegionVertices.isEmpty()) {
-			if(fleeLongEnemyFlag == false){
+		if (enemyBaseRegionVertices.isEmpty()) 
+		{
+			if(fleeLongEnemyFlag == false)
+			{
 				calculateEnemyRegionVertices();
-			}else{
+			}
+			else
+			{
 				calculateEnemySecnodRegionVertices();
 			}
 		}
 
-		if (enemyBaseRegionVertices.isEmpty()) {
+		if (enemyBaseRegionVertices.isEmpty()) 
+		{
 			return MyBotModule.Broodwar.self().getStartLocation().toPosition();
 		}
 
@@ -671,21 +755,24 @@ public class ScoutManager{
 	}
 	
 	// Enemy MainBaseLocation 이 있는 Region 의 가장자리를  enemyBaseRegionVertices 에 저장한다
-		// Region 내 모든 건물을 Eliminate 시키기 위한 지도 탐색 로직 작성시 참고할 수 있다
+	// Region 내 모든 건물을 Eliminate 시키기 위한 지도 탐색 로직 작성시 참고할 수 있다
 	public void calculateEnemySecnodRegionVertices()
 	{
 		Position enemyFirstExpansionLocation = InformationManager.Instance().getFirstExpansionLocation(MyBotModule.Broodwar.enemy()).getPosition();
-		if (enemyFirstExpansionLocation == null) {
+		if (enemyFirstExpansionLocation == null) 
+		{
 			return;
 		}
+		
 		// check each tile position
 		enemyBaseRegionVertices.add(new Position(enemyFirstExpansionLocation.getX(), enemyFirstExpansionLocation.getY()));
 		
 		Position enemySecondChokePoint = InformationManager.Instance().getSecondChokePoint(MyBotModule.Broodwar.enemy()).getPoint();
 		enemyBaseRegionVertices.add(new Position(enemySecondChokePoint.getX(), enemySecondChokePoint.getY()));
 		
-		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts
-				|| InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple){
+		if(InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts ||
+		   InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.LostTemple)
+		{
 			enemyBaseRegionVertices.add(new Position(enemySecondChokePoint.getX()+(enemySecondChokePoint.getX()-enemyFirstExpansionLocation.getX())
 					,  enemySecondChokePoint.getY()+(enemySecondChokePoint.getY()- enemyFirstExpansionLocation.getY())));
 		}

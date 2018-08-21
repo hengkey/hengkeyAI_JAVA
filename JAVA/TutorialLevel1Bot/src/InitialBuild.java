@@ -93,7 +93,8 @@ public class InitialBuild {
 		}
 		else
 		{   
-            System.out.println("setInitialBuildOrder : Zerg");			
+            System.out.println("setInitialBuildOrder : Zerg");		
+            /*
             queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
@@ -103,10 +104,29 @@ public class InitialBuild {
 	        queueBuild(false, UnitType.Terran_SCV);
 	        queueBuild(true, UnitType.Terran_Refinery);
 	        queueBuild(true, UnitType.Terran_Marine);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
 	        queueBuild(false, UnitType.Terran_Marine);
-	        BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
 	        queueBuild(false, UnitType.Terran_Marine);
 	        queueBuild(false, UnitType.Terran_Marine);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,turret1Pos,true,true);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
+			*/
+			queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
+			queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
+			//BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
+			queueBuild(true, UnitType.Terran_SCV);
+			queueBuild(true, UnitType.Terran_Refinery);
+			queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
+			queueBuild(false, UnitType.Terran_SCV);
+			queueBuild(false, UnitType.Terran_Marine);
+			queueBuild(false, UnitType.Terran_Marine);
+			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
+			queueBuild(false, UnitType.Terran_Marine);
+			queueBuild(false, UnitType.Terran_Marine);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,turret1Pos,true,true);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);

@@ -49,33 +49,40 @@ public class MicroMarine extends MicroManager {
 		if (bunker == null) {
 			Position mineralpos = CombatManager.Instance().getBestPosition(CC);
 			kitingOption.setGoalPosition(mineralpos);
-
+			
 			for (Unit marine : marines) {
-				if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) {
-					continue;
-				}
-
-				Unit target = getTarget(marine, targets);
-				if (target != null) 
+				
+				Position center = new Position(2048, 2048);
+				if (InformationManager.Instance().enemyRace == Race.Zerg) 
 				{
-					if (DontGoFar) 
-					{
-						if (marine.getDistance(mineralpos) > 30) {
-							CommandUtil.move(marine, mineralpos);
+				// if we're not near the order position, go there
+					CommandUtil.move(marine, center);
+				}
+				else
+				{
+					if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) {
+						continue;
+					}
+
+					Unit target = getTarget(marine, targets);
+					if (target != null) {
+						if (DontGoFar) {
+							if (marine.getDistance(mineralpos) > 30) {
+								CommandUtil.move(marine, mineralpos);
+							}
+						} else {
+							MicroUtils.preciseKiting(marine, target, kitingOption);
 						}
 					} else {
-						MicroUtils.preciseKiting(marine, target, kitingOption);
-					}
-				} else 
-				{
-					if (InformationManager.Instance().enemyRace == Race.Zerg) 
-					{
-					// if we're not near the order position, go there
-						if (marine.getDistance(mineralpos) > 30) {
-							CommandUtil.move(marine, mineralpos);
+						if (InformationManager.Instance().enemyRace == Race.Zerg) {
+							// if we're not near the order position, go there
+							if (marine.getDistance(mineralpos) > 30) {
+								CommandUtil.move(marine, mineralpos);
+							}
+						} else {
+							CommandUtil.move(marine, InformationManager.Instance()
+									.getSecondChokePoint(InformationManager.Instance().selfPlayer).getPoint());
 						}
-					}else{
-						CommandUtil.move(marine, InformationManager.Instance().getSecondChokePoint(InformationManager.Instance().selfPlayer).getPoint());
 					}
 				}
 			}
@@ -87,7 +94,11 @@ public class MicroMarine extends MicroManager {
 			for (Unit marine : marines) 
 			{
 				
-				bunker.load(marine);
+				//bunker.load(marine);
+				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
+				{
+					marine.rightClick(bunker);
+				}
 				
 				/*
 				Unit target = getTarget(marine, targets);
