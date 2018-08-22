@@ -782,7 +782,8 @@ public class StrategyManager {
 		boolean controltower = false;
 		int CC = 0;
 
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+		{
 			if (unit == null)
 				continue;
 
@@ -3112,89 +3113,67 @@ public class StrategyManager {
 				unit.lift();
 			}
 			
-			/* 베슬만들어야지
-			if((unit.getType() == UnitType.Terran_Starport) && unit.isCompleted())
-			{
-				unit.lift();
-			}
-			*/
-			
 			if((unit.getType() == UnitType.Terran_Science_Facility) && unit.isCompleted())
 			{
 				unit.lift();
 			}
 		}
 		
-		// 마린4마리 만들고 배럭올리기 5000 적당할듯
-		if ((MyBotModule.Broodwar.getFrameCount() > 4300) &&
+		// 마린4마리 만들고 배럭올리기 4500
+		// 마린8마리 만들고 배럭올리기 6000?
+		if ((MyBotModule.Broodwar.getFrameCount() > 6500) &&
 		    (MyBotModule.Broodwar.getFrameCount() < 11000))
 		{
-			//if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) >= 1) 
-			//{
-				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
-				{
-					if (unit.getType() == UnitType.Terran_Barracks)
-						MyBotModule.Broodwar.drawCircleMap(unit.getPosition(), 700, Color.Red);
-					
-					if((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted())
-					{
-						List <Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 700, false, true, null);
-						if(enemy.size() > 3)
-						{
-							if(unit.isLifted() == true)
-							{
-								//System.out.println("enemy attack!! barrak land!!");
-								unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,
-														   BlockingEntrance.Instance().barrackY));
-								LiftChecker = false;
-							}
-						}
-						else
-						{
-							//System.out.println("enemy none!! barrak lift!!");
-							unit.lift();
-							LiftChecker = true;
-						}
-					}
-					
-					
-					BuildOrderQueue tempbuildQueue = BuildManager.Instance().getBuildQueue();
-					BuildOrderItem checkItem = null;
+			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+			{
+				//if (unit.getType() == UnitType.Terran_Barracks)
+				//	MyBotModule.Broodwar.drawCircleMap(unit.getPosition(), 700, Color.Red);
 
-					if (!tempbuildQueue.isEmpty()) 
+				if ((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted()) 
+				{
+					List<Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 700, false, true, null);
+					if (enemy.size() > 3) 
 					{
-						checkItem = tempbuildQueue.getHighestPriorityItem();
-						while (true) 
+						if (unit.isLifted() == true) 
 						{
-							if (tempbuildQueue.canGetNextItem() == true) 
-							{
-								tempbuildQueue.canGetNextItem();
-							} 
-							else 
-							{
-								break;
-							}
-							tempbuildQueue.PointToNextItem();
-							checkItem = tempbuildQueue.getItem();
-							if (checkItem.metaType.isUnit() && 
-								checkItem.metaType.getUnitType() == UnitType.Terran_Marine) 
-							{
-								tempbuildQueue.removeCurrentItem();
-							}
+							// System.out.println("enemy attack!! barrak land!!");
+							unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,BlockingEntrance.Instance().barrackY));
+							LiftChecker = false;
 						}
-					}
-					
-					/*
-					if (InformationManager.Instance().enemyRace != Race.Zerg) 
+					} 
+					else 
 					{
-						if (unit.getType() == UnitType.Terran_Marine) 
-						{
-							CommandUtil.move(unit, InformationManager.Instance().getSecondChokePoint(InformationManager.Instance().selfPlayer).getPoint());
-						}
+						// System.out.println("enemy none!! barrak lift!!");
+						unit.lift();
+						LiftChecker = true;
 					}
-					*/
 				}
-			//}
+
+				BuildOrderQueue tempbuildQueue = BuildManager.Instance().getBuildQueue();
+				BuildOrderItem checkItem = null;
+
+				if (!tempbuildQueue.isEmpty()) 
+				{
+					checkItem = tempbuildQueue.getHighestPriorityItem();
+					while (true) 
+					{
+						if (tempbuildQueue.canGetNextItem() == true) 
+						{
+							tempbuildQueue.canGetNextItem();
+						} 
+						else 
+						{
+							break;
+						}
+						tempbuildQueue.PointToNextItem();
+						checkItem = tempbuildQueue.getItem();
+						if (checkItem.metaType.isUnit() && checkItem.metaType.getUnitType() == UnitType.Terran_Marine) 
+						{
+							tempbuildQueue.removeCurrentItem();
+						}
+					}
+				}
+			}
 		}
 		else if (MyBotModule.Broodwar.getFrameCount() > 12000)
 		{
@@ -3225,9 +3204,6 @@ public class StrategyManager {
 						}
 					}
 					firstBRLiftPersistantTime++;
-					// MyBotModule.Broodwar.sendText("firstBRLiftPersistantTime=" +
-					// firstBRLiftPersistantTime + " "
-					// + new Exception().getStackTrace()[0].getLineNumber());
 				}
 			}
 			
@@ -3246,23 +3222,6 @@ public class StrategyManager {
 					}
 				}
 			}
-		
-			/*
-			if (MyBotModule.Broodwar.getFrameCount() > 2000) 
-			{
-				for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
-				{
-					if (unit.isLifted() == true && 
-					    unit.getType() == UnitType.Terran_Barracks && 
-					    unit.isCompleted()) 
-					{
-						unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,
-								                   BlockingEntrance.Instance().barrackY));
-						LiftChecker = false;
-					}
-				}
-			}
-			*/
 		}
 	}
 }

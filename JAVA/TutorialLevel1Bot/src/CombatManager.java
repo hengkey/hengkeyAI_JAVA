@@ -67,11 +67,17 @@ class Combat {
 }
 
 enum CombatStrategy {
-	DEFENCE_INSIDE, DEFENCE_CHOKEPOINT, ATTACK_ENEMY //, READY_TO_ATTACK
+	DEFENCE_INSIDE, 
+	DEFENCE_CHOKEPOINT, 
+	ATTACK_ENEMY //, READY_TO_ATTACK
 };
 
 enum CombatStrategyDetail {
-	VULTURE_JOIN_SQUAD, NO_WAITING_CHOKE, NO_CHECK_NO_GUERILLA, ATTACK_NO_MERCY, MINE_STRATEGY_FOR_TERRAN
+	VULTURE_JOIN_SQUAD, 
+	NO_WAITING_CHOKE, 
+	NO_CHECK_NO_GUERILLA, 
+	ATTACK_NO_MERCY, 
+	MINE_STRATEGY_FOR_TERRAN
 };
 
 public class CombatManager {
@@ -108,19 +114,20 @@ public class CombatManager {
 	public CombatStrategy getCombatStrategy() {
 		return combatStrategy;
 	}
+	
 	public void setCombatStrategy(CombatStrategy combatStrategy) {
 		if (this.combatStrategy != combatStrategy) {
-//			MyBotModule.Broodwar.sendText("combatStrategy changed : " + combatStrategy);
 			this.combatStrategy = combatStrategy;
 		}
-		
 		if (combatStrategy != CombatStrategy.ATTACK_ENEMY) {
 			currTargetChoke = null;
 		}
 	}
+	
 	public int getDetailStrategyFrame(CombatStrategyDetail detailStrategy) {
 		return detailStrategyExFrame[detailStrategy.ordinal()];
 	}
+	
 	/// 특수상황 처리 함수 ex) 벌처 본진 귀환 setDetailStrategy(CombatStrategyDetail.VULTURE_JOIN_SQUAD);
 	public void setDetailStrategy(CombatStrategyDetail detailStrategy, int frameDuration) {
 		if (Config.DrawHengDebugInfo == true)
@@ -128,8 +135,10 @@ public class CombatManager {
 		System.out.println("detailStrategy enabled : " + detailStrategy.toString());
 		detailStrategyExFrame[detailStrategy.ordinal()] = MyBotModule.Broodwar.getFrameCount() + frameDuration;
 	}
+	
 	public void updateDetailStrategy() {
-		for (int i = 0; i < detailStrategyExFrame.length; i++) {
+		for (int i = 0; i < detailStrategyExFrame.length; i++) 
+		{
 			int expireFrame = detailStrategyExFrame[i];
 			if (expireFrame == 0)
 				continue;
@@ -203,28 +212,21 @@ public class CombatManager {
 	
 	public void update() {
 		
-//		LagTest test = LagTest.startTest(true);
-//		test.setDuration(0);
-//		
-//		int scvcount1 = MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_SCV);
-//		test.estimate();
-//		int scvcount2 = InformationManager.Instance().getNumUnits(UnitType.Terran_SCV, InformationManager.Instance().selfPlayer);
-//		test.estimate();
-//		System.out.println(scvcount1 + ", " + scvcount2);
+		int frameCount = MyBotModule.Broodwar.getFrameCount();
 		
-//		ShortPathGuerrilla path = new ShortPathGuerrilla("aaa");
-//		path.init();
-//		TilePosition curPos = new TilePosition(51, 38);
-//		TilePosition targetPos = new TilePosition(92,14);
-//		path.updateWeightValue(curPos, targetPos);		
-		
-		if(ScoutDefenseNeeded){
-			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-				if((unit.getType() == UnitType.Terran_Marine || unit.getType() == UnitType.Terran_Vulture) && unit.isCompleted()){
+		if(ScoutDefenseNeeded)
+		{
+			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+			{
+				if((unit.getType() == UnitType.Terran_Marine || unit.getType() == UnitType.Terran_Vulture) && 
+					unit.isCompleted())
+				{
 					ScoutDefenseNeeded = false;
 					Squad scoutDefenseSquad = squadData.getSquad(SquadName.SCOUT_DEFENSE);
-					if (scoutDefenseSquad != null) {
-						if (!scoutDefenseSquad.isEmpty()) {
+					if (scoutDefenseSquad != null) 
+					{
+						if (!scoutDefenseSquad.isEmpty()) 
+						{
 							scoutDefenseSquad.clear();
 						}
 					}
@@ -251,27 +253,30 @@ public class CombatManager {
 				updateBaseDefenseSquads();
 			}
 			gasRush = InformationManager.Instance().isGasRushed();
+			
 			//포톤러쉬 체크
 			photonRush = InformationManager.Instance().isPhotonRushed();
 			if(FastZerglingsInOurBase > 0 || gasRush || photonRush){
 				updateEarlyDefenseSquad();
 			}
 			
-			//if(MyBotModule.Broodwar.getFrameCount() < 11000){
-			if(MyBotModule.Broodwar.getFrameCount() < 10000){
+			if((frameCount < 10000) && (frameCount % 5 == 0))
+			{
 				updateBunker();
 			}
 			
 			updateAttackSquads();
-			
 			updateWraithSquad();
-			updateVesselSquad(); //AttackSquads 뒤에
+			updateVesselSquad(); 
 			updateBuildingSquad();
 //			updateGuerillaSquad(); 
 			
-			if (MyBotModule.Broodwar.getFrameCount() > 14000) {
+			if (frameCount > 14000) 
+			{
 				updateMultiGuerillaSquad();
-			} else {
+			} 
+			else 
+			{
 				updateCheckerSquad();
 			}
 			
@@ -293,31 +298,24 @@ public class CombatManager {
 	
 	private void updateBunker() {
 		
-        /*
-		bwta.BaseLocation base = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
-		bwta.Region myRegion = base.getRegion();
-		if (myRegion == null || !myRegion.getCenter().isValid()) {
-		    return;
-		}
-		List<Unit> enemyUnitsInRegion = MicroUtils.getUnitsInRegion(myRegion, InformationManager.Instance().enemyPlayer);
-		if(enemyUnitsInRegion.size() == 0){
-			return;
-		}
-		*/
-		
 		List<Unit> myUnits = MyBotModule.Broodwar.self().getUnits();
-		//List<Unit> bunkers = new ArrayList<Unit>();
-		//List<Unit> myMarines = new ArrayList<Unit>();
 		
 		Unit bunker=null;
 		Unit marine=null;
+		
 		for(Unit unit : myUnits)
 		{
-					
 			if(unit.getType() == UnitType.Terran_Bunker && unit.isCompleted())
 			{
 				bunker = unit;
-				break;
+				if(bunker.canLoad())
+				{
+					break;
+				}
+				else
+				{
+					continue;
+				}
 			}
 		}
 				
@@ -325,55 +323,35 @@ public class CombatManager {
 		{
 			if(unit.getType() == UnitType.Terran_Marine && unit.isCompleted())
 			{
+				
 				marine = unit;
+				if(marine.isLoaded())
+					continue;
+			}
+			else
+			{
+				continue;
 			}
 			
-			if ((bunker != null) && (marine != null))
+			if (bunker != null)
 			{
-				//System.out.println("MicroMarine : in to the bunker");
-				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
+				//System.out.println("updateBunker : in to the bunker");
+				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()) && marine.canLoad(bunker))
 				{
 					CommandUtil.rightClick(marine, bunker);
+					marine.load(bunker);
 				}
-				/*
-				bunker.load(marine);
-				
-				marine = null;
-				*/
 			}
 			else
 			{
 				Position center = new Position(64*32, 64*32);
-				if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				//System.out.println("updateBunker : go to the center");
+				//if (InformationManager.Instance().enemyRace == Race.Zerg) 
 				{
-				// if we're not near the order position, go there
 					CommandUtil.move(marine, center);
 				}
 			}
-			
-			Chokepoint enemy_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
-			if(enemy_first_choke != null)
-				MyBotModule.Broodwar.drawCircleMap(enemy_first_choke.getPoint(), 10, Color.Red, true);
 		}
-		
-		//if(bunkers.size() == 0){
-		//	return;
-		//}
-		
-		/*
-		for (Unit bunker : bunkers) {
-			boolean bunkerOut = true;
-			if (enemyUnitsInRegion != null) {
-				Unit target = closestTarget(bunker, enemyUnitsInRegion);
-				if(bunker.getDistance(target) <= 160){
-					bunkerOut = false;
-				}
-				if(bunkerOut){
-					bunker.unloadAll();
-				}
-			}
-		}
-		*/
 	}
 		
 	private Unit closestTarget(Unit bunker, List<Unit> bunkertargets) {

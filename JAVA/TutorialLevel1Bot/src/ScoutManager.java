@@ -71,47 +71,110 @@ public class ScoutManager{
 	public void update()
 	{
 		// 1초에 6번만 실행합니다
-		if (MyBotModule.Broodwar.getFrameCount() % 4 == 0)
+		//if (MyBotModule.Broodwar.getFrameCount() % 4 == 0)
+		if (MyBotModule.Broodwar.getFrameCount() % 3 == 0)
 		{
-			BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
-			if (enemyfirstBaseLocation == null)
+			BaseLocation enemyBaseLocation = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
+			
+			if (enemyBaseLocation == null)
 			{
 				// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
 				if (scoutFlag == false)
 					assignScoutIfNeeded();
 
-				if (fleeFlag == false) {
+				if (fleeFlag == false) 
+				{
 					moveScoutUnit();
-				} else {
-					if (fleeLongEnemyFlag == false) {
+				} 
+				else 
+				{
+					if (fleeLongEnemyFlag == false) 
+					{
 						updateFleeUnit();
-					} else {
+					} 
+					else 
+					{
 						updateSecondFleeUnit();
 					}
 
-					if (idleFlag) {
+					if (idleFlag) 
+					{
 						WorkerManager.Instance().setIdleWorker(currentScoutUnit);
 						currentScoutUnit = null;
 						return;
-					} else {
+					} 
+					else 
+					{
 						followPerimeter();
 					}
-
-					// distrubMineral();
-					// if (distrubMineral && MyBotModule.Broodwar.getFrameCount() % 20 == 0)
-					// updateScoutUnit();
-
 				}
 			} 
 			else 
 			{
+				Chokepoint enemy_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
+				
+				if(enemy_first_choke != null)
+					MyBotModule.Broodwar.drawCircleMap(enemy_first_choke.getPoint(), 10, Color.Red, true);
+				
 				if (bunkerFlag == false)
 				{
+					Position bunkerPos = new Position(enemy_first_choke.getX(), enemy_first_choke.getY());
+					System.out.println("Choke Position : "+ enemyBaseLocation.getX() + ","+ enemyBaseLocation.getY());
+
+					if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.CircuitBreaker) 
+					{
+						if ((enemyBaseLocation.getX() < 64*32 && enemyBaseLocation.getY() < 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() + (32*4));
+						} 
+						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() < 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() + (32*4));
+						} 
+						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() > 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() - (32*4));
+						} 
+						else 
+						{
+							System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() - (32*4));
+						}
+					} 
+					else// if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts) 
+					{
+						if ((enemyBaseLocation.getX() < 64*32 && enemyBaseLocation.getY() < 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX() + (32*2), bunkerPos.getY() + (32*6));
+						} 
+						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() < 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX() - (32*8), bunkerPos.getY() + (32*1));
+						} 
+						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() > 64*32)) 
+						{
+							System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX() - (32*3), bunkerPos.getY() - (32*6));
+						} 
+						else 
+						{
+							System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX() + (32*6), bunkerPos.getY() - (32*2));
+						}
+					}
+						
+					System.out.println("Build Bunker!!!" + bunkerPos.toTilePosition().getX() + "," + bunkerPos.toTilePosition().getY() );
+					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos.toTilePosition(), false);
+					
+					updateFleeUnit();
+					currentScoutUnit.move(bunkerPos);
 					WorkerManager.Instance().setIdleWorker(currentScoutUnit);
 					currentScoutUnit = null;
-
-					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker,
-							enemyfirstBaseLocation.getTilePosition(), true);
 					bunkerFlag = true;
 				}
 			}

@@ -130,7 +130,7 @@ public class Squad {
 		microBuilding.setMicroInformation(order, nearbyEnemies);
 		
 //		microScv.execute();
-		microMarine.execute();
+//		microMarine.execute();
 		microVulture.execute();
 		microTank.execute();
 		microGoliath.execute();

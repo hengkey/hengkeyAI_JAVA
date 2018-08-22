@@ -14,28 +14,38 @@ public class MicroMarine extends MicroManager {
 
 	@Override
 	protected void executeMicro(List<Unit> targets) {
+		
 		List<Unit> marines = getUnits();
 		Unit bunker = null;
 		Unit CC = null;
 
-		if (targets.size() == 0) {
+		if (targets.size() == 0) 
+		{
 			return;
 		}
 
 		boolean DontGoFar = true;
 
-		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) {
-			if (unit.getType() == UnitType.Terran_Bunker && unit.isCompleted()) {
+		for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
+		{
+			if (unit.getType() == UnitType.Terran_Bunker && unit.isCompleted()) 
+			{
 				bunker = unit;
 			}
-			if (unit.isUnderAttack()) {
+			
+			if (unit.isUnderAttack()) 
+			{
 				DontGoFar = false;
 			}
-			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) {
+			
+			if (unit.getType() == UnitType.Terran_Command_Center && unit.isCompleted()) 
+			{
 				CC = unit;
 			}
 		}
-		if(InformationManager.Instance().isGasRushed() == true){
+		
+		if(InformationManager.Instance().isGasRushed() == true)
+		{
 			DontGoFar = false;
 		}
 		
@@ -46,18 +56,20 @@ public class MicroMarine extends MicroManager {
 		kitingOption.setFleeAngle(MicroSet.FleeAngle.NARROW_ANGLE);
 
 		// 벙커가 없는 경우 행동
-		if (bunker == null) {
+		if (bunker == null) 
+		{
 			Position mineralpos = CombatManager.Instance().getBestPosition(CC);
 			kitingOption.setGoalPosition(mineralpos);
 			
-			for (Unit marine : marines) {
-				
+			for (Unit marine : marines) 
+			{
 				Position center = new Position(2048, 2048);
-				if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				//if (InformationManager.Instance().enemyRace == Race.Zerg) 
 				{
 				// if we're not near the order position, go there
 					CommandUtil.move(marine, center);
 				}
+				/*
 				else
 				{
 					if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) {
@@ -85,6 +97,7 @@ public class MicroMarine extends MicroManager {
 						}
 					}
 				}
+				*/
 			}
 		} 
 		else 
