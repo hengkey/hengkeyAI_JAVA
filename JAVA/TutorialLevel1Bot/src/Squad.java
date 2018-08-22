@@ -28,6 +28,7 @@ public class Squad {
 	private int frameNum;
 	private int ignoreDropShipFrame;
 	public static final int IgnoreFrameValue=3200;
+	public static final int DestRange=400;
 	
 	public int getIgnoreDropShipFrame() {
 		return ignoreDropShipFrame;
@@ -500,6 +501,25 @@ public class Squad {
 			}
 		}
 		InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, order.getPosition(), InformationManager.Instance().enemyPlayer, order.getRadius());
+		
+		//이동하다 중간에 적군멀티나 미사일터렛을 발견했을때 바로 내린다
+		boolean enemyFlag = false;
+		for (UnitInfo enemyInfo : nearbyEnemiesInfo) {
+			if (enemyInfo.getType() == UnitType.Terran_Missile_Turret)
+				enemyFlag = true;
+			if (enemyInfo.getType() == UnitType.Terran_Command_Center)
+				enemyFlag = true;
+			// if (enemyInfo.getType() == UnitType.Terran_Wraith) {
+			// enemyFlag = true;
+			// }
+			
+			if (enemyFlag == true) {				
+//				System.out.println("enemyInfo.getType()="+enemyInfo.getType());
+				order = new SquadOrder(SquadOrderType.DROPSHIP, enemyInfo.getUnit().getPosition(),
+						UnitType.Terran_Dropship.sightRange(), "DropShip");
+				break;
+			}
+		}
 		
 //		mechanicVulture.prepareMechanic(order, nearbyEnemiesInfo);
 //		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);

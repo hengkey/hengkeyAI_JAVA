@@ -74,10 +74,13 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 					"" + order.getType());
 		if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), 10, Color.Purple, true);
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), UnitType.Terran_Dropship.sightRange(), Color.Purple, false);
 		
 		// 목적지까지 move
-		movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
-		if (dropShip.getDistance(movePosition) > order.getRadius()) {
+		if (movePosition.equals(enemymainBaseLocations))
+			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
+		if (dropShip.getDistance(movePosition) > Squad.DestRange) {
 			
 			//모두 실으면 unit이 안보이므로 size가 0이다
 			if (tankList.size() > 0)
@@ -87,17 +90,15 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			if (goliathList.size() > 0)
 				return;
 
-//			if (dropShip.getDistance(movePosition) > 500) {
-				// 벽타고 움직이기 위해
-				int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
-				if (diffX > 36)
-					movePosition = new Position(movePosition.getX(), dropShip.getY());
-				else
-					movePosition = new Position(dropShip.getX(), movePosition.getY());
+			// 벽타고 움직이기 위해
+			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
+			if (diffX > 36 * 2)
+				movePosition = new Position(movePosition.getX(), dropShip.getY());
+			else
+				movePosition = new Position(dropShip.getX(), movePosition.getY());
 
-				movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
-				// System.out.println("movePosition"+movePosition.toTilePosition().toString());
-//			}
+			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
+			// System.out.println("movePosition"+movePosition.toTilePosition().toString());
 			
 			// 일단 울베애 가까운 y축 벽에 붙는다
 			Position tmpPosition = selfmainBaseLocations.getPosition();
@@ -130,12 +131,21 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			
 			if (dropShip.isIdle())
 				CommandUtil.move(dropShip, movePosition);
+
 		} else { // 목적지 도착
-			if (dropShip.isIdle() || dropShip.isBraking()) {
-				Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
-//				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
-				CommandUtil.unLoadAll(dropShip, randomPosition);
+			//임요환드롭
+			if (dropShip.getDistance(order.getPosition()) < Squad.DestRange && dropShip.isMoving()
+					&& dropShip.canUnload()) {
+				for (Unit unit : dropShip.getLoadedUnits()) {
+					dropShip.unload(unit);
+				}
 			}
+			
+//			if (dropShip.isIdle() || dropShip.isBraking()) {
+//				Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
+////				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
+//				CommandUtil.unLoadAll(dropShip, randomPosition);
+//			}
 		}
 	}
 }

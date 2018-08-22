@@ -60,6 +60,12 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 			return;
 		}
 
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawTextMap(goliath.getPosition().getX(), goliath.getPosition().getY() + 10,
+					"" + order.getType());
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(goliath.getPosition(), 10, Color.Cyan, true);
+		
 		MechanicMicroDecision decision = MechanicMicroDecision.makeDecision(goliath, enemiesInfo, saveUnitLevel); // 0: flee, 1: kiting, 2: attack
 		KitingOption kOpt = KitingOption.defaultKitingOption();
 		switch (decision.getDecision()) {

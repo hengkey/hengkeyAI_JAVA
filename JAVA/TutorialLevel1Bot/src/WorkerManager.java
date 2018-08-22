@@ -565,6 +565,7 @@ public class WorkerManager {
 				if (unit.getType() == UnitType.Terran_Goliath 
 						|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode 
 						|| unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
+						|| unit.getType() == UnitType.Terran_Dropship
 						|| unit.getType() == UnitType.Terran_Science_Vessel){
 					Unit repairWorker = chooseRepairWorkerClosestTo(unit, 0);
 					setRepairWorker(repairWorker, unit);

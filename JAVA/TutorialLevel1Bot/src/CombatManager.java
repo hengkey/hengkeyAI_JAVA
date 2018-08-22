@@ -198,7 +198,7 @@ public class CombatManager {
 		SquadOrder wraithOrder = new SquadOrder(SquadOrderType.ATTACK, getAttackPosition(null), Combat.WRAITH_RADIUS, "Wraith");
 		squadData.putSquad(new Squad(SquadName.WRAITH, wraithOrder, Combat.WRAITH_PRIORITY));
 		
-		SquadOrder dropShipOrder = new SquadOrder(SquadOrderType.ATTACK, getAttackPosition(null), Combat.DROPSHIP_RADIUS, "DropShip");
+		SquadOrder dropShipOrder = new SquadOrder(SquadOrderType.DROPSHIP, getAttackPosition(null), Combat.DROPSHIP_RADIUS, "DropShip");
 		squadData.putSquad(new Squad(SquadName.DROPSHIP, dropShipOrder, Combat.DROPSHIP_PRIORITY));
 		
 		SquadOrder vesselOrder = new SquadOrder(SquadOrderType.DEFEND, getAttackPosition(null), Combat.VESSEL_RADIUS, "Vessel");
@@ -1602,20 +1602,34 @@ public class CombatManager {
 		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Dropship) < 1)
 			return;
 		
-		//이미 할당되어 있으면 return
+		// 이미 할당되어 있으면 return
 		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
 		if (!dropShipSquad.getUnitSet().isEmpty()) {
-//			for (Unit unit : dropShipSquad.getUnitSet()) {
-//				if ((unit.getType() == UnitType.Terran_Dropship) && unit.canUnload())// 목적지에 다 내릴때까지 기다림.
-//					break;
-//				else {// 다 내리면 drop squad에서 unitset 해제
-//					dropShipSquad.setIgnoreDropShipFrame(MyBotModule.Broodwar.getFrameCount() + Squad.IgnoreFrameValue);
-//					dropShipSquad.clear();
-//				}
-//			}
-//
-//			return;
-//		} else if (MyBotModule.Broodwar.getFrameCount() < dropShipSquad.getIgnoreDropShipFrame()) {// 드랍십 임무 완료후 일정시간 재편성 무시
+			List<Unit> unitSet = dropShipSquad.getUnitSet();
+			int destLandCnt = 0;
+			for (int i = 0; i < unitSet.size(); i++) {
+				MyBotModule.Broodwar.drawCircleMap(dropShipSquad.getOrder().getPosition(), Squad.DestRange, Color.Green);
+				// 목적지범위이고
+				if (unitSet.get(i).getDistance(dropShipSquad.getOrder().getPosition()) < Squad.DestRange) {
+					// 목적지에 다 내릴때까지기다림.
+					if ((unitSet.get(i).getType() == UnitType.Terran_Siege_Tank_Tank_Mode
+							|| unitSet.get(i).getType() == UnitType.Terran_Goliath) && unitSet.get(i).isLoaded()) {
+						return;
+					} else {
+						destLandCnt++;
+					}
+				}
+			}
+
+			if (destLandCnt >= (MechanicMicroDropShip.MaxDropTank + MechanicMicroDropShip.MaxDropGoliath)) {
+				dropShipSquad.setIgnoreDropShipFrame(MyBotModule.Broodwar.getFrameCount() + Squad.IgnoreFrameValue);
+				dropShipSquad.clear();
+			}
+
+			return;
+
+			// 드랍십 임무 완료후 일정시간 재편성 무시
+		} else if (MyBotModule.Broodwar.getFrameCount() < dropShipSquad.getIgnoreDropShipFrame()) {
 			return;
 		}
 		

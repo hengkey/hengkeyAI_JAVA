@@ -1249,8 +1249,7 @@ public class StrategyManager {
 		
 		// dropShip for TvT start
 		if (InformationManager.Instance().enemyRace == Race.Terran) {
-			if (MechanicMicroDropShip.MaxDropShip > dropShipCnt
-					&& nomoreDropShipCnt <= MechanicMicroDropShip.MaxDropShip) {
+			if (MechanicMicroDropShip.MaxDropShip > dropShipCnt) {
 
 				if (CC >= 2) {
 					if (star == false) {
@@ -1263,12 +1262,11 @@ public class StrategyManager {
 				}
 
 				if (starComplete) {
-					if (starportUnit.isTraining() == false
-							&& (MyBotModule.Broodwar.getFrameCount() - dropShipTime > 100 || dropShipCnt < MechanicMicroDropShip.MaxDropShip)) {
+					if (starportUnit.isTraining() == false && (MyBotModule.Broodwar.getFrameCount() - dropShipTime > 100
+							|| dropShipCnt < MechanicMicroDropShip.MaxDropShip)) {
 						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Dropship, null) == 0) {
 							dropShipTime = MyBotModule.Broodwar.getFrameCount();
 							BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Dropship, false);
-							nomoreDropShipCnt++;
 						}
 					}
 				}
@@ -2985,6 +2983,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -2995,6 +2995,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -3004,6 +3006,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -3014,6 +3018,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -3024,6 +3030,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -3037,6 +3045,8 @@ public class StrategyManager {
 					if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 							+ ConstructionManager.Instance()
 									.getConstructionQueueItemCount(UnitType.Terran_Command_Center, null) == 0) {
+//						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//								BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 						BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 								BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					}
@@ -3053,6 +3063,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}
@@ -3061,6 +3073,8 @@ public class StrategyManager {
 				if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Command_Center, null)
 						+ ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Command_Center,
 								null) == 0) {
+//					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,
+//							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 					BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Command_Center,
 							BuildOrderItem.SeedPositionStrategy.NextExpansionPoint, true);
 				}

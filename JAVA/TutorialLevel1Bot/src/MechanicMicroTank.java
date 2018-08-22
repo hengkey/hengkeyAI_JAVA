@@ -50,6 +50,12 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 			return;
 		}
 	
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawTextMap(tank.getPosition().getX(), tank.getPosition().getY() + 10,
+					"" + order.getType());
+		if (Config.DrawHengDebugInfo)
+			MyBotModule.Broodwar.drawCircleMap(tank.getPosition(), 10, Color.Cyan, true);
+		
 		if (order.getType() == SquadOrderType.DROPSHIP) {
 			if (Config.DrawHengDebugInfo)
 				MyBotModule.Broodwar.drawTextMap(tank.getPosition().getX(), tank.getPosition().getY() + 10,
