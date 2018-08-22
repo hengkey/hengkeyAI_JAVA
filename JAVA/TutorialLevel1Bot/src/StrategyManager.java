@@ -306,9 +306,9 @@ public class StrategyManager {
 			executeSustainUnits();
 		}
 		
-		if (frameCount < 10000) 
+		if (frameCount < 11000) 
 		{
-			if (frameCount % 29 == 0) 
+			if (frameCount % 25 == 0) 
 			{
 				executeFly();
 			}

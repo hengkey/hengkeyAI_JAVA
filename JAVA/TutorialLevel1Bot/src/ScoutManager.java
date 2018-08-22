@@ -54,7 +54,8 @@ public class ScoutManager{
 	private boolean scoutFlag = false;  //스카웃 한번만 보내기 위한 변수 
 	private boolean gasExpscoutFlag = false;  //적 본진 가스 발견했는지 판별 변수 
 	private boolean twoBarrack = false;  //적 본진 가스 발견했는지 판별 변수
-	private boolean bunkerFlag = false;  //적 앞마당 bunker 
+	private boolean bunkerFlag = false;  //적 앞마당 bunker
+	private boolean seeEnemyBase = false;  //적 base를 봤는지
 	
 	
 	private List<Unit> units = new ArrayList<>();
@@ -76,41 +77,48 @@ public class ScoutManager{
 		{
 			BaseLocation enemyBaseLocation = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
 			
-			if (enemyBaseLocation == null)
+			
+			// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
+			if (scoutFlag == false)
+				assignScoutIfNeeded();
+
+			if (fleeFlag == false) 
 			{
-				// scoutUnit 을 지정하고, scoutUnit 의 이동을 컨트롤함.
-				if (scoutFlag == false)
-					assignScoutIfNeeded();
-
-				if (fleeFlag == false) 
-				{
-					moveScoutUnit();
-				} 
-				else 
-				{
-					if (fleeLongEnemyFlag == false) 
-					{
-						updateFleeUnit();
-					} 
-					else 
-					{
-						updateSecondFleeUnit();
-					}
-
-					if (idleFlag) 
-					{
-						WorkerManager.Instance().setIdleWorker(currentScoutUnit);
-						currentScoutUnit = null;
-						return;
-					} 
-					else 
-					{
-						followPerimeter();
-					}
-				}
+				moveScoutUnit();
 			} 
 			else 
 			{
+				if (fleeLongEnemyFlag == false) 
+				{
+					updateFleeUnit();
+				} 
+				else 
+				{
+					updateSecondFleeUnit();
+				}
+
+				if (idleFlag) 
+				{
+					WorkerManager.Instance().setIdleWorker(currentScoutUnit);
+					currentScoutUnit = null;
+					return;
+				} 
+				else 
+				{
+					followPerimeter();
+				}
+			} 
+			
+			if ((enemyBaseLocation != null) && (seeEnemyBase == true))
+			{
+				if ((InformationManager.Instance().enemyRace == Race.Protoss) &&
+				   (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ReadyToZealot) ||
+			       (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ZealotPush))
+				{
+					System.out.println("protossException_ReadyToZealot, protossException_ReadyToZealot Base Defense!!");
+					return;
+				}
+				
 				Chokepoint enemy_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
 				
 				if(enemy_first_choke != null)
@@ -118,6 +126,7 @@ public class ScoutManager{
 				
 				if (bunkerFlag == false)
 				{
+					System.out.println("Bunker Rush!!!");
 					Position bunkerPos = new Position(enemy_first_choke.getX(), enemy_first_choke.getY());
 					System.out.println("Choke Position : "+ enemyBaseLocation.getX() + ","+ enemyBaseLocation.getY());
 
@@ -168,7 +177,6 @@ public class ScoutManager{
 						}
 					}
 						
-					System.out.println("Build Bunker!!!" + bunkerPos.toTilePosition().getX() + "," + bunkerPos.toTilePosition().getY() );
 					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos.toTilePosition(), false);
 					
 					updateFleeUnit();
@@ -190,8 +198,7 @@ public class ScoutManager{
 		{
 			return;
 		}
-		
-		if(currentScoutUnit != null)
+		else
 		{
 			enemyLongInRadius();
 		}
@@ -227,14 +234,16 @@ public class ScoutManager{
 	
 	private void updateScoutUnit() {
 		// TODO Auto-generated method stub
-		if(currentScoutUnit == null){
+		if(currentScoutUnit == null)
+		{
 			return;
 		}
-		if(currentScoutUnit != null){
-			if(currentScoutUnit.isGatheringMinerals()){
+		else
+		{
+			if(currentScoutUnit.isGatheringMinerals())
+			{
 				currentScoutUnit.stop();
 			}
-			
 		}
 	}
 
@@ -340,16 +349,10 @@ public class ScoutManager{
 				}
 			}
 		}
-		else
-		{
-	        idleFlag = true;
-	        fleeFlag = true;
-	        scoutFlag = true;
-		}
 	}
 
 
-	/// 정찰 유닛을 이동시킵니다
+	// 정찰 유닛을 이동시킵니다
 	// 상대방 MainBaseLocation 위치를 모르는 상황이면, StartLocation 들에 대해 아군의 MainBaseLocation에서 가까운 것부터 순서대로 정찰
 	// 상대방 MainBaseLocation 위치를 아는 상황이면, 해당 BaseLocation 이 있는 Region의 가장자리를 따라 계속 이동함 (정찰 유닛이 죽을때까지) 
 	public void moveScoutUnit()
@@ -454,7 +457,8 @@ public class ScoutManager{
 					currentScoutStatus = ScoutStatus.MovingToAnotherBaseLocation.ordinal();
 					currentScoutTargetPosition = currentScoutTargetBaseLocation.getPosition();
 					CommandUtil.move(currentScoutUnit, currentScoutTargetPosition);
-					
+					seeEnemyBase = true;
+					System.out.println("see enemy Base : true");
 				}
 				else 
 				{
@@ -709,6 +713,7 @@ public class ScoutManager{
 				fleeFlag = true;
 				fleeLongEnemyFlag = true;
 			}
+			
 			if(ui.getType() == UnitType.Terran_Barracks){
 				barrackCnt++;
 			}

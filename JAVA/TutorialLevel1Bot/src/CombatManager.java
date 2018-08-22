@@ -336,7 +336,7 @@ public class CombatManager {
 			if (bunker != null)
 			{
 				//System.out.println("updateBunker : in to the bunker");
-				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()) && marine.canLoad(bunker))
+				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
 				{
 					CommandUtil.rightClick(marine, bunker);
 					marine.load(bunker);
@@ -1604,8 +1604,20 @@ public class CombatManager {
 		
 		//이미 할당되어 있으면 return
 		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
-		if (!dropShipSquad.getUnitSet().isEmpty())
+		if (!dropShipSquad.getUnitSet().isEmpty()) {
+			for (Unit unit : dropShipSquad.getUnitSet()) {
+				if ((unit.getType() == UnitType.Terran_Dropship) && unit.canUnload())// 목적지에 다 내릴때까지 기다림.
+					break;
+				else {// 다 내리면 drop squad에서 unitset 해제
+					dropShipSquad.setIgnoreDropShipFrame(MyBotModule.Broodwar.getFrameCount() + Squad.IgnoreFrameValue);
+					dropShipSquad.clear();
+				}
+			}
+
 			return;
+		} else if (MyBotModule.Broodwar.getFrameCount() < Squad.IgnoreFrameValue) {// 드랍십 임무 완료후 일정시간 재편성 무시
+			return;
+		}
 		
 		List<Unit> assignableTanks = new ArrayList<>();
 		List<Unit> assignableGoliathes = new ArrayList<>();

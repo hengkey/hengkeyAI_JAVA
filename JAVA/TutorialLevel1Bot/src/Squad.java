@@ -18,6 +18,7 @@ public class Squad {
 		this.order = order;
 		this.priority = priority;
 		this.frameNum = 0;
+		this.ignoreDropShipFrame = 0;
 	}
 	
 	private String name;
@@ -25,8 +26,18 @@ public class Squad {
 	private int priority;
 	private boolean pushLine;
 	private int frameNum;
+	private int ignoreDropShipFrame;
+	public static final int IgnoreFrameValue=3200;
 	
-//	public MicroScv microScv = new MicroScv();
+	public int getIgnoreDropShipFrame() {
+		return ignoreDropShipFrame;
+	}
+
+	public void setIgnoreDropShipFrame(int ignoreDropShipFrame) {
+		this.ignoreDropShipFrame = ignoreDropShipFrame;
+	}
+
+	//	public MicroScv microScv = new MicroScv();
 	public MicroMarine microMarine = new MicroMarine();
 	public MicroVulture microVulture = new MicroVulture();
 	public MicroTank microTank = new MicroTank();
