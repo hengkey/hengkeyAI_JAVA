@@ -46,6 +46,7 @@ public class GameCommander {
 		pretime = curtime;
 		if (difftime > maxdifftime)
 		{
+			if(Config.DrawHengDebugInfo==true)
 			MyBotModule.Broodwar.sendText("line=" + line + " difftime=" + difftime + " "
 					+ new Exception().getStackTrace()[0].getLineNumber());
 //			System.out.println("line=" + line + " difftime=" + difftime + " "

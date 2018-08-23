@@ -54,7 +54,7 @@ public class InitialBuild {
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
 			queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			queueBuild(true, UnitType.Terran_Vulture);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, factoryPos,false, false);
+//			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Starport, factoryPos,false, false);
 			queueBuild(false, UnitType.Terran_SCV);
 			queueBuild(false, UnitType.Terran_SCV);
 			queueBuild(false, UnitType.Terran_Machine_Shop);

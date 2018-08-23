@@ -22,6 +22,10 @@ public class Squad {
 		this.progressLevel = 0;
 	}
 	
+	public void resetParmeter() {
+		this.progressLevel = 0;
+	}
+	
 	private String name;
 	private SquadOrder order;
 	private int priority;
@@ -531,7 +535,7 @@ public class Squad {
 			// }
 			
 			if (enemyFlag == true) {				
-				System.out.println("enemyInfo.getType()="+enemyInfo.getType()+enemyInfo.getUnit().getPosition());
+//				System.out.println("enemyInfo.getType()="+enemyInfo.getType()+enemyInfo.getUnit().getPosition());
 				order = new SquadOrder(SquadOrderType.DROPSHIP, enemyInfo.getUnit().getPosition(),
 						UnitType.Terran_Dropship.sightRange(), "DropShip");
 				break;

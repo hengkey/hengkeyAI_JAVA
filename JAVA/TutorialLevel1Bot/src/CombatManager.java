@@ -1537,11 +1537,11 @@ public class CombatManager {
 					|| unit.getType() == UnitType.Terran_Goliath || unit.getType() == UnitType.Terran_Dropship) {
 				
 				if (Config.DrawHengDebugInfo == true)
-					MyBotModule.Broodwar.drawCircleMap(selfmainBaseLocations.getPosition(), 600, Color.Yellow, false);
+					MyBotModule.Broodwar.drawCircleMap(selfmainBaseLocations.getPosition(), 700, Color.Yellow, false);
 				
 				// 울베에 있는 드랍십은 attack squad에 넣지 않는다.
 				if (unit.getType() == UnitType.Terran_Dropship
-						&& unit.getDistance(selfmainBaseLocations.getPosition()) < 600) {
+						&& unit.getDistance(selfmainBaseLocations.getPosition()) < 700) {
 					continue;
 				}
 				
@@ -1637,6 +1637,7 @@ public class CombatManager {
 
 			if (destLandCnt >= (MechanicMicroDropShip.MaxDropTank + MechanicMicroDropShip.MaxDropGoliath)) {
 				dropShipSquad.setIgnoreDropShipFrame(MyBotModule.Broodwar.getFrameCount() + Squad.IgnoreFrameValue);
+				dropShipSquad.resetParmeter();
 				dropShipSquad.clear();
 			}
 
