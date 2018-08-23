@@ -303,6 +303,7 @@ public class Squad {
 		// 탱크 vs 탱크 전투 판단여부
 		int saveUnitLevelTank = 1;
 		int saveUnitLevelGoliath = 1;
+		int saveUnitLevelDropShip = 1;
 		if (InformationManager.Instance().enemyRace == Race.Terran) {
 			if (closeTankEnemies.size() * 3 <= microTank.getUnits().size()) {
 //				System.out.println("go ahead");
@@ -339,7 +340,9 @@ public class Squad {
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelTank, initFrame);
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelGoliath);
-
+		mechanicDropShip.prepareMechanic(attackerOrder, attackerEnemies);
+		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelDropShip);
+		
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
 		//제공해주는 frame값이 튀는 현상이 있는것 같아 자체 frame값 사용
 		if (frameNum == 655000)
@@ -375,6 +378,10 @@ public class Squad {
 			groupNum++;
 			if (groupNum >= maxGroupNum)
 				groupNum = 0;
+		}
+		
+		for (Unit dropShip : microDropShip.getUnits()) {
+			mechanicDropShip.executeMechanicMicro(dropShip);
 		}
 	}
 	

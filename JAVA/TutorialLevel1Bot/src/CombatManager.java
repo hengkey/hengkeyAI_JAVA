@@ -1529,11 +1529,22 @@ public class CombatManager {
 	
 	private void updateAttackSquads() {
 	    Squad mainAttackSquad = squadData.getSquad(SquadName.MAIN_ATTACK);
-
+		BaseLocation selfmainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
+		
 		for (Unit unit : combatUnits) {
 			if (unit.getType() == UnitType.Terran_Vulture || unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode
 					|| unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode
-					|| unit.getType() == UnitType.Terran_Goliath) {
+					|| unit.getType() == UnitType.Terran_Goliath || unit.getType() == UnitType.Terran_Dropship) {
+				
+				if (Config.DrawHengDebugInfo == true)
+					MyBotModule.Broodwar.drawCircleMap(selfmainBaseLocations.getPosition(), 600, Color.Yellow, false);
+				
+				// 울베에 있는 드랍십은 attack squad에 넣지 않는다.
+				if (unit.getType() == UnitType.Terran_Dropship
+						&& unit.getDistance(selfmainBaseLocations.getPosition()) < 600) {
+					continue;
+				}
+				
 				if (squadData.canAssignUnitToSquad(unit, mainAttackSquad)) {
 					squadData.assignUnitToSquad(unit, mainAttackSquad);// 배슬, 드랍십도 포함됨
 				}
