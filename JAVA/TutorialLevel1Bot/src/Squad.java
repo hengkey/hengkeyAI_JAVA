@@ -50,7 +50,7 @@ public class Squad {
 	}
 
 	public static final int IgnoreFrameValue = 3200;
-	public static final int DestRange = 330;
+	public static final int DestRange = 300;
 	public static final int closestRange = 32 * 2;
 	
 	public int getIgnoreDropShipFrame() {

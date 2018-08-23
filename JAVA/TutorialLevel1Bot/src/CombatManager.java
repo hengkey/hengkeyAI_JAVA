@@ -271,7 +271,7 @@ public class CombatManager {
 			updateBuildingSquad();
 //			updateGuerillaSquad(); 
 			
-			if (frameCount > 14000) 
+			if (frameCount > 18000) 
 			{
 				updateMultiGuerillaSquad();
 			} 
@@ -1619,23 +1619,19 @@ public class CombatManager {
 		// 이미 할당되어 있으면 return
 		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
 		if (!dropShipSquad.getUnitSet().isEmpty()) {
-			List<Unit> unitSet = dropShipSquad.getUnitSet();
-			int destLandCnt = 0;
-			for (int i = 0; i < unitSet.size(); i++) {
-				MyBotModule.Broodwar.drawCircleMap(dropShipSquad.getOrder().getPosition(), Squad.DestRange, Color.Green);
-				// 목적지범위이고
-				if (unitSet.get(i).getDistance(dropShipSquad.getOrder().getPosition()) < Squad.DestRange) {
-					// 목적지에 다 내릴때까지기다림.
-					if ((unitSet.get(i).getType() == UnitType.Terran_Siege_Tank_Tank_Mode
-							|| unitSet.get(i).getType() == UnitType.Terran_Goliath) && unitSet.get(i).isLoaded()) {
-						return;
-					} else {
-						destLandCnt++;
-					}
-				}
-			}
 
-			if (destLandCnt >= (MechanicMicroDropShip.MaxDropTank + MechanicMicroDropShip.MaxDropGoliath)) {
+			if (dropShipSquad.getProgressLevel() == Squad.Drop_UnloadComplete) {
+//				List<Unit> unitSet = dropShipSquad.getUnitSet();
+//				for (int i = 0; i < unitSet.size(); i++) {
+//					if (Config.DrawHengDebugInfo == true)
+//						MyBotModule.Broodwar.drawCircleMap(dropShipSquad.getOrder().getPosition(), Squad.DestRange,
+//								Color.Green);
+//					if (unitSet.get(i).getType() == UnitType.Terran_Dropship) {
+//						if (unitSet.get(i).isMoving())
+//							unitSet.get(i).stop();
+//					}
+//				}
+				
 				dropShipSquad.setIgnoreDropShipFrame(MyBotModule.Broodwar.getFrameCount() + Squad.IgnoreFrameValue);
 				dropShipSquad.resetParmeter();
 				dropShipSquad.clear();
@@ -1665,10 +1661,10 @@ public class CombatManager {
 				assignableTanks.add(unit);
 			}
 			else if (unit.getType() == UnitType.Terran_Goliath) {
-				if (assignableGoliathes.size() < MechanicMicroDropShip.MaxDropGoliath) {
+				if (assignableGoliathes.size() < (MechanicMicroDropShip.MaxDropGoliath + 2)) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
-					if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)//적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
+					if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)// 적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
 						continue;
 					assignableGoliathes.add(unit);
 				}
@@ -1683,8 +1679,8 @@ public class CombatManager {
 		}
 		
 		if (assignableDropShips.size() >= MechanicMicroDropShip.MaxDropShip
-				&& assignableTanks.size() >= MechanicMicroDropShip.MaxDropTank
-				&& assignableGoliathes.size() >= MechanicMicroDropShip.MaxDropGoliath) {
+				&& assignableTanks.size() >= (MechanicMicroDropShip.MaxDropTank+2)
+				&& assignableGoliathes.size() >= (MechanicMicroDropShip.MaxDropGoliath+1)) {
 			// 드랍쉽
 			for (Unit assignableDropShip : assignableDropShips) {
 				squadData.assignUnitToSquad(assignableDropShip, dropShipSquad);
