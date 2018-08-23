@@ -80,7 +80,7 @@ public class RespondToStrategy {
 	public boolean chk_comsat_station;
 	public boolean chk_science_facility;
 	
-	
+	public boolean baseBunker = false;
 	public boolean center_gateway = false;
 	
 	public RespondToStrategy() {
