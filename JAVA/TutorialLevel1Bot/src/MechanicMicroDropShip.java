@@ -152,7 +152,16 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 				// System.out.println("movePosition"+movePosition.toTilePosition().toString());
 				break;
 
-			default:				
+			case Squad.Drop_MoveWithWallToDestComplete:// 도착했으니 무조건 내림
+				//임요환드롭
+				if (dropShip.canUnload()) {
+					for (Unit unit : dropShip.getLoadedUnits()) {
+						dropShip.unload(unit);
+					}
+				}
+				break;
+				
+			default:	
 				break;
 			}
 			
@@ -161,8 +170,7 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 
 		} else { // 목적지 도착
 			//임요환드롭
-			if (dropShip.getDistance(order.getPosition()) < Squad.DestRange && dropShip.isMoving()
-					&& dropShip.canUnload()) {
+			if (dropShip.getDistance(order.getPosition()) < Squad.DestRange	&& dropShip.canUnload()) {
 				for (Unit unit : dropShip.getLoadedUnits()) {
 					dropShip.unload(unit);
 				}
@@ -178,7 +186,7 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 	
 	public void executeMechanicMicroAttack(Unit dropShip) {
 		//아직도 내려지지 않은 unit 임요환드롭
-		if (dropShip.isMoving() && dropShip.canUnload()) {
+		if (dropShip.canUnload()) {
 			for (Unit unit : dropShip.getLoadedUnits()) {
 				dropShip.unload(unit);
 			}

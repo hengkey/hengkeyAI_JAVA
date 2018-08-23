@@ -25,6 +25,7 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 	private int initFrame = 0;
 	private boolean useInitFrame = false;
 	private int saveUnitLevel = 1;
+	private int progressLevel = 0;
 	
 	private int siegeModeSpreadRadius = 200;
 	
@@ -34,7 +35,7 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 		this.flyingEnemisInfo = MicroUtils.filterFlyingTargetInfos(enemiesInfo);
 	}
 	
-	public void prepareMechanicAdditional(List<Unit> vultureList, List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel, int initFrame) {
+	public void prepareMechanicAdditional(List<Unit> vultureList, List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel, int initFrame, int progressLevel) {
 		this.vultureList = vultureList;
 		this.tankList = tankList;
 		this.goliathList = goliathList;
@@ -42,6 +43,7 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 		this.initFrame = initFrame;
 		this.siegeModeSpreadRadius = UnitType.Terran_Siege_Tank_Siege_Mode.sightRange() + (int) (Math.log(tankList.size()) * 11);
 		this.saveUnitLevel = saveUnitLevel;
+		this.progressLevel = progressLevel;
 		this.useInitFrame = false;
 	}
 	
@@ -267,7 +269,7 @@ public class MechanicMicroTank extends MechanicMicroAbstract {
 	private void executeTankModeForDR(Unit tank) {
 		if (tank.getDistance(order.getPosition()) > 300) {
 			for (Unit dropShip : dropShipList) {
-				if (dropShip.canLoad(tank))
+				if (dropShip.canLoad(tank) && progressLevel == Squad.Drop_Init)
 					CommandUtil.rightClick(tank, dropShip);
 			}
 		}

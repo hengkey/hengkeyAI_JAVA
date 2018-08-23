@@ -1651,17 +1651,25 @@ public class CombatManager {
 		List<Unit> assignableTanks = new ArrayList<>();
 		List<Unit> assignableGoliathes = new ArrayList<>();
 		List<Unit> assignableDropShips = new ArrayList<>();
+		BaseLocation enemymainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
+		
+		if (Config.DrawHengDebugInfo == true)
+			MyBotModule.Broodwar.drawCircleMap(enemymainBaseLocations.getPosition(), 1000, Color.Yellow, false);
 		
 		for (Unit unit : combatUnits) {
 			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode || unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
-					assignableTanks.add(unit);
+				if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)//적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
+					continue;
+				assignableTanks.add(unit);
 			}
 			else if (unit.getType() == UnitType.Terran_Goliath) {
 				if (assignableGoliathes.size() < MechanicMicroDropShip.MaxDropGoliath) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
+					if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)//적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
+						continue;
 					assignableGoliathes.add(unit);
 				}
 			}
@@ -1960,7 +1968,10 @@ public class CombatManager {
 	}
 	
 	private void updateMultiGuerillaSquad() {
-
+		if (getDetailStrategyFrame(CombatStrategyDetail.NO_CHECK_NO_GUERILLA) > 0) {
+			return;
+		}
+		
 		List<Unit> assignableVultures = new ArrayList<>();
 		List<Unit> assignableGoliathes = new ArrayList<>();
 		int combatGoliathCnt = 0;
@@ -2005,8 +2016,8 @@ public class CombatManager {
 			} else {
 				if(assignableVultures.size()>0)
 					squadData.assignUnitToSquad(assignableVultures.get(0), guerillaSquad);
-				if(assignableGoliathes.size()>0)
-					squadData.assignUnitToSquad(assignableGoliathes.get(0), guerillaSquad);
+//				if(assignableGoliathes.size()>0)
+//					squadData.assignUnitToSquad(assignableGoliathes.get(0), guerillaSquad);
 				
 				VultureTravelManager.Instance().guerillaStart(squadName);
 			}
@@ -2033,8 +2044,8 @@ public class CombatManager {
 			} else {
 				if(assignableVultures.size()>1)
 					squadData.assignUnitToSquad(assignableVultures.get(1), guerillaSquad);
-				if(assignableGoliathes.size()>1)
-					squadData.assignUnitToSquad(assignableGoliathes.get(1), guerillaSquad);
+//				if(assignableGoliathes.size()>1)
+//					squadData.assignUnitToSquad(assignableGoliathes.get(1), guerillaSquad);
 				
 				VultureTravelManager.Instance().guerillaStart(squadName);
 				// System.out.println("putSquad " + guerillaSquad.toString() + " "

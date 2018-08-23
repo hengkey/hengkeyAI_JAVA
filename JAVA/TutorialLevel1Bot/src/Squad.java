@@ -50,7 +50,7 @@ public class Squad {
 	}
 
 	public static final int IgnoreFrameValue = 3200;
-	public static final int DestRange = 300;
+	public static final int DestRange = 330;
 	public static final int closestRange = 32 * 2;
 	
 	public int getIgnoreDropShipFrame() {
@@ -360,9 +360,9 @@ public class Squad {
 		mechanicVulture.prepareMechanic(watchOrder, vultureEnemies);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), saveUnitLevelVulture, attackWithMechanic);
 		mechanicTank.prepareMechanic(attackerOrder, attackerEnemies);
-		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelTank, initFrame);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelTank, initFrame, progressLevel);
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
-		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelGoliath);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelGoliath, progressLevel);
 		mechanicDropShip.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelDropShip, progressLevel);
 		
@@ -499,7 +499,7 @@ public class Squad {
 				InformationManager.Instance().enemyPlayer, order.getRadius());
 	
 		mechanicGoliath.prepareMechanic(order, goliathEnemies);
-		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevel);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevel, progressLevel);
 		
 		for (Unit goliath : microGoliath.getUnits()) {
 			String shortPathName = SquadName.MULTIGUERILLA_ + goliath.getType() + goliath.getID();
@@ -613,9 +613,9 @@ public class Squad {
 		}
 		
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0, progressLevel);
 		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
+		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, progressLevel);
 		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, progressLevel);
 		
@@ -649,7 +649,7 @@ public class Squad {
 		mechanicVulture.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
+		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0, progressLevel);
 		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
 		
 //		LagTest lagTest = LagTest.startTest(true);

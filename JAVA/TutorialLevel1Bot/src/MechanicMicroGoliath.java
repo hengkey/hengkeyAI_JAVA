@@ -22,6 +22,7 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 	private List<Unit> dropShipList = new ArrayList<>();
 	
 	private int saveUnitLevel = 1;
+	private int progressLevel = 0;
 	
 	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
 	private boolean attackWithTank = false;
@@ -40,11 +41,12 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 		this.enemiesInfo = enemiesInfo;
 	}
 	
-	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel) {
+	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel, int progressLevel) {
 		this.tankList = tankList;
 		this.goliathList = goliathList;
 		this.dropShipList = dropShipList;
 		this.saveUnitLevel = saveUnitLevel;
+		this.progressLevel = progressLevel;
 		
 		this.attackWithTank = tankList.size() * 6 >= goliathList.size();
 		if (this.attackWithTank) {
@@ -159,7 +161,7 @@ public class MechanicMicroGoliath extends MechanicMicroAbstract {
 		
 		if (goliath.getDistance(order.getPosition()) > 300) {
 			for (Unit dropShip : dropShipList) {
-				if (dropShip.canLoad(goliath))
+				if (dropShip.canLoad(goliath) && progressLevel == Squad.Drop_Init)
 					CommandUtil.rightClick(goliath, dropShip);
 			}
 		} else {
