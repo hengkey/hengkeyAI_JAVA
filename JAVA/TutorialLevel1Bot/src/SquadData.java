@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import bwapi.Unit;
+import bwapi.UnitType;
 
 public class SquadData {
 	
@@ -86,6 +87,11 @@ public class SquadData {
 		if (previousSquad != null) {
 			previousSquad.removeUnit(unit);
 		}
+
+		if (unit.getType() == UnitType.Terran_Dropship) {
+			unit.stop();
+		}
+						
 		squad.addUnit(unit);
 		
 	}
