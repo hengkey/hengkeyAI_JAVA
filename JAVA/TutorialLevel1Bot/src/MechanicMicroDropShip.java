@@ -22,10 +22,19 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 	private List<Unit> dropShipList = new ArrayList<>();
 	
 	private int saveUnitLevel = 1;
+	private int	progressLevel = 0;
 	
 	private Map<String, ShortPathGuerrilla> shortPathInfo = new HashMap<>();
 	private boolean attackWithTank = false;
 	private boolean nearestFlag = false;
+	public boolean isNearestFlag() {
+		return nearestFlag;
+	}
+
+	public void setNearestFlag(boolean nearestFlag) {
+		this.nearestFlag = nearestFlag;
+	}
+
 	private int stickToTankRadius = 0;
 	
     public static int MaxDropShip=2;
@@ -45,11 +54,12 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 		this.enemiesInfo = enemiesInfo;
 	}
 	
-	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel) {
+	public void prepareMechanicAdditional(List<Unit> tankList, List<Unit> goliathList, List<Unit> dropShipList, int saveUnitLevel, int progressLevel) {
 		this.tankList = tankList;
 		this.goliathList = goliathList;
 		this.dropShipList = dropShipList;
 		this.saveUnitLevel = saveUnitLevel;
+		this.progressLevel = progressLevel;
 		
 		this.attackWithTank = tankList.size() * 6 >= goliathList.size();
 		if (this.attackWithTank) {
@@ -66,77 +76,88 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			return;
 		}
 		
+		if (progressLevel == Squad.Drop_Init)
+			return;
+		
 		Position movePosition = order.getPosition();
-		BaseLocation selfmainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
-//		BaseLocation sourceBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
-//		List<BaseLocation> selfotherBaseLocations = InformationManager.Instance().getOtherExpansionLocations(InformationManager.Instance().selfPlayer);
-		BaseLocation enemymainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
-//		BaseLocation enemyfirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
-//		List<BaseLocation> enemyotherBaseLocations = InformationManager.Instance().getOtherExpansionLocations(InformationManager.Instance().enemyPlayer);
-	
+
 		if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawTextMap(dropShip.getPosition().getX(), dropShip.getPosition().getY() + 10,
-					"" + order.getType());
+					"" + order.getType() + movePosition.toTilePosition().toString());
 		if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), 10, Color.Blue, true);
 		if (Config.DrawHengDebugInfo)
 			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), UnitType.Terran_Dropship.sightRange(), Color.Blue, false);
+		
+		BaseLocation selfmainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
+		BaseLocation enemymainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer);
 		
 		// 목적지까지 move
 		if (movePosition.equals(enemymainBaseLocations.getPosition()))
 			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
 		
 		if (dropShip.getDistance(movePosition) > Squad.DestRange) {
-			
-			//모두 실으면 unit이 안보이므로 size가 0이다
-			if (tankList.size() > 0)
-				return;
+			switch (progressLevel) {
+			case Squad.Drop_Loaded:// 모아야할 단계 그래야 터렛에 덜 맞음
+//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
+				if (nearestFlag == false) {
+					int nearCnt = 0;
+					for (Unit otherdropShip : dropShipList) {
+						if (dropShip.getID() == otherdropShip.getID())
+							continue;
 
-			//모두 실으면 unit이 안보이므로 size가 0이다
-			if (goliathList.size() > 0)
-				return;
+						if (dropShip.getDistance(otherdropShip) < (Squad.closestRange/2)) {
+							nearCnt++;
+						}
+					}
 
-			// 벽타고 움직이기 위해
-			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
-			if (diffX > 36 * 2)
-				movePosition = new Position(movePosition.getX(), dropShip.getY());
-			else
-				movePosition = new Position(dropShip.getX(), movePosition.getY());
-
-			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
-			// System.out.println("movePosition"+movePosition.toTilePosition().toString());
-			
-			// 일단 울베애 가까운 y축 벽에 붙는다
-			Position tmpPosition = selfmainBaseLocations.getPosition();
-			tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
-			int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
-			if (diffY > 36*2)
-				movePosition = new Position(dropShip.getX(), tmpPosition.getY());
-			// System.out.println("movePosition"+movePosition.toTilePosition().toString()+
-			// new Exception().getStackTrace()[0].getLineNumber());		
-			//모든 dropShip을 모으기 위해(그래야 터렛피해를 덜 받는다)
-			if (nearestFlag == false) {
-				int nearCnt = 0;
-				for (Unit otherdropShip : dropShipList) {
-					if (dropShip.equals(otherdropShip))
-						continue;
-
-					// System.out.println("dropShip.getDistance(otherdropShip)=" +
-					// dropShip.getDistance(otherdropShip));
-					if (dropShip.getDistance(otherdropShip) < 36) {
-						nearCnt++;
+					if (nearCnt < (MaxDropShip - 1)) {
+						movePosition = dropShipList.get(0).getPosition();
+						if (dropShip.isIdle())
+							CommandUtil.move(dropShip, movePosition);
+					} else {
+						System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
+						nearestFlag = true;
 					}
 				}
-				
-				if (nearCnt < (MaxDropShip-1)) {
-					movePosition = dropShipList.get(0).getPosition();
-				} else {
-					nearestFlag = true;
+				break;
+
+			case Squad.Drop_AllNeared:// 벽에 붙어야 할 단계
+//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
+				Position tmpPosition = selfmainBaseLocations.getPosition();
+				tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
+				int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
+				if (diffY > Squad.closestRange) {
+					movePosition = new Position(dropShip.getX(), tmpPosition.getY());
+					if (dropShip.isIdle())
+						CommandUtil.move(dropShip, movePosition);
 				}
+				// System.out.println("movePosition"+movePosition.toTilePosition().toString()+
+				// new Exception().getStackTrace()[0].getLineNumber());
+				break;
+
+			case Squad.Drop_MoveToWallComplete:// 벽타고 이동할 단계
+//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
+				int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
+				if (diffX > Squad.closestRange)
+					movePosition = new Position(movePosition.getX(), dropShip.getY());
+				else
+					movePosition = new Position(dropShip.getX(), movePosition.getY());
+				
+				if (dropShip.isIdle())
+					CommandUtil.move(dropShip, movePosition);
+
+				// movePosition = new Position((movePosition.getX() / 2048) * 4064,
+				// (movePosition.getY() / 2048) * 4064);
+				// System.out.println("movePosition"+movePosition.toTilePosition().toString());
+				break;
+
+			default:				
+				break;
 			}
 			
-			if (dropShip.isIdle())
-				CommandUtil.move(dropShip, movePosition);
+//			if (dropShip.isIdle())
+//				CommandUtil.move(dropShip, movePosition);
 
 		} else { // 목적지 도착
 			//임요환드롭
@@ -176,9 +197,9 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			MyBotModule.Broodwar.drawTextMap(dropShip.getPosition().getX(), dropShip.getPosition().getY() + 10,
 					"" + order.getType());
 		if (Config.DrawHengDebugInfo)
-			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), 10, Color.Purple, true);
+			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), 10, Color.Teal, true);
 		if (Config.DrawHengDebugInfo)
-			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), UnitType.Terran_Dropship.sightRange(), Color.Purple, false);
+			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), UnitType.Terran_Dropship.sightRange(), Color.Teal, false);
 		
 		// 목적지까지 move
 		movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);

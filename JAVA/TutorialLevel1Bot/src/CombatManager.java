@@ -1613,6 +1613,9 @@ public class CombatManager {
 		if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Dropship) < 1)
 			return;
 		
+//		System.out.println("enemy InformationManager.Instance().getMainBaseLocation=" + InformationManager.Instance()
+//				.getMainBaseLocation(InformationManager.Instance().enemyPlayer).getPosition().toTilePosition());
+		
 		// 이미 할당되어 있으면 return
 		Squad dropShipSquad = squadData.getSquad(SquadName.DROPSHIP);
 		if (!dropShipSquad.getUnitSet().isEmpty()) {
@@ -1697,12 +1700,15 @@ public class CombatManager {
 						|| assignableGoliathesCnt >= MechanicMicroDropShip.MaxDropGoliath)
 					break;
 			}
+			
+			if (dropShipSquad.getProgressLevel() == 0)
+				dropShipSquad.setProgressLevel(Squad.Drop_Init);
 		}
 					
 		if (InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().enemyPlayer) != null) {
 			SquadOrder dropShipOrder = new SquadOrder(
 					SquadOrderType.DROPSHIP, InformationManager.Instance()
-							.getMainBaseLocation(InformationManager.Instance().enemyPlayer).getPoint(),
+							.getMainBaseLocation(InformationManager.Instance().enemyPlayer).getPosition(),
 					UnitType.Terran_Dropship.sightRange(), SquadName.DROPSHIP);
 			dropShipSquad.setOrder(dropShipOrder);
 		}

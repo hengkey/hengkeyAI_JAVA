@@ -19,6 +19,7 @@ public class Squad {
 		this.priority = priority;
 		this.frameNum = 0;
 		this.ignoreDropShipFrame = 0;
+		this.progressLevel = 0;
 	}
 	
 	private String name;
@@ -27,8 +28,26 @@ public class Squad {
 	private boolean pushLine;
 	private int frameNum;
 	private int ignoreDropShipFrame;
-	public static final int IgnoreFrameValue=3200;
-	public static final int DestRange=400;
+	private int progressLevel;
+
+	public static final int Drop_Init = 1;
+	public static final int Drop_Loaded = 2;
+	public static final int Drop_AllNeared = 3;
+	public static final int Drop_MoveToWallComplete = 4;
+	public static final int Drop_MoveWithWallToDestComplete = 5;
+	public static final int Drop_UnloadComplete = 6;
+	
+	public int getProgressLevel() {
+		return progressLevel;
+	}
+
+	public void setProgressLevel(int progressLevel) {
+		this.progressLevel = progressLevel;
+	}
+
+	public static final int IgnoreFrameValue = 3200;
+	public static final int DestRange = 400;
+	public static final int closestRange = 32 * 2;
 	
 	public int getIgnoreDropShipFrame() {
 		return ignoreDropShipFrame;
@@ -341,7 +360,7 @@ public class Squad {
 		mechanicGoliath.prepareMechanic(attackerOrder, attackerEnemies);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelGoliath);
 		mechanicDropShip.prepareMechanic(attackerOrder, attackerEnemies);
-		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelDropShip);
+		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), saveUnitLevelDropShip, progressLevel);
 		
 		//부하분산을 위해 maxGroupNum frame으로 나누어 수행
 		//제공해주는 frame값이 튀는 현상이 있는것 같아 자체 frame값 사용
@@ -493,21 +512,12 @@ public class Squad {
 	
 	private void updateDropShipSquad() {
 		List<UnitInfo> nearbyEnemiesInfo = new ArrayList<>();
-		if (MicroSet.Common.versusMechanicSet()) {
-//			for (Unit vulture : microVulture.getUnits()) {
-//				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, vulture.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Vulture.sightRange());
-//			}
-			for (Unit tank : microTank.getUnits()) {
-				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, tank.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Siege_Tank_Tank_Mode.sightRange());
-			}
-			for (Unit goliath : microGoliath.getUnits()) {
-				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, goliath.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Goliath.sightRange());
-			}
-			for (Unit dropShip : microDropShip.getUnits()) {
-				InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, dropShip.getPosition(), InformationManager.Instance().enemyPlayer, UnitType.Terran_Dropship.sightRange());
-			}
+		BaseLocation selfmainBaseLocations = InformationManager.Instance().getMainBaseLocation(InformationManager.Instance().selfPlayer);
+
+		for (Unit dropShip : microDropShip.getUnits()) {
+			InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, dropShip.getPosition(),
+					InformationManager.Instance().enemyPlayer, UnitType.Terran_Dropship.sightRange());
 		}
-		InformationManager.Instance().getNearbyForce(nearbyEnemiesInfo, order.getPosition(), InformationManager.Instance().enemyPlayer, order.getRadius());
 		
 		//이동하다 중간에 적군멀티나 미사일터렛을 발견했을때 바로 내린다
 		boolean enemyFlag = false;
@@ -521,25 +531,90 @@ public class Squad {
 			// }
 			
 			if (enemyFlag == true) {				
-//				System.out.println("enemyInfo.getType()="+enemyInfo.getType());
+				System.out.println("enemyInfo.getType()="+enemyInfo.getType()+enemyInfo.getUnit().getPosition());
 				order = new SquadOrder(SquadOrderType.DROPSHIP, enemyInfo.getUnit().getPosition(),
 						UnitType.Terran_Dropship.sightRange(), "DropShip");
 				break;
 			}
 		}
+//		System.out.println("microTank.getUnits().size()="+microTank.getUnits().size()+" "+new Exception().getStackTrace()[0].getLineNumber());
+//		System.out.println("microGoliath.getUnits().size()="+microGoliath.getUnits().size()+" "+new Exception().getStackTrace()[0].getLineNumber());
+		if(microTank.getUnits().size()==0 && microGoliath.getUnits().size()==0)
+		{
+			if (progressLevel == Squad.Drop_Init) {
+				progressLevel = Squad.Drop_Loaded;
+				System.out.println(
+						"progressLevel=" + progressLevel + " " + new Exception().getStackTrace()[0].getLineNumber());
+			}
+		}
+
+		int fullDropShipCnt=0;//꽉찬 드랍십
+		int nearestToWallCnt=0;//벽에붙은 드랍십
+		int destToCnt=0;//목적지에 도착한 드랍십
+		int canUnloadCnt=0;//목적지에 도착한 드랍십
+		Position tmpPosition = selfmainBaseLocations.getPosition();
+		for (Unit tmpDropShip : microDropShip.getUnits()) {
+			if (tmpDropShip.canLoad() == false) {
+				fullDropShipCnt++;
+			}
+			
+			tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
+			int diffY = Math.abs(tmpDropShip.getPosition().getY() - tmpPosition.getY());
+			if (diffY < closestRange)
+				nearestToWallCnt++;
+			
+			if (tmpDropShip.getDistance(order.getPosition()) < Squad.DestRange)
+				destToCnt++;
+			
+			if (tmpDropShip.canUnload())
+				canUnloadCnt++;
+		}
 		
-//		mechanicVulture.prepareMechanic(order, nearbyEnemiesInfo);
-//		mechanicVulture.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), 1, true);
+		if (fullDropShipCnt >= microDropShip.getUnits().size()) {
+			if (progressLevel == Squad.Drop_Init) {
+				progressLevel = Squad.Drop_Loaded;
+				System.out.println(
+						"progressLevel=" + progressLevel + " " + new Exception().getStackTrace()[0].getLineNumber());
+			}
+
+		}
+		
+		if( mechanicDropShip.isNearestFlag() == true) {
+			if (progressLevel == Squad.Drop_Loaded) {
+				progressLevel = Squad.Drop_AllNeared;
+				System.out.println(
+						"progressLevel=" + progressLevel + " " + new Exception().getStackTrace()[0].getLineNumber());
+			}
+		}
+		
+		if (nearestToWallCnt >= microDropShip.getUnits().size()) {
+			if (progressLevel == Squad.Drop_AllNeared) {
+				progressLevel = Squad.Drop_MoveToWallComplete;
+				System.out.println(
+						"progressLevel=" + progressLevel + " " + new Exception().getStackTrace()[0].getLineNumber());
+			}
+		}	
+		
+		if (destToCnt >= microDropShip.getUnits().size()) {
+			if (progressLevel == Squad.Drop_MoveToWallComplete) {
+				progressLevel = Squad.Drop_MoveWithWallToDestComplete;
+				System.out.println(
+						"progressLevel=" + progressLevel + " " + new Exception().getStackTrace()[0].getLineNumber());
+			}
+		}	
+		
+		if (canUnloadCnt == 0) {
+			if (progressLevel == Squad.Drop_MoveWithWallToDestComplete)
+				progressLevel = Squad.Drop_UnloadComplete;
+		}
+		
 		mechanicTank.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicTank.prepareMechanicAdditional(microVulture.getUnits(), microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, 0);
 		mechanicGoliath.prepareMechanic(order, nearbyEnemiesInfo);
 		mechanicGoliath.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
 		mechanicDropShip.prepareMechanic(order, nearbyEnemiesInfo);
-		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1);
+		mechanicDropShip.prepareMechanicAdditional(microTank.getUnits(), microGoliath.getUnits(), microDropShip.getUnits(), 1, progressLevel);
 		
-//		for (Unit vulture : microVulture.getUnits()) {
-//			mechanicVulture.executeMechanicMicro(vulture);
-//		}
 		for (Unit tank : microTank.getUnits()) {
 			mechanicTank.executeMechanicMicro(tank);
 		}
