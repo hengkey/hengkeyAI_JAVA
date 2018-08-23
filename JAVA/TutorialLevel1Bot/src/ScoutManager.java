@@ -212,8 +212,11 @@ public class ScoutManager{
 					}
 					
 					WorkerManager.Instance().setIdleWorker(currentScoutUnit);
-					currentScoutUnit.move(bunkerPos);
-					currentScoutUnit = null;
+					if (currentScoutUnit != null) {
+						currentScoutUnit.move(bunkerPos);
+						currentScoutUnit = null;
+					}
+					
 					bunkerFlag = true;
 				}
 			}

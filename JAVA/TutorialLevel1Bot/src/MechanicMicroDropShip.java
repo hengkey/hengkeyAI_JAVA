@@ -78,8 +78,9 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 			MyBotModule.Broodwar.drawCircleMap(dropShip.getPosition(), UnitType.Terran_Dropship.sightRange(), Color.Purple, false);
 		
 		// 목적지까지 move
-		if (movePosition.equals(enemymainBaseLocations))
+		if (movePosition.equals(enemymainBaseLocations.getPosition()))
 			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
+		
 		if (dropShip.getDistance(movePosition) > Squad.DestRange) {
 			
 			//모두 실으면 unit이 안보이므로 size가 0이다
