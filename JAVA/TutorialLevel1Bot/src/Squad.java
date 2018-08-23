@@ -50,7 +50,7 @@ public class Squad {
 	}
 
 	public static final int IgnoreFrameValue = 3200;
-	public static final int DestRange = 300;
+	public static final int DestRange = 400;
 	public static final int closestRange = 32 * 2;
 	
 	public int getIgnoreDropShipFrame() {
@@ -530,6 +530,9 @@ public class Squad {
 				enemyFlag = true;
 			if (enemyInfo.getType() == UnitType.Terran_Command_Center)
 				enemyFlag = true;
+			if (enemyInfo.getType() == UnitType.Protoss_Photon_Cannon)
+				enemyFlag = true;
+
 			// if (enemyInfo.getType() == UnitType.Terran_Wraith) {
 			// enemyFlag = true;
 			// }
@@ -556,6 +559,17 @@ public class Squad {
 		int nearestToWallCnt=0;//벽에붙은 드랍십
 		int destToCnt=0;//목적지에 도착한 드랍십
 		int canUnloadCnt=0;//목적지에 도착한 드랍십
+		Position tmpOrderPos=null;
+		if (enemyFlag == true)
+			tmpOrderPos = order.getPosition();
+		else
+			tmpOrderPos = new Position((order.getPosition().getX() / 2048) * 4064,
+					(order.getPosition().getY() / 2048) * 4064);
+		
+		if (Config.DrawHengDebugInfo == true) {
+			MyBotModule.Broodwar.drawCircleMap(tmpOrderPos, Squad.DestRange, Color.Orange);
+		}
+		
 		Position tmpPosition = selfmainBaseLocations.getPosition();
 		for (Unit tmpDropShip : microDropShip.getUnits()) {
 			if (tmpDropShip.canLoad() == false) {
@@ -567,7 +581,7 @@ public class Squad {
 			if (diffY < closestRange)
 				nearestToWallCnt++;
 			
-			if (tmpDropShip.getDistance(order.getPosition()) < Squad.DestRange)
+			if (tmpDropShip.getDistance(tmpOrderPos) < Squad.DestRange)
 				destToCnt++;
 			
 			if (tmpDropShip.getLoadedUnits().size()>0)

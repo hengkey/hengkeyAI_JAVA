@@ -96,91 +96,81 @@ public class MechanicMicroDropShip extends MechanicMicroAbstract {
 		if (movePosition.equals(enemymainBaseLocations.getPosition()))
 			movePosition = new Position((movePosition.getX() / 2048) * 4064, (movePosition.getY() / 2048) * 4064);
 		
-		if (dropShip.getDistance(movePosition) > Squad.DestRange) {
-			switch (progressLevel) {
-			case Squad.Drop_Loaded:// 모아야할 단계 그래야 터렛에 덜 맞음
-//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
-				if (nearestFlag == false) {
-					int nearCnt = 0;
-					for (Unit otherdropShip : dropShipList) {
-						if (dropShip.getID() == otherdropShip.getID())
-							continue;
+		switch (progressLevel) {
+		case Squad.Drop_Loaded:// 모아야할 단계 그래야 터렛에 덜 맞음
+			// System.out.println("progressLevel="+progressLevel+" "+new
+			// Exception().getStackTrace()[0].getLineNumber());
+			if (nearestFlag == false) {
+				int nearCnt = 0;
+				for (Unit otherdropShip : dropShipList) {
+					if (dropShip.getID() == otherdropShip.getID())
+						continue;
 
-						if (dropShip.getDistance(otherdropShip) < (Squad.closestRange/2)) {
-							nearCnt++;
-						}
-					}
-
-					if (nearCnt < (MaxDropShip - 1)) {
-						movePosition = dropShipList.get(0).getPosition();
-						if (dropShip.isIdle())
-							CommandUtil.move(dropShip, movePosition);
-					} else {
-						System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
-						nearestFlag = true;
+					if (dropShip.getDistance(otherdropShip) < (Squad.closestRange / 2)) {
+						nearCnt++;
 					}
 				}
-				break;
 
-			case Squad.Drop_AllNeared:// 벽에 붙어야 할 단계
-//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
-				Position tmpPosition = selfmainBaseLocations.getPosition();
-				tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
-				int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
-				if (diffY > Squad.closestRange) {
-					movePosition = new Position(dropShip.getX(), tmpPosition.getY());
+				if (nearCnt < (MaxDropShip - 1)) {
+					movePosition = dropShipList.get(0).getPosition();
 					if (dropShip.isIdle())
 						CommandUtil.move(dropShip, movePosition);
+				} else {
+					System.out.println("progressLevel=" + progressLevel + " "
+							+ new Exception().getStackTrace()[0].getLineNumber());
+					nearestFlag = true;
 				}
-				// System.out.println("movePosition"+movePosition.toTilePosition().toString()+
-				// new Exception().getStackTrace()[0].getLineNumber());
-				break;
+			}
+			break;
 
-			case Squad.Drop_MoveToWallComplete:// 벽타고 이동할 단계
-//				System.out.println("progressLevel="+progressLevel+" "+new Exception().getStackTrace()[0].getLineNumber());
-				int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
-				if (diffX > Squad.closestRange)
-					movePosition = new Position(movePosition.getX(), dropShip.getY());
-				else
-					movePosition = new Position(dropShip.getX(), movePosition.getY());
-				
+		case Squad.Drop_AllNeared:// 벽에 붙어야 할 단계
+			// System.out.println("progressLevel="+progressLevel+" "+new
+			// Exception().getStackTrace()[0].getLineNumber());
+			Position tmpPosition = selfmainBaseLocations.getPosition();
+			tmpPosition = new Position((tmpPosition.getX() / 2048) * 4064, (tmpPosition.getY() / 2048) * 4064);
+			int diffY = Math.abs(dropShip.getPosition().getY() - tmpPosition.getY());
+			if (diffY > Squad.closestRange) {
+				movePosition = new Position(dropShip.getX(), tmpPosition.getY());
 				if (dropShip.isIdle())
 					CommandUtil.move(dropShip, movePosition);
-
-				// movePosition = new Position((movePosition.getX() / 2048) * 4064,
-				// (movePosition.getY() / 2048) * 4064);
-				// System.out.println("movePosition"+movePosition.toTilePosition().toString());
-				break;
-
-			case Squad.Drop_MoveWithWallToDestComplete:// 도착했으니 무조건 내림
-				//임요환드롭
-				if (dropShip.canUnload()) {
-					for (Unit unit : dropShip.getLoadedUnits()) {
-						dropShip.unload(unit);
-					}
-				}
-				break;
-				
-			default:	
-				break;
 			}
-			
-//			if (dropShip.isIdle())
-//				CommandUtil.move(dropShip, movePosition);
+			// System.out.println("movePosition"+movePosition.toTilePosition().toString()+
+			// new Exception().getStackTrace()[0].getLineNumber());
+			break;
 
-		} else { // 목적지 도착
-			//임요환드롭
-			if (dropShip.getDistance(order.getPosition()) < Squad.DestRange	&& dropShip.canUnload()) {
+		case Squad.Drop_MoveToWallComplete:// 벽타고 이동할 단계
+			// System.out.println("progressLevel="+progressLevel+" "+new
+			// Exception().getStackTrace()[0].getLineNumber());
+			int diffX = Math.abs(dropShip.getPosition().getX() - movePosition.getX());
+			if (diffX > Squad.closestRange)
+				movePosition = new Position(movePosition.getX(), dropShip.getY());
+			else
+				movePosition = new Position(dropShip.getX(), movePosition.getY());
+
+			if (dropShip.isIdle())
+				CommandUtil.move(dropShip, movePosition);
+
+			// movePosition = new Position((movePosition.getX() / 2048) * 4064,
+			// (movePosition.getY() / 2048) * 4064);
+			// System.out.println("movePosition"+movePosition.toTilePosition().toString());
+			break;
+
+		case Squad.Drop_MoveWithWallToDestComplete:// 도착했으니 무조건 내림
+			// 임요환드롭
+			if (dropShip.canUnload()) {
 				for (Unit unit : dropShip.getLoadedUnits()) {
 					dropShip.unload(unit);
 				}
+			} else if (dropShip.getLoadedUnits().size() > 0) {
+				if (dropShip.isIdle() || dropShip.isBraking()) {
+					Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
+					CommandUtil.unLoadAll(dropShip, randomPosition);
+				}
 			}
-			
-//			if (dropShip.isIdle() || dropShip.isBraking()) {
-//				Position randomPosition = MicroUtils.randomPosition(dropShip.getPosition(), 100);
-////				CommandUtil.unLoadAll(dropShip, enemymainBaseLocations.getPosition());
-//				CommandUtil.unLoadAll(dropShip, randomPosition);
-//			}
+			break;
+
+		default:
+			break;
 		}
 	}
 	
