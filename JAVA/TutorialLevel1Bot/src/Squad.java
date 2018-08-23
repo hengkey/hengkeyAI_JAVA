@@ -570,7 +570,7 @@ public class Squad {
 			if (tmpDropShip.getDistance(order.getPosition()) < Squad.DestRange)
 				destToCnt++;
 			
-			if (tmpDropShip.canUnload())
+			if (tmpDropShip.getLoadedUnits().size()>0)
 				canUnloadCnt++;
 		}
 		
