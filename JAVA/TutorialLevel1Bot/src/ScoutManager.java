@@ -56,7 +56,8 @@ public class ScoutManager{
 	private boolean twoBarrack = false;  //적 본진 가스 발견했는지 판별 변수
 	private boolean bunkerFlag = false;  //적 앞마당 bunker
 	private boolean seeEnemyBase = false;  //적 base를 봤는지
-	
+
+	//public boolean baseBunkerFlag = false;  //본진 bunker
 	
 	private List<Unit> units = new ArrayList<>();
 	public List<Unit> getUnits() {
@@ -105,24 +106,36 @@ public class ScoutManager{
 				} 
 				else 
 				{
-					followPerimeter();
+					if(currentScoutUnit != null)
+						followPerimeter();
 				}
 			} 
 			
-			if ((enemyBaseLocation != null) && (seeEnemyBase == true))
+			if (enemyBaseLocation != null)
 			{
+				/*
 				if ((InformationManager.Instance().enemyRace == Race.Protoss) &&
 				   (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ReadyToZealot) ||
 			       (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ZealotPush))
 				{
-					System.out.println("protossException_ReadyToZealot, protossException_ReadyToZealot Base Defense!!");
+					if(baseBunkerFlag == false)
+					{
+						TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos,true, true);
+						baseBunkerFlag = true;
+						MyBotModule.Broodwar.sendText("Zealot Rush Base Defense!");
+					}
 					return;
 				}
+				*/
 				
 				Chokepoint enemy_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
-				
-				if(enemy_first_choke != null)
-					MyBotModule.Broodwar.drawCircleMap(enemy_first_choke.getPoint(), 10, Color.Red, true);
+				BaseLocation enemyFirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().enemyPlayer);
+				TilePosition nearTilePosition = new TilePosition(enemyFirstBaseLocation.getX(), enemyFirstBaseLocation.getY());
+				if(enemyFirstBaseLocation != null)
+					MyBotModule.Broodwar.drawCircleMap(enemyFirstBaseLocation.getPoint(), 10, Color.Red, true);
+				//if(enemy_first_choke != null)
+				//	MyBotModule.Broodwar.drawCircleMap(enemy_first_choke.getPoint(), 10, Color.Red, true);
 				
 				if (bunkerFlag == false)
 				{
@@ -134,54 +147,72 @@ public class ScoutManager{
 					{
 						if ((enemyBaseLocation.getX() < 64*32 && enemyBaseLocation.getY() < 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
-							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() + (32*4));
+							//System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX() - (32*2), bunkerPos.getY() + (32*3));
 						} 
 						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() < 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
-							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() + (32*4));
+							//System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							bunkerPos = new Position(bunkerPos.getX() + (32*2), bunkerPos.getY() + (32*3));
 						} 
 						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() > 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
-							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() - (32*4));
+							//System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX() + (32*2), bunkerPos.getY() - (32*3));
 						} 
 						else 
 						{
-							System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
-							bunkerPos = new Position(bunkerPos.getX(), bunkerPos.getY() - (32*4));
+							//System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							bunkerPos = new Position(bunkerPos.getX() - (32*2), bunkerPos.getY() - (32*3));
 						}
 					} 
 					else// if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.FightingSpririts) 
 					{
 						if ((enemyBaseLocation.getX() < 64*32 && enemyBaseLocation.getY() < 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							//System.out.println("Bunker Position [BASE 0] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
 							bunkerPos = new Position(bunkerPos.getX() + (32*2), bunkerPos.getY() + (32*6));
 						} 
 						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() < 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
+							//System.out.println("Bunker Position [BASE 1] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() + 10) );
 							bunkerPos = new Position(bunkerPos.getX() - (32*8), bunkerPos.getY() + (32*1));
 						} 
 						else if ((enemyBaseLocation.getX() > 64*32 && enemyBaseLocation.getY() > 64*32)) 
 						{
-							System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							//System.out.println("Bunker Position [BASE 2] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
 							bunkerPos = new Position(bunkerPos.getX() - (32*3), bunkerPos.getY() - (32*6));
 						} 
 						else 
 						{
-							System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
+							//System.out.println("Bunker Position [BASE 3] : "+bunkerPos.getX() + ","+ (bunkerPos.getY() - 10) );
 							bunkerPos = new Position(bunkerPos.getX() + (32*6), bunkerPos.getY() - (32*2));
 						}
 					}
-						
-					BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos.toTilePosition(), false);
 					
-					updateFleeUnit();
-					currentScoutUnit.move(bunkerPos);
+					
+					TilePosition nearTilePosition1 = new TilePosition(bunkerPos.toTilePosition().getX(), bunkerPos.toTilePosition().getY());
+					ConstructionTask b = new ConstructionTask(UnitType.Terran_Bunker,nearTilePosition, false);
+					ConstructionTask b1 = new ConstructionTask(UnitType.Terran_Bunker,nearTilePosition1, false);
+					
+					if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition, b))
+					{
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(
+								UnitType.Terran_Bunker, nearTilePosition, true);
+						System.out.println("UnitType.Terran_Bunker, nearTilePosition");
+					}
+					else
+					{
+						if (ConstructionPlaceFinder.Instance().canBuildHere(nearTilePosition1, b1)) 
+						{
+							BuildManager.Instance().buildQueue.queueAsHighestPriority(
+									UnitType.Terran_Bunker, nearTilePosition1, true);
+							System.out.println("UnitType.Terran_Bunker, nearTilePosition1");
+						}
+					}
+					
 					WorkerManager.Instance().setIdleWorker(currentScoutUnit);
+					currentScoutUnit.move(bunkerPos);
 					currentScoutUnit = null;
 					bunkerFlag = true;
 				}
@@ -290,6 +321,7 @@ public class ScoutManager{
 
 				for (Unit unit : MyBotModule.Broodwar.self().getUnits())
 				{
+					/*
 					if (InformationManager.Instance().getMapSpecificInformation().getMap() == MAP.TheHunters) 
 					{
 						if (unit.getType().isBuilding() == true && 
@@ -300,10 +332,10 @@ public class ScoutManager{
 						}
 					}
 					else
+					*/
 					{
-						if (unit.getType().isBuilding() == true && 
-							//unit.getType() == UnitType.Terran_Barracks)
-							unit.getType() == UnitType.Terran_Supply_Depot)
+						if ((unit.getType().isBuilding() == true && 
+						   ((unit.getType() == UnitType.Terran_Barracks) || unit.getType() == UnitType.Terran_Supply_Depot)))
 						{
 							firstBuilding = unit;
 							break;
@@ -337,7 +369,8 @@ public class ScoutManager{
 					{
 						// set unit as scout unit
 						currentScoutUnit = unit;
-						if(currentScoutUnit!= null){
+						if(currentScoutUnit!= null)
+						{
 							if(currentScoutUnit.isCarryingMinerals())
 								return;
 						}
@@ -397,8 +430,9 @@ public class ScoutManager{
 					if (MyBotModule.Broodwar.isExplored(startLocation.getTilePosition()) == false)
 					{
 						// GroundDistance 를 기준으로 가장 가까운 곳으로 선정
-						tempDistance = (double)(InformationManager.Instance().getMainBaseLocation(MyBotModule.Broodwar.self()).getGroundDistance(startLocation) + 0.5);
+						//tempDistance = (double)(InformationManager.Instance().getMainBaseLocation(MyBotModule.Broodwar.self()).getGroundDistance(startLocation) + 0.5);
 
+						tempDistance = (double)( currentScoutUnit.getDistance(startLocation) + 0.5);
 						if (tempDistance > 0 && tempDistance < closestDistance) 
 						{
 							closestBaseLocation = startLocation;
@@ -407,12 +441,14 @@ public class ScoutManager{
 					}
 				}
 				
+				/*
 				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false)
 				{
 				    CommandUtil.move(currentScoutUnit, new TilePosition(64,64).toPosition());
 				    currentScoutTargetBaseLocation = closestBaseLocation;
 				}
-				else 
+				else
+				*/
 				{
 					if (closestBaseLocation != null) 
 					{
@@ -431,11 +467,13 @@ public class ScoutManager{
 			else
 			{
 				//BasicBot1.2
+				/*
 				if (MyBotModule.Broodwar.isExplored(new TilePosition(64,64)) == false)
 				{
 				    CommandUtil.move(currentScoutUnit, new TilePosition(64,64).toPosition());
 				}
 				else
+				*/
 				{
 					CommandUtil.move(currentScoutUnit, currentScoutTargetBaseLocation.getPosition());
 				}
@@ -451,7 +489,7 @@ public class ScoutManager{
 			if (currentScoutUnit != null) 
 			{
 				currentScoutTargetBaseLocation = enemyBaseLocation;
-				
+				/*
 				if (MyBotModule.Broodwar.isExplored(currentScoutTargetBaseLocation.getTilePosition()) == false) 
 				{
 					currentScoutStatus = ScoutStatus.MovingToAnotherBaseLocation.ordinal();
@@ -460,7 +498,11 @@ public class ScoutManager{
 					seeEnemyBase = true;
 					System.out.println("see enemy Base : true");
 				}
-				else 
+				else
+				*/ 
+				CommandUtil.move(currentScoutUnit, enemyBaseLocation.getPosition());
+				seeEnemyBase = true;
+				
 				{
 					//정찰 유닛이 공격받고 있으면
 					if(scoutHP < preScoutHP)
@@ -563,7 +605,7 @@ public class ScoutManager{
 
 //        MyBotModule.Broodwar.drawCircleMap(fleeTo, 5, Color.Red, true);
 	    
-		commandUtil.move(currentScoutUnit, fleeTo);
+		CommandUtil.move(currentScoutUnit, fleeTo);
 	}
 	// Choose an enemy worker to harass, or none.
 	public Unit enemyWorkerToHarass()

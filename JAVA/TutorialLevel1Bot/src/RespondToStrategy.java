@@ -347,27 +347,45 @@ public class RespondToStrategy {
 //				}
 //				
 		}
-		if (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ZealotPush) {
-			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Barracks) >= 1
-					&& MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) >= 1) {
-				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) < 3) {
-					if (StrategyManager.Instance().LiftChecker == false
-							&& MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Marine) < 4) {
-						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Marine) < 1) {
-							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Marine,
+		if ((StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ZealotPush) ||
+		    (StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_Dark))
+		{
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Barracks) >= 1) 
+			{
+				//if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) < 3) 
+				{
+					//if (StrategyManager.Instance().LiftChecker == false) 
+					{
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Marine) < 1) 
+						{
+							int marineCount = MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Marine);
+							
+							for(int i=marineCount; i<6;i++)
+							{
+								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Marine,
 									BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
+							}
 						}
 					}
-					if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Bunker) < 1
-							&& BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Bunker) < 1
-							&& ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Bunker,
-									null) == 0) {
+					/*
+					if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Bunker) < 1 && 
+						BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Bunker) < 1 &&
+						ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Bunker,null) == 0)
+					{
 						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker,
 								BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
+					}
+					*/
+					if(this.baseBunker == false)
+					{
+						TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos, true,true);
+						this.baseBunker= true;
 					}
 				}
 			}
 		}
+		
 		if(StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.protossException_ZealotPush){
 			if(MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Barracks) >= 1){
 				if(center_gateway){
@@ -521,6 +539,41 @@ public class RespondToStrategy {
 			enemy_lurker = true;
 			need_vessel = true;
 			max_vessel = 1;
+
+			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Barracks) >= 1)// &&	MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Factory) >= 1) 
+			{
+				//if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) < 3) 
+				{
+					if (StrategyManager.Instance().LiftChecker == false) // && MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Marine) < 4) 
+					{
+						if (BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Marine) < 1) 
+						{
+							int marineCount = MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Marine);
+							
+							for(int i=marineCount; i<6;i++)
+							{
+								BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Marine,
+									BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
+							}
+						}
+					}
+					/*
+					if (MyBotModule.Broodwar.self().allUnitCount(UnitType.Terran_Bunker) < 1 && 
+						BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Bunker) < 1 &&
+						ConstructionManager.Instance().getConstructionQueueItemCount(UnitType.Terran_Bunker,null) == 0)
+					{
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker,
+								BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
+					}
+					*/
+					if(this.baseBunker == false)
+					{
+						TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
+						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos, true,true);
+						this.baseBunker= true;
+					}
+				}
+			}
 		}
 		
 		if(StrategyManager.Instance().getCurrentStrategyException() == StrategyManager.StrategysException.zergException_HighTech){

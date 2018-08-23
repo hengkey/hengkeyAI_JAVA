@@ -64,12 +64,11 @@ public class MicroMarine extends MicroManager {
 			for (Unit marine : marines) 
 			{
 				Position center = new Position(2048, 2048);
-				//if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				if (InformationManager.Instance().enemyRace == Race.Zerg) 
 				{
 				// if we're not near the order position, go there
-					CommandUtil.move(marine, center);
+					CommandUtil.move(marine, mineralpos);
 				}
-				/*
 				else
 				{
 					if (!CommonUtils.executeUnitRotation(marine, LagObserver.groupsize())) {
@@ -97,21 +96,19 @@ public class MicroMarine extends MicroManager {
 						}
 					}
 				}
-				*/
 			}
 		} 
 		else 
 		{			
-			//Position bunkerpos = bunker.getPosition();
-			//kitingOption.setGoalPosition(bunkerpos);
+			Position bunkerpos = bunker.getPosition();
+			kitingOption.setGoalPosition(bunkerpos);
 			for (Unit marine : marines) 
 			{
-				
-				//bunker.load(marine);
 				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
 				{
 					marine.rightClick(bunker);
 				}
+				bunker.load(marine);
 				
 				/*
 				Unit target = getTarget(marine, targets);

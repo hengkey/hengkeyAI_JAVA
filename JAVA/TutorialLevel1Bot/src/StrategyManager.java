@@ -308,7 +308,7 @@ public class StrategyManager {
 		
 		if (frameCount < 11000) 
 		{
-			if (frameCount % 25 == 0) 
+			if (frameCount % 20 == 0) 
 			{
 				executeFly();
 			}
@@ -3135,7 +3135,7 @@ public class StrategyManager {
 		
 		// 마린4마리 만들고 배럭올리기 4500
 		// 마린8마리 만들고 배럭올리기 6000?
-		if ((MyBotModule.Broodwar.getFrameCount() > 6500) &&
+		if ((MyBotModule.Broodwar.getFrameCount() > 4500) &&
 		    (MyBotModule.Broodwar.getFrameCount() < 11000))
 		{
 			for (Unit unit : MyBotModule.Broodwar.self().getUnits()) 
@@ -3145,7 +3145,7 @@ public class StrategyManager {
 
 				if ((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted()) 
 				{
-					List<Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 700, false, true, null);
+					List<Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 800, false, true, null);
 					if (enemy.size() > 3) 
 					{
 						if (unit.isLifted() == true) 
@@ -3196,6 +3196,7 @@ public class StrategyManager {
 				if((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted())
 				{
 					unit.lift();
+					LiftChecker = false;
 				}
 			}
 		}
