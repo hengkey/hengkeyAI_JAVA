@@ -1702,7 +1702,7 @@ public class CombatManager {
 					break;
 			}
 			
-			if (dropShipSquad.getProgressLevel() == 0)
+//			if (dropShipSquad.getProgressLevel() == 0)
 				dropShipSquad.setProgressLevel(Squad.Drop_Init);
 		}
 					
