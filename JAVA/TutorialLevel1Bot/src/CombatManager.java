@@ -335,7 +335,6 @@ public class CombatManager {
 			
 			if (bunker != null)
 			{
-				//System.out.println("updateBunker : in to the bunker");
 				if(!marine.isLoaded() && (marine.isIdle() || marine.isBraking()))
 				{
 					CommandUtil.rightClick(marine, bunker);
@@ -345,8 +344,6 @@ public class CombatManager {
 			else
 			{
 				Position center = new Position(64*32, 64*32);
-				//System.out.println("updateBunker : go to the center");
-				//if (InformationManager.Instance().enemyRace == Race.Zerg) 
 				{
 					CommandUtil.move(marine, center);
 				}

@@ -64,10 +64,12 @@ public class MicroMarine extends MicroManager {
 			for (Unit marine : marines) 
 			{
 				Position center = new Position(2048, 2048);
-				if (InformationManager.Instance().enemyRace == Race.Zerg) 
+				if ((InformationManager.Instance().enemyRace == Race.Zerg) ||
+					(InformationManager.Instance().enemyRace == Race.Protoss)) 
 				{
-				// if we're not near the order position, go there
-					CommandUtil.move(marine, mineralpos);
+				    // if we're not near the order position, go there
+					//CommandUtil.move(marine, mineralpos);
+					CommandUtil.move(marine, center);
 				}
 				else
 				{

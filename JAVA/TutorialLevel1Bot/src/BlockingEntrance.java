@@ -425,9 +425,9 @@ public class BlockingEntrance {
 				int[] factoryYY_array = { 12, 15, 107, 99 };
 				factoryY_array = factoryYY_array;
 				
-				int[] bunkerXX_array = { 13, 100, 111, 25 };
+				int[] bunkerXX_array = { 10, 100, 111, 25 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 26, 5, 101, 122 };
+			    int[] bunkerYY_array = { 24, 5, 101, 122 };
 			    bunkerY_array = bunkerYY_array; 
 			    
 				int[] engineeringXX_array = { 4, 117, 117, 9 };
@@ -479,9 +479,9 @@ public class BlockingEntrance {
 				int[] factoryYY_array = { 12, 15, 107, 99 };
 				factoryY_array = factoryYY_array;
 				
-				int[] bunkerXX_array = { 13, 100, 111, 25 };
+				int[] bunkerXX_array = { 10, 100, 111, 25 };
 			    bunkerX_array = bunkerXX_array;
-			    int[] bunkerYY_array = { 26, 5, 101, 122 };
+			    int[] bunkerYY_array = { 24, 5, 101, 122 };
 			    bunkerY_array = bunkerYY_array; 
 			    
 				int[] engineeringXX_array = { 4, 117, 117, 9 };
@@ -489,9 +489,9 @@ public class BlockingEntrance {
 			    int[] engineeringYY_array = { 18, 14, 123, 122 };
 			    engineeringY_array = engineeringYY_array;	
 			    
-			    int[] turret1XX_array = {16, 103, 109, 23};
+			    int[] turret1XX_array = {4, 103, 109, 23};
 			    turret1X_array = turret1XX_array;
-			    int[] turret1YY_array = {27, 6, 101, 121};
+			    int[] turret1YY_array = {31, 6, 101, 121};
 			    turret1Y_array = turret1YY_array;
 				
 			    int[][] turretXX_array = {

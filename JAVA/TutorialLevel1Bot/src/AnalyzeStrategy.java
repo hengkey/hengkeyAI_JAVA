@@ -294,6 +294,30 @@ public class AnalyzeStrategy {
 								break;
 							}
 						}
+						
+						Chokepoint myFirstChoke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().selfPlayer);
+						List<Unit> chkPush1 = MyBotModule.Broodwar.getUnitsInRadius(myFirstChoke.getCenter(), 500);
+						
+						int temp1 = 0;
+						for (Unit enemy : chkPush1) 
+						{
+							if (enemy.getType() == UnitType.Protoss_Dragoon) 
+							{
+								selectedSE = StrategyManager.StrategysException.protossException_DragoonPush;
+								break;
+							}
+							
+							if (enemy.getType() == UnitType.Protoss_Zealot) 
+							{
+								temp1++;
+							}
+							
+							if (temp1 > 3) 
+							{
+								selectedSE = StrategyManager.StrategysException.protossException_ZealotPush;
+								break;
+							}
+						}
 					}
 
 					int dragooncnt = 0;
@@ -693,49 +717,56 @@ public class AnalyzeStrategy {
 	}
 
 	private void AnalyzeVsZerg() {
+		
 		StrategyManager.StrategysException selectedSE = StrategyManager.Instance().getCurrentStrategyException();
 		StrategyManager.Strategys selectedS = StrategyManager.Instance().getCurrentStrategyBasic();
 
-		Chokepoint my_first_choke = InformationManager.Instance()
-				.getFirstChokePoint(InformationManager.Instance().selfPlayer);
-		Chokepoint my_second_choke = InformationManager.Instance()
-				.getFirstChokePoint(InformationManager.Instance().selfPlayer);
+		Chokepoint my_first_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().selfPlayer);
+		Chokepoint my_second_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().selfPlayer);
 
-		int cntHatchery = InformationManager.Instance().getNumUnits(UnitType.Zerg_Hatchery,
-				InformationManager.Instance().enemyPlayer);
-		int cntLair = InformationManager.Instance().getNumUnits(UnitType.Zerg_Lair,
-				InformationManager.Instance().enemyPlayer);
+		int cntHatchery = InformationManager.Instance().getNumUnits(UnitType.Zerg_Hatchery,	InformationManager.Instance().enemyPlayer);
+		int cntLair = InformationManager.Instance().getNumUnits(UnitType.Zerg_Lair,	InformationManager.Instance().enemyPlayer);
+		int ling_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Zergling,InformationManager.Instance().enemyPlayer);
+		int hydra_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Hydralisk,InformationManager.Instance().enemyPlayer);
+		int lurker_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Lurker,InformationManager.Instance().enemyPlayer)
+						+InformationManager.Instance().getNumUnits(UnitType.Zerg_Lurker_Egg,InformationManager.Instance().enemyPlayer);
+		int mutal_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Mutalisk,InformationManager.Instance().enemyPlayer);
+		int ultra_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Ultralisk,InformationManager.Instance().enemyPlayer);
 
-		int ling_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Zergling,
-				InformationManager.Instance().enemyPlayer);
-		int hydra_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Hydralisk,
-				InformationManager.Instance().enemyPlayer);
-		int lurker_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Lurker,
-				InformationManager.Instance().enemyPlayer)
-				+ InformationManager.Instance().getNumUnits(UnitType.Zerg_Lurker_Egg,
-						InformationManager.Instance().enemyPlayer);
-		int mutal_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Mutalisk,
-				InformationManager.Instance().enemyPlayer);
-		int ultra_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Ultralisk,
-				InformationManager.Instance().enemyPlayer);
-
-		if (InformationManager.Instance().getNumUnits(UnitType.Zerg_Hive,
-				InformationManager.Instance().enemyPlayer) >= 1 || ultra_cnt > 0) {
+		Chokepoint enemy_second_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
+		if (enemy_second_choke != null && MyBotModule.Broodwar.getFrameCount() < 6000) 
+		{
+			if(ling_cnt >= 3)
+			{
+				selectedSE = StrategyManager.StrategysException.zergException_FastLing;
+				System.out.println("Zerg zergling rush!!");
+				return;
+			}
+		}
+		
+		
+		if (InformationManager.Instance().getNumUnits(UnitType.Zerg_Hive,InformationManager.Instance().enemyPlayer) >= 1 || 
+			ultra_cnt > 0) 
+		{
 			selectedSE = StrategyManager.StrategysException.zergException_HighTech;
 		}
 
-		if (selectedSE == StrategyManager.StrategysException.zergException_HighTech && InformationManager.Instance()
-				.getNumUnits(UnitType.Terran_Science_Vessel, InformationManager.Instance().selfPlayer) > 3) {
+		if (selectedSE == StrategyManager.StrategysException.zergException_HighTech && 
+			InformationManager.Instance().getNumUnits(UnitType.Terran_Science_Vessel, 
+			InformationManager.Instance().selfPlayer) > 3) 
+		{
 			selectedSE = StrategyManager.StrategysException.Init;
 		}
 
 		// hydra check with lurker
-		if (InformationManager.Instance().getNumUnits(UnitType.Zerg_Hydralisk_Den,
-				InformationManager.Instance().enemyPlayer) >= 1 || hydra_cnt >= 1 || lurker_cnt >= 1) {
-
+		if (InformationManager.Instance().getNumUnits(UnitType.Zerg_Hydralisk_Den,InformationManager.Instance().enemyPlayer) >= 1 || 
+			hydra_cnt >= 1 || 
+			lurker_cnt >= 1) 
+		{
 			selectedS = StrategyManager.Strategys.zergBasic_HydraWave;
 
-			if (RespondToStrategy.Instance().enemy_lurker == false && cntLair >= 1) {
+			if (RespondToStrategy.Instance().enemy_lurker == false && cntLair >= 1) 
+			{
 				selectedSE = StrategyManager.StrategysException.zergException_PrepareLurker;
 			}
 			hydraStrategy = true;

@@ -93,6 +93,7 @@ public class StrategyManager {
 		zergException_Guardian, 
 		zergException_NongBong, 
 		zergException_OnLyLing, 
+		zergException_FastLing, 
 		zergException_PrepareLurker,
 		
 		zergException_ReverseRush, 
@@ -323,7 +324,8 @@ public class StrategyManager {
 
 		// lag.estimate("9");
 
-		if ((frameCount  < 13000 && frameCount %  5 == 0) ||
+		//if ((frameCount  < 13000 && frameCount %  5 == 0) ||
+		if ((frameCount  < 13000 && frameCount %  4 == 0) ||
 			(frameCount >= 13000 && frameCount % 23 == 0))
 		{ 
 			// Analyze와 동일하게  다른 유닛 생성에 비해 제일 마지막에 돌아야 한다. 
@@ -3143,21 +3145,21 @@ public class StrategyManager {
 				//if (unit.getType() == UnitType.Terran_Barracks)
 				//	MyBotModule.Broodwar.drawCircleMap(unit.getPosition(), 700, Color.Red);
 
+				List<Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 800, false, true, null);
 				if ((unit.getType() == UnitType.Terran_Barracks) && unit.isCompleted()) 
 				{
-					List<Unit> enemy = MapGrid.Instance().getUnitsNear(unit.getPosition(), 800, false, true, null);
-					if (enemy.size() > 3) 
+					//마린을 만들어야 되거나 barracks 800 내에 적3마리 이상일때
+					if((BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Marine) > 0) ||
+					   (enemy.size() >= 3))
 					{
 						if (unit.isLifted() == true) 
 						{
-							// System.out.println("enemy attack!! barrak land!!");
 							unit.land(new TilePosition(BlockingEntrance.Instance().barrackX,BlockingEntrance.Instance().barrackY));
 							LiftChecker = false;
 						}
-					} 
+					}
 					else 
 					{
-						// System.out.println("enemy none!! barrak lift!!");
 						unit.lift();
 						LiftChecker = true;
 					}
