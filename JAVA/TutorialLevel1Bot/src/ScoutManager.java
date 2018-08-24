@@ -111,6 +111,12 @@ public class ScoutManager{
 				}
 			} 
 			
+			String enemyName = MyBotModule.Broodwar.enemy().getName();
+			if(!enemyName.equals("Dont_Scan"))
+			{
+				return;
+			}
+
 			if (enemyBaseLocation != null)
 			{
 				if (bunkerFlag == false)

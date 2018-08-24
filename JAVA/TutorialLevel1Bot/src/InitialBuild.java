@@ -32,6 +32,8 @@ public class InitialBuild {
 		TilePosition turret1Pos     = new TilePosition(BlockingEntrance.Instance().turret1X,BlockingEntrance.Instance().turret1Y);
 		TilePosition engineeringPos = new TilePosition(BlockingEntrance.Instance().build_engineeringX,BlockingEntrance.Instance().build_engineeringY);
 		 
+		String enemyName = MyBotModule.Broodwar.enemy().getName();
+		
 		if (InformationManager.Instance().enemyRace == Race.Terran) 
 		{
 			System.out.println("setInitialBuildOrder : Terran");
@@ -91,29 +93,17 @@ public class InitialBuild {
 		}
 		else
 		{   
-            System.out.println("setInitialBuildOrder : Zerg");		
-            /*
-            queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
-	        queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);  
-	        queueBuild(false, UnitType.Terran_SCV, UnitType.Terran_SCV);
-	        BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
-	        queueBuild(false, UnitType.Terran_SCV);
-	        queueBuild(true, UnitType.Terran_Refinery);
-	        queueBuild(true, UnitType.Terran_Marine);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, secondSupplyPos,true,true);
-	        queueBuild(false, UnitType.Terran_Marine);
-	        queueBuild(false, UnitType.Terran_Marine);
-	        queueBuild(false, UnitType.Terran_Marine);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Engineering_Bay,engineeringPos,true,true);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Missile_Turret,turret1Pos,true,true);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos,true,true);
-			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Factory, factoryPos2,false, true);
-			*/
+            System.out.println("setInitialBuildOrder : Zerg");
+            //System.out.println("Enemy Name : " + enemyName);
+
 			queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV, UnitType.Terran_SCV);
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Barracks, barrackPos,true,true);
 			queueBuild(true, UnitType.Terran_SCV, UnitType.Terran_SCV);
+			
+			
+			if(!enemyName.equals("Dont_Scan"))
+				BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Bunker, bunkerPos,true,true);
+			
 			BuildManager.Instance().buildQueue.queueAsLowestPriority(UnitType.Terran_Supply_Depot, firstSupplyPos,true,true);
 			queueBuild(true, UnitType.Terran_SCV);
 			queueBuild(true, UnitType.Terran_Refinery);
