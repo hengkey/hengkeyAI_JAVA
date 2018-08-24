@@ -112,7 +112,7 @@ public class ScoutManager{
 			} 
 			
 			String enemyName = MyBotModule.Broodwar.enemy().getName();
-			if(!enemyName.equals("Dont_Scan"))
+			if ((InformationManager.Instance().enemyRace == Race.Zerg) && !enemyName.equals("Dont_Scan"))
 			{
 				return;
 			}
