@@ -532,6 +532,8 @@ public class Squad {
 				enemyFlag = true;
 			if (enemyInfo.getType() == UnitType.Protoss_Photon_Cannon)
 				enemyFlag = true;
+			if (enemyInfo.getType() == UnitType.Protoss_Nexus)
+				enemyFlag = true;
 
 			// if (enemyInfo.getType() == UnitType.Terran_Wraith) {
 			// enemyFlag = true;

@@ -94,26 +94,26 @@ public class StrategyManager {
 		zergException_NongBong, 
 		zergException_OnLyLing, 
 		zergException_FastLing, 
-		zergException_PrepareLurker,
 		
+		zergException_PrepareLurker,
 		zergException_ReverseRush, 
 		zergException_HighTech, 
 		protossException_CarrierMany, 
 		protossException_Dark, 
+
 		protossException_Reaver, 
-		
 		protossException_Scout, 
 		protossException_Shuttle, 
 		protossException_ShuttleMix, 
 		protossException_ReadyToZealot, 
+
 		protossException_ZealotPush, 
-		
 		protossException_ReadyToDragoon, 
 		protossException_DragoonPush, 
 		protossException_PhotonRush, 
 		protossException_DoubleNexus, 
+
 		protossException_Arbiter, 
-		
 		terranException_CheeseRush, 
 		terranException_NuClear, 
 		terranException_WraithCloak,
@@ -1250,7 +1250,7 @@ public class StrategyManager {
 		}
 		
 		// dropShip for TvT start
-		if (InformationManager.Instance().enemyRace == Race.Terran) {
+//		if (InformationManager.Instance().enemyRace == Race.Terran) {
 			if (MechanicMicroDropShip.MaxDropShip > dropShipCnt) {
 
 				if (CC >= 2) {
@@ -1273,7 +1273,7 @@ public class StrategyManager {
 					}
 				}
 			}
-		}
+//		}
 		
 		// wraith for TvT end
 

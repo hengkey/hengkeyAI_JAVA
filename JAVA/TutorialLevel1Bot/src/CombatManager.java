@@ -280,7 +280,7 @@ public class CombatManager {
 				updateCheckerSquad();
 			}
 			
-			if (InformationManager.Instance().enemyRace == Race.Terran)
+//			if (InformationManager.Instance().enemyRace == Race.Terran)
 				updateDropShipSquad();
 			
 			SpiderMineManger.Instance().update();
@@ -1653,16 +1653,25 @@ public class CombatManager {
 			if (unit.getType() == UnitType.Terran_Siege_Tank_Tank_Mode || unit.getType() == UnitType.Terran_Siege_Tank_Siege_Mode) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
-				if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)//적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
-					continue;
+
+				if (enemymainBaseLocations != null) {
+					if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)// 적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
+						continue;
+				}
+
 				assignableTanks.add(unit);
 			}
 			else if (unit.getType() == UnitType.Terran_Goliath) {
 				if (assignableGoliathes.size() < (MechanicMicroDropShip.MaxDropGoliath + 2)) {
 					// System.out.println("updateDropShipSquad,"+unit.getType()+ new
 					// Exception().getStackTrace()[0].getLineNumber());
-					if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)// 적베에서 한참싸우고 있는데 드랍십 태울라고해서 넣음
-						continue;
+
+					if (enemymainBaseLocations != null) {
+						if (unit.getDistance(enemymainBaseLocations.getPosition()) < 1000)// 적베에서 한참싸우고 있는데 드랍십 태울라고해서
+																							// 넣음
+							continue;
+					}
+					
 					assignableGoliathes.add(unit);
 				}
 			}
