@@ -68,8 +68,8 @@ public class MicroMarine extends MicroManager {
 					(InformationManager.Instance().enemyRace == Race.Protoss)) 
 				{
 				    // if we're not near the order position, go there
-					//CommandUtil.move(marine, mineralpos);
-					CommandUtil.move(marine, center);
+					CommandUtil.move(marine, mineralpos);
+					//CommandUtil.move(marine, center);
 				}
 				else
 				{

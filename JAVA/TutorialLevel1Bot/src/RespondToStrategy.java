@@ -535,10 +535,18 @@ public class RespondToStrategy {
 		{
 			if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Barracks) >= 1) 
 			{
-				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) < 3) 
+				if (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Vulture) < 4) 
 				{
 					if (StrategyManager.Instance().LiftChecker == false) 
 					{
+						if(this.baseBunker == false)
+						{
+							TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
+							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos, true,true);
+							this.baseBunker= true;
+							System.out.println("RespondVsZerg : Make Bunker!"+BlockingEntrance.Instance().bunkerX+","+BlockingEntrance.Instance().bunkerY);
+						}
+						
 						if ((BuildManager.Instance().buildQueue.getItemCount(UnitType.Terran_Marine) < 1) &&
 						     (MyBotModule.Broodwar.self().completedUnitCount(UnitType.Terran_Marine) < 4))
 						{
@@ -546,13 +554,6 @@ public class RespondToStrategy {
 							BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Marine,
 									BuildOrderItem.SeedPositionStrategy.MainBaseLocation, true);
 						}
-					}
-
-					if(this.baseBunker == false)
-					{
-						TilePosition bunkerPos = new TilePosition(BlockingEntrance.Instance().bunkerX,BlockingEntrance.Instance().bunkerY);
-						BuildManager.Instance().buildQueue.queueAsHighestPriority(UnitType.Terran_Bunker, bunkerPos, true,true);
-						this.baseBunker= true;
 					}
 				}
 			}

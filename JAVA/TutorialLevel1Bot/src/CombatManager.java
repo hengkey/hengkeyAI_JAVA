@@ -345,7 +345,8 @@ public class CombatManager {
 			{
 				Position center = new Position(64*32, 64*32);
 				{
-					CommandUtil.move(marine, center);
+					if (MyBotModule.Broodwar.getFrameCount() < 6000)
+						CommandUtil.move(marine, center);
 				}
 			}
 		}

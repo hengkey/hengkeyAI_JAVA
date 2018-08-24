@@ -734,12 +734,19 @@ public class AnalyzeStrategy {
 		int ultra_cnt = InformationManager.Instance().getNumUnits(UnitType.Zerg_Ultralisk,InformationManager.Instance().enemyPlayer);
 
 		Chokepoint enemy_second_choke = InformationManager.Instance().getFirstChokePoint(InformationManager.Instance().enemyPlayer);
-		if (enemy_second_choke != null && MyBotModule.Broodwar.getFrameCount() < 6000) 
+		BaseLocation myFirstBaseLocation = InformationManager.Instance().getFirstExpansionLocation(InformationManager.Instance().selfPlayer);
+		List<Unit> enemy = MapGrid.Instance().getUnitsNear(myFirstBaseLocation.getPosition(), 800, false, true, null);
+		if (enemy_second_choke != null && MyBotModule.Broodwar.getFrameCount() < 8000)
 		{
-			if(ling_cnt >= 3)
+			if(ling_cnt >= 2)
 			{
 				selectedSE = StrategyManager.StrategysException.zergException_FastLing;
-				System.out.println("Zerg zergling rush!!");
+				return;
+			}
+			
+			if(enemy.size() > 2)
+			{
+				selectedSE = StrategyManager.StrategysException.zergException_FastLing;
 				return;
 			}
 		}
